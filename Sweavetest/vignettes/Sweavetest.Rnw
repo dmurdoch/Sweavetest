@@ -1,0 +1,259 @@
+\documentclass[12pt]{article}
+\usepackage{Sweave}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\usepackage[authoryear,round,comma]{natbib}
+\bibliographystyle{apa}
+
+%\VignetteIndexEntry{About the tables package}
+
+% The next line is needed for inverse search...
+\SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex}
+<<>>=
+options(width=60)
+set.seed(18)
+library(Sweavetest)
+randomize <- TRUE
+testversion <- 1
+@
+
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+% These commands affect the display of the test samples
+\newcommand{\Correct}{*}
+\renewcommand{\labelenumii}{(\Alph{enumii})}
+
+\title{The \pkg{Sweavetest} Package\footnote{This 
+vignette  was built using \pkg{Sweavetest} version \Sexpr{packageDescription("Sweavetest")$Version}}.}%$
+
+\author{Duncan Murdoch \and Adam Rahman}
+
+\begin{document}
+
+\maketitle
+
+\abstract{
+
+Multiple choice tests are used frequently to assess student
+performance in large classes. The \pkg{Sweavetest} package
+contains support functions to format, grade and analyze multiple
+choice tests.  Answers are randomized during formatting,
+and after grading a report is automatically generated, showing descriptive
+statistics, measuring test reliability, and presenting item analysis.
+Errors in answer keys and poorly worded questions are easily
+recognized through the information generated. Several plots are also
+created to visually show the instructor how well the students are
+performing, and to help identify possible problem questions
+and answer patterns that suggest cheating.
+}
+
+
+\tableofcontents
+
+\section{Introduction}
+
+The \pkg{Sweavetest} package is designed to support administration of multiple choice
+tests.  It was written at the University of Western Ontario (UWO), and some aspects of the code
+reflect the way we administer tests, but efforts have been made to make it more generally
+useful.
+
+There are four main parts to the package, described in the following sections.  First, a
+number of functions are given to help an instructor prepare a test using Sweave \citep{Leisch2002}.
+These are described in section \ref{sec:preparing}.  At UWO, the students use Scantron brand 
+mark-sense sheets to record answers on multiple-choice tests; section \ref{sec:reading}
+describes how these are handled in \pkg{Sweavetest}, producing grades for each student
+and merging them into existing class lists.
+
+An important part of testing is to analyze the results of a test.  This can detect badly
+worded questions, errors in answer keys, and can otherwise give information about the
+quality of the questions and of the test as a whole.  Section \ref{sec:analysis} describes
+this aspect of \pkg{Sweavetest}.  It may also be possible to use the aggregate results
+to detect cheating by individual students; section \ref{sec:cheating} describes how this is done.
+This paper finishes with a short discussion of plans for changes to \pkg{Sweavetest}.
+
+
+\section{Preparing a Test}
+\label{sec:preparing}
+
+\pkg{Sweavetest} was originally designed to support writing multiple choice tests in Sweave
+and \LaTeX.  There are functions that output introductory material at the start of the
+test, as well as functions that format and randomize the answers.  These functions also
+record the results of the randomization so that an answer key can be produced automatically
+at the end.
+
+Using the test preparation functions requires knowledge of Sweave and \LaTeX.  Instructors
+who want to use other document preparation systems to produce the test can skip this section,
+but some of the work done here automatically will have to be done manually later.
+
+\subsection{Writing questions}
+
+The general format of a question is assumed to be text followed by an enumerated list of 
+possible responses.  \pkg{Sweavetest} supports four separate versions of each test; questions
+may contain from 2 to 5 answers.
+
+The supplied functions do the work of formatting the answers.   For example,
+\begin{verbatim}
+ \item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if 
+ $U > 0.3$, equal to 1 otherwise.  The distribution of 
+ $X$ is
+ <<>>=
+ enumerate("Binomial$(n=1, p=0.7)$", 
+      "Binomial$(n=1, p=0.3)$",
+      "Poisson$(\\mu = 0.3)$",
+      "Poisson$(\\mu = 0.7)$",
+      "Exponential$(\\lambda=0.3)$",
+      Correct=2)
+ @
+ \end{verbatim}
+The \verb!enumerate()! function produces
+an enumeration environment in \LaTeX.  The answers are displayed in a random order.  Earlier in the text, we've used
+\begin{verbatim}
+\newcommand{\Correct}{*}
+\renewcommand{\labelenumii}{(\Alph{enumii})}
+\end{verbatim}
+so that the correct answer is marked with an asterisk, and the answers are labelled with 
+capital letters.  (We wouldn't label the correct answer on the version of the test we give to 
+students!)  We also used \verb!\SweaveOpts{echo=FALSE,results=tex}! earlier to set the defaults
+to output \LaTeX\ code without echoing the input.   With this preparation, the Sweave code listed
+above will be processed and displayed as
+\begin{enumerate}
+\item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if $U > 0.3$, equal to 1 otherwise.  The
+distribution of $X$ is
+<<>>=
+enumerate("Binomial$(n=1, p=0.7)$", 
+      "Binomial$(n=1, p=0.3)$",
+      "Poisson$(\\mu = 0.3)$",
+      "Poisson$(\\mu = 0.7)$",
+      "Exponential$(\\lambda=0.3)$",
+      Correct=2)
+@
+\end{enumerate}
+
+Besides \verb!enumerate()!, several other functions produce randomized answer lists.  The
+\verb!horiz()! function formats them horizontally on a single line.  The \verb!items()! function
+is like \verb!enumerate()!, but only the latex \verb!\items! part of the enumeration is output:
+it is assumed that the test writer has already entered \verb!\begin{enumeration}! or equivalent.
+The \verb!things()! function just randomizes the items it is given; the test writing needs to
+enter the \verb!\item! values if necessary.
+
+The \pkg{Sweavetest} package also has special support for questions involving R code.
+\verb!Renumerate()!, \verb!Rhoriz()! and \verb!Ritems()! format text to look like R input expressions. The \verb!resultenumerate()! and \verb!resultitems()! function evaluate the
+arguments and format the output as if it was printed as output by R.  For example,
+the input
+\begin{verbatim}
+ \item Which of the following gives the best approximation to 
+ $\int_0^5 (x + 4) \cos(x) dx$?
+ <<>>=
+ Renumerate(Correct=2,
+ "x <- runif(1000, 0, 5); mean((x + 4)*cos(x))",
+ "x <- runif(1000, 0, 5); mean(5*(x + 4)*cos(x))",
+ "x <- runif(1000, 0, 5); mean((x + 4)*cos(x)/5)",
+ "x <- rcos(1000, 0, 5); mean(x + 4)",
+ "42")
+ @
+\end{verbatim}
+produces
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item Which of the following gives the best approximation to \\
+ $\int_0^5 (x + 4) \cos(x) dx$?
+<<>>=
+ Renumerate(Correct=2,
+ "x <- runif(1000, 0, 5); mean((x + 4)*cos(x))",
+ "x <- runif(1000, 0, 5); mean(5*(x + 4)*cos(x))",
+ "x <- runif(1000, 0, 5); mean((x + 4)*cos(x)/5)",
+ "x <- rcos(1000, 0, 5); mean(x + 4)",
+ "42")
+@ 
+\end{enumerate}
+and 
+\begin{verbatim}
+ \item What will the following code produce?
+ <<results=hide,echo=TRUE>>=
+ x <- rep(c(TRUE, FALSE), 2)
+ y <- rep(c(TRUE, FALSE), each=2)
+ x & !y
+ @
+ <<>>=
+ resultenumerate(Correct=1, x & !y, x & y,
+ x | !y, x | y, !y)
+ @
+\end{verbatim}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item What will the following code produce?
+<<results=hide,echo=TRUE>>=
+x <- rep(c(TRUE, FALSE), 2)
+y <- rep(c(TRUE, FALSE), each=2)
+x & !y
+@
+<<>>=
+resultenumerate(Correct=1,
+x & !y,
+x & y,
+x | !y,
+x | y,
+!y)
+@
+\end{enumerate}
+
+\subsection{Introductory material at start of test}
+
+\subsection{Producing an answer key}
+
+A side effect of using the functions described in the previous section is that information on the
+randomization is saved
+and is used to produce an answer key.  For example, the answer key from the questions
+above is requested via
+
+\noindent\verb!Answer key for version \Sexpr!\verb!{versioncodes[testversion]}:\\!
+\begin{verbatim}
+ <<>>=
+ answerkey(symbols=LETTERS)
+ @
+\end{verbatim}
+and displayed as \\
+
+Answer key for version \Sexpr{versioncodes[testversion]}:\\
+<<>>=
+answerkey(symbols=LETTERS)
+@
+
+\section{Reading Student Responses}
+\label{sec:reading}
+
+\section{Analysis and Report}
+\label{sec:analysis}
+
+The report uses the \pkg{tables} package \citep{pkg:tables}.
+
+\section{Cheating Detection}
+\label{sec:cheating}
+
+
+\section{Future Directions}
+
+\section*{Acknowledgments}
+
+This research was supported by an NSERC Discovery Grant to the first author, and an
+NSERC Undergraduate Summer Research Award to the second author.
+
+\section{Not covered yet}
+
+Update this list as we cover things.
+
+Still need to document
+
+ [1] "answerCorrelations"          "answerMatrix"       "answerPlots"        "clean"             
+ [6]          "getglobal"          "grades"                              
+[11] "marklist"           "mergeLists"         "msg"                "multiplechoice"     "newCommands"       
+[16] "nominalRoll"        "perms"              "print.msg"          "readScanex"           
+[26] "versioncodes"       "wrongKey"   
+
+
+\bibliography{Sweavetest}
+
+\end{document}

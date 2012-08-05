@@ -1,0 +1,135 @@
+% A sample test using the Sweavetest package 
+\documentclass[12pt]{article}
+\usepackage{Sweave}
+\SweaveOpts{keep.source=TRUE,width=5,height=3,echo=FALSE,results=tex,concordance=TRUE,prefix.string=figs/}
+\usepackage{graphicx}
+\setkeys{Gin}{width=3in}
+
+\newcommand{\Correct}{}
+<<>>=
+options(width=60)
+dir.create("figs", showWarn=FALSE)
+set.seed(17)
+library(Sweavetest)  # Should come after set.seed, to make reproducible.
+newCommands()
+testversion <- 4
+randomize <- TRUE
+@
+\pagestyle{myheadings}
+\markright{SS 2864b Exam   \hspace{0.5in} Name: \underline{\hspace{1.9in}} ID: \underline{\hspace{1in}}\hspace{0.5in}}
+
+\newcounter{myitem}
+
+\begin{document}
+
+\setcounter{page}{1}
+
+{\large
+\begin{center}
+Department of Statistical and Actuarial Sciences \\
+SS 2864b Jan-Apr 2009 \\
+Instructor:  D. Murdoch  \\
+Final Exam, April 20, 9 AM to noon,  SSC 2036
+\end{center}
+}
+{\em Instructions}
+
+\begin{itemize}
+\item A basic calculator is allowed; no other aids are allowed.  Cell phones, pagers and other wireless devices must be left with the proctors.
+\item Answer all multiple choice questions in the space below.  
+Answer all short and long answer questions on the question sheet.  All 
+questions give partial marks if left blank; read the instructions carefully.
+\item The question sheet has \pageref{endofpaper} pages; put your name on page 1 
+and on the short and long answer pages.
+There are also blank pages
+at the end for rough work.
+\end{itemize}
+
+\begin{center}
+\vspace*{0.25in}
+<<>>=
+marklist(c(4,5,3,8,6), c("1--4", 5:8))
+@
+\hspace{0.5in}
+<<>>=
+multiplechoice(1:4)
+@
+\end{center}
+\newpage
+\markright{SS 2864b Exam \Sexpr{versioncodes[testversion]}}
+\begin{center}
+\bf \large Multiple Choice Questions.  Write your answers on the answer sheet (page 1).  The correct
+answer is worth 1 mark.  A blank is worth 0.25 marks.
+\end{center}
+
+
+For questions 1 to \ref{lastoutput}, assume that R has been started with an empty workspace just
+before each question, i.e. the calculations in one question don't have any effect on the other questions.
+Each question lists some R input along with the R prompts ``\verb!> !'' or ``\verb!+ !''; you should provide the output.
+
+In some cases, pseudo-random numbers are involved, so multiple answers might be possible, but there
+should always be one answer that is much more likely than any of the others.
+\begin{enumerate}
+
+\item
+\begin{verbatim}
+> sum(10:15)
+\end{verbatim}
+\begin{enumerate}
+<<>>=
+resultitems(sum(10:15), mean(10:15), max(10:15), min(10:15), prod(10:15))
+@
+\end{enumerate}
+
+\item
+<<echo=TRUE,results=hide>>=
+x <- seq(0, 10)
+x[4]
+@
+\begin{enumerate}
+<<>>=
+resultitems(x[4], x[3], x[5], x[1:4], x)
+@
+\end{enumerate}
+
+\label{lastoutput}
+
+\setcounter{myitem}{\theenumi}
+
+\end{enumerate}
+
+\newpage
+
+The remaining questions are not asking for R output.  Remember, put your answers on the answer
+sheet on page 1.
+
+\begin{enumerate}
+
+\setcounter{enumi}{\themyitem}
+
+\item Which of the following R statements will draw a line segment from $[0,0]^T$ to $[3,1]^T$?
+\begin{enumerate}
+<<>>=
+Ritems("lines(c(0, 3), c(0, 1))", "arrows(c(0, 0, 3, 1))", "c(0, 0) -> c(3, 1)",
+"lines(c(0, 0, 3, 1))", "lines(c(0, 3, 0, 1))")
+@
+\end{enumerate}
+
+\item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if $U > 0.3$, equal to 1 otherwise.  The distribution
+of $X$ is
+\begin{enumerate}
+<<>>=
+items("Binomial$(n=1, p=0.7)$", 
+      "Binomial$(n=1, p=0.3)$",
+      "Poisson$(\\mu = 0.3)$",
+      "Poisson$(\\mu = 0.7)$",
+      "Exponential$(\\lambda=0.3)$",
+      Correct=2)
+@
+\end{enumerate}
+
+
+\end{enumerate}
+\label{endofpaper}
+
+\end{document}

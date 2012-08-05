@@ -1,0 +1,10 @@
+Package: Sweavetest
+Type: Package
+Title: Support for tests in Sweave
+Version: 1.4
+Date: 2011-10-16
+Author: Duncan Murdoch
+Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
+Description: Simple functions to use in four-version tests
+License: GPL
+LazyLoad: yes

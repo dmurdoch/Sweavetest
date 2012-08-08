@@ -1,21 +1,42 @@
-newCommands <- function() 
-cat("
-\\newcommand{\\Var}{\\mbox{Var}}
-\\newcommand{\\Cov}{\\mbox{Cov}}
-\\newcommand{\\Unif}{\\mbox{Unif}}
-\\newcommand{\\E}{\\mbox{E}}
-\\newcommand{\\Lik}{{\\cal L}}
-\\newcommand{\\lik}{{\\it l}}
-\\renewcommand{\\thesection}{}
-\\newcommand{\\X}{\\lowtilde{X}}
-\\newcommand{\\x}{\\lowtilde{x}}
-\\newcommand{\\Y}{\\lowtilde{Y}}
-\\newcommand{\\g}{g(\\cdot)}
-\\newcommand{\\F}{{\\cal F}}
-\\newcommand{\\G}{{\\cal G}}
-\\newcommand{\\vs}{\\hspace{2em}\\mbox{vs}\\hspace{2em}}
-\\newcommand{\\Marks}[1]{\\marginpar{/#1}}
-")
+newCommands <- function(Cov=TRUE, Var=TRUE, Unif=TRUE, 
+                        E=TRUE, Lik=TRUE, lik=TRUE, 
+                        X=TRUE, x=TRUE, Y=TRUE,
+                        F=TRUE, G=TRUE, g=TRUE, vs=TRUE,
+                        Marks=TRUE, thesection=TRUE,
+                        lowtilde=TRUE) {
+  if (Cov)
+    cat("\\newcommand{\\Cov}{\\mbox{Cov}}\n")
+  if (Var)
+    cat("\\newcommand{\\Var}{\\mbox{Var}}\n")
+  if (Unif)
+    cat("\\newcommand{\\Unif}{\\mbox{Unif}}\n")
+  if (E)
+    cat("\\newcommand{\\E}{\\mbox{E}}\n")
+  if (Lik)
+    cat("\\newcommand{\\Lik}{{\\cal L}}\n")
+  if (lik)
+    cat("\\newcommand{\\lik}{{\\it l}}\n")
+  if (X)
+    cat("\\newcommand{\\X}{\\lowtilde{X}}\n")
+  if (x)
+    cat("\\newcommand{\\x}{\\lowtilde{x}}\n")
+  if (Y) 
+    cat("\\newcommand{\\Y}{\\lowtilde{Y}}\n")
+  if (F)
+    cat("\\newcommand{\\F}{{\\cal F}}\n")
+  if (G)
+    cat("\\newcommand{\\G}{{\\cal G}}\n")
+  if (g)
+    cat("\\newcommand{\\g}{g(\\cdot)}\n")
+  if (vs)
+    cat("\\newcommand{\\vs}{\\hspace{2em}\\mbox{vs}\\hspace{2em}}\n")
+  if (Marks)
+    cat("\\newcommand{\\Marks}[1]{\\marginpar{/#1}}")
+  if (thesection)
+    cat("\\renewcommand{\\thesection}{}\n")
+  if (lowtilde)
+    cat("\\newcommand{\\lowtilde}[1]{\\mathop{#1}\\limits_{\\textstyle\\tilde{}}}\n")
+}
 
 marklist <- function(marks, names=1:length(marks), testversion) {
   testversion <- getglobal(testversion, 1)

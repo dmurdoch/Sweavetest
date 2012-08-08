@@ -17,6 +17,7 @@ set.seed(18)
 library(Sweavetest)
 randomize <- TRUE
 testversion <- 1
+newCommands(thesection=FALSE)
 @
 
 \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
@@ -88,6 +89,7 @@ who want to use other document preparation systems to produce the test can skip 
 but some of the work done here automatically will have to be done manually later.
 
 \subsection{Writing questions}
+\label{sec:questions}
 
 The general format of a question is assumed to be text followed by an enumerated list of 
 possible responses.  \pkg{Sweavetest} supports four separate versions of each test; questions
@@ -133,15 +135,18 @@ enumerate("Binomial$(n=1, p=0.7)$",
 
 Besides \verb!enumerate()!, several other functions produce randomized answer lists.  The
 \verb!horiz()! function formats them horizontally on a single line.  The \verb!items()! function
-is like \verb!enumerate()!, but only the latex \verb!\items! part of the enumeration is output:
-it is assumed that the test writer has already entered \verb!\begin{enumeration}! or equivalent.
+is like \verb!enumerate()!, but only the \LaTeX\ \verb!\items! part of the enumeration is output:
+it is assumed that the test writer has already entered \verb!\begin{enumerate}! or equivalent.
 The \verb!things()! function just randomizes the items it is given; the test writing needs to
 enter the \verb!\item! values if necessary.
 
-The \pkg{Sweavetest} package also has special support for questions involving R code.
-\verb!Renumerate()!, \verb!Rhoriz()! and \verb!Ritems()! format text to look like R input expressions. The \verb!resultenumerate()! and \verb!resultitems()! function evaluate the
-arguments and format the output as if it was printed as output by R.  For example,
-the input
+The \pkg{Sweavetest} package also has special support for questions
+involving R code. \verb!Renumerate()!, \verb!Rhoriz()! and 
+\verb!Ritems()! format text to look like R input expressions. The 
+\verb!resultenumerate()! and \verb!resultitems()! function evaluate the
+arguments and format the output as if it was printed as output by R,
+unless they are protected by being wrapped in the \verb!msg()! function.
+For example, the input
 \begin{verbatim}
  \item Which of the following gives the best approximation to 
  $\int_0^5 (x + 4) \cos(x) dx$?
@@ -177,8 +182,8 @@ and
  x & !y
  @
  <<>>=
- resultenumerate(Correct=1, x & !y, x & y,
- x | !y, x | y, !y)
+ resultenumerate(Correct=1, KeepLast=1, x & !y, x & y,
+ x | !y, x | y, msg("None of the above"))
  @
 \end{verbatim}
 
@@ -191,20 +196,80 @@ y <- rep(c(TRUE, FALSE), each=2)
 x & !y
 @
 <<>>=
-resultenumerate(Correct=1,
+resultenumerate(Correct=1, KeepLast=1,
 x & !y,
 x & y,
 x | !y,
 x | y,
-!y)
+msg("None of the above"))
 @
 \end{enumerate}
 
 \subsection{Introductory material at start of test}
 
+Several functions and variables are included that are intended to be run or set 
+at the start of a test.  These customize the behaviour of \pkg{Sweavetest}, and 
+provide some common definitions that may be helpful in producing a test.
+
+\begin{table}
+\caption{Current math mode definitions provided by \texttt{newCommands()}.\label{tab:commands}}
+\begin{center}
+\begin{tabular}{lc}
+\hline
+Macro & Sample \\
+\hline
+<<>>=
+n <- names(formals(newCommands))
+for(i in n) {
+  if (!(i %in% c("Marks", "thesection", "lowtilde")))
+    cat("\\verb!\\", i, "! & $ \\", i, " $ \\\\ \n", sep="")
+}
+@
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+The \verb!newCommands()! function defines a number of \LaTeX\ macros that may be
+convenient to use in the test.  Current definitions of simple macros
+to use in mathematical expressions are shown in Table \ref{tab:commands}.  The function
+also optionally defines \verb!\Marks!, which displays marks for a question in the right
+margin, \verb!\thesection!, which suppresses section numbering, and \verb!\lowtilde!,
+which draws a tilde under a math symbol, similar to the convention used on a blackboard
+to indicate a vector.  By default, all macros are defined, but any of them
+may be suppressed by passing an argument to \verb!newCommands()!.  For example,
+this document uses \verb!newCommands(thesection = FALSE)!, because section headings
+should not be overridden.
+
+The \verb!marklist()! function outputs a box, suitable for recording marks on the
+first page of a test.  For example,
+<<marklist, echo=TRUE, eval=FALSE>>=
+marklist(marks=rep(5,4), names=1:4)
+@
+produces the text and box shown in Figure \ref{fig:marklist}.
+\begin{figure}
+\begin{center}
+<<>>=
+<<marklist>>
+@
+\end{center}
+\caption{Sample mark list produced by the \texttt{marklist()} function. \label{fig:marklist}}
+\end{figure}
+
+Similarly, the \verb!multiplechoice()! function produces a box
+suitable for manually entering multiple choice answers.  This would be
+used on a test that only had a few multiple choice questions (Figure \ref{fig:multiplechoice}).
+\begin{figure}
+\begin{center}
+<<>>=
+multiplechoice(1:10)
+@
+\end{center}
+\caption{Multiple choice response box produced by \texttt{multiplechoice(1:10)}. \label{fig:multiplechoice}}
+\end{figure}
+
 \subsection{Producing an answer key}
 
-A side effect of using the functions described in the previous section is that information on the
+A side effect of using the functions described in section \ref{sec:questions} is that information on the
 randomization is saved
 and is used to produce an answer key.  For example, the answer key from the questions
 above is requested via
@@ -249,8 +314,8 @@ Still need to document
 
  [1] "answerCorrelations"          "answerMatrix"       "answerPlots"        "clean"             
  [6]          "getglobal"          "grades"                              
-[11] "marklist"           "mergeLists"         "msg"                "multiplechoice"     "newCommands"       
-[16] "nominalRoll"        "perms"              "print.msg"          "readScanex"           
+[11]       "mergeLists"                         
+[16] "nominalRoll"        "perms"                "readScanex"           
 [26] "versioncodes"       "wrongKey"   
 
 

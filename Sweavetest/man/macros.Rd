@@ -9,11 +9,18 @@ Write out commonly used macros.
 This writes out the Latex definitions of some commonly used macros.
 }
 \usage{
-newCommands()
+newCommands(Cov=TRUE, Var=TRUE, Unif=TRUE, 
+                        E=TRUE, Lik=TRUE, lik=TRUE, 
+                        X=TRUE, x=TRUE, Y=TRUE, g=TRUE,
+                        F=TRUE, G=TRUE, vs=TRUE,
+                        Marks=TRUE, thesection=TRUE)
 marklist(marks, names=1:length(marks), testversion)
 multiplechoice(names) 
 }
 \arguments{
+\item{Cov, Var, Unif, E, Lik, lik, X, x, Y, g, F, G, vs, Marks, thesection}{
+Whether to define macros with these names.
+}
 \item{marks}{
 Numerical values of the marks to be assigned to the questions.
 }

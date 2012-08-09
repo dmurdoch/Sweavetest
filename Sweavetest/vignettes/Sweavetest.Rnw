@@ -4,8 +4,6 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 
-test change 3
-
 \usepackage[authoryear,round,comma]{natbib}
 \bibliographystyle{apa}
 

@@ -7,9 +7,10 @@
 \usepackage[authoryear,round,comma]{natbib}
 \bibliographystyle{apa}
 
-%\VignetteIndexEntry{About the tables package}
+%\VignetteIndexEntry{About the Sweavetest package}
 
 % The next line is needed for inverse search...
+\SweaveOpts{echo=TRUE,results=verbatim} % to show R code and results
 \SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex}
 <<>>=
 options(width=60)

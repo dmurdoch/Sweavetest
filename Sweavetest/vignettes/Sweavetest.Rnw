@@ -296,6 +296,129 @@ answerkey(symbols=LETTERS)
 
 The report uses the \pkg{tables} package \citep{pkg:tables}.
 
+Using the results of the \verb!readScanex()! and the \verb!grades()! functions, a report analyzing the test as a whole
+and each question individually can be easily created. The functions are called by using:
+
+\begin{verbatim}
+<<<>>=
+scanex <- readScanex(''sample.dat'')
+GradedTests <- grades(scanex)
+@
+\end{verbatim}
+
+There are several individual functions that are used during the report creation process. Each is discussed below.
+
+\subsection{Statistical Overview}
+
+First, the report process creates a statistical overview of the test using the \verb!StatisticalOverview()! function.
+This function is called very simply, taking only the result of the \verb!grades()! function as input:
+
+\begin{verbatim}
+StatisticalOverview(GradedTests)
+\end{verbatim}
+
+This function is used primarily for formatting in \LaTeX, utilizing the \pkg{tables} package to format the created tables
+and called functions. 
+
+When called, this package creates several statistics which analyze the overall quality of the test:
+
+\begin{itemize}
+\item Descriptive Statistics Table
+\item Student Count Table
+\item Test Means Table
+\item Kuder-Richardson 20 Statistic
+\item Ferguson's Delta
+\item Answer Correlation Plot
+\item Histogram of Student Scores
+\end{itemize}
+
+\subsection{Descriptive Statistics}
+
+The descriptive statistics table is created within the \verb!StatisticalOverview()! function and includes each of the following statistics
+based on the results of the test:
+
+\begin{itemize}
+\item Mean
+\item Standard Deviation
+\item Maximum Score
+\item Minimum Score
+\item 25th Quantile
+\item Median
+\item 75th Quantile
+\end{itemize}
+
+The table presents these statistics seperated by class section (if there is more than one section) and also presents them aggregated.
+\LaTeX formatting is done using the \pkg{tables} package.
+
+\subsection{Student Count Table}
+
+The student count table provides a count of the number of students who wrote each different version of the exam, separated into class section
+and aggregated, providing a total count for each exam code, and a grand total. This is produced automatically when the \verb!StatisticalOverview()!
+function is called, with \LaTeX formatting using the \pkg{tables} package.
+
+\subsection{Kuder-Richardson 20}
+
+The Kuder-Richardson 20 statistics is produced by calling the \verb!KR20()! function, available in the \pkg{Sweavetest} package.
+It uses the result of \verb!grades()! as input and can be called as follows:
+
+\begin{verbatim}
+<<>>=
+KR20(GradedTests)
+@
+\end{verbatim}
+
+This is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
+test provide information about the knowledge students on the tested material.
+
+It is calculated through the following simple formula:
+
+\[\alpha = \frac{K}{K+1}(1- \frac{\sum_{i=1}^{K} p_{i}q_{i}}{\sigma^{2}_{X}} \]
+
+where K is the total number of items, \[p_{i}\] is the probability of success on item i.
+
+\subsection{Ferguson's Delta}
+
+The Ferguson's Delta statistic is produced by calling the \verb!FergusonsDelta()! function, available in the \pkg{Sweavetest} package.
+It takes the results of \verb!grades! as input, and can be called by the user as follows:
+
+\begin{verbatim}
+<<>>=
+FergusonsDelta(GradedTests)
+@
+\end{verbatim}
+
+Similar to the KR20 statistic, Ferguson's Delta also measures the consistency of the test. However, instead of measuring internal
+reliability, it measures test reliability as ``the ratio between the number of discriminations made by the test to the greatest number
+of discriminations that the test can generate, given the size of the sample and the number of items'' (Kline, 1986). 
+
+It is calculated using the following easy formula:
+
+\[ \delta = \frac{(m+1)(n^{2}-\sum(f^{2}_{s}}{mn^{2}}\]
+
+where n is the number of test takers, m is the number of items, and \[f_{s}\] is the number of test takers obtaining each possible test score.
+
+Both the Ferguson's Delta and Kuder-Richardson 20 statistics are formatted into a table using the \pkg{tables} package.
+
+\subsection{Answer Correlation Plot}
+
+% % % % %Dr. Murdoch to Fill In % % % % % % % %
+
+\subsection{Score Distribution}
+
+The \verb!StatisticalOverview()! function also produces a histogram of the scores achieved by the students on the test.
+The purpose of this plot is to show the instructor the distribution of his test scores, and to help identify possible
+problems with the test as a whole (when used in conjunction with the other statistics provided).
+
+It is created as follows in the \verb!StatisticalOverview()! function:
+
+\begin{verbatim}
+weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+Percentage <- 100*GradedTests$Grade/weight
+GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
+\end{verbatim}
+
+\subsection{Individual Question Analysis}
+
 \section{Cheating Detection}
 \label{sec:cheating}
 

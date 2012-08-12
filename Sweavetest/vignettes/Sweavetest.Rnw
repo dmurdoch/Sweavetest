@@ -368,13 +368,13 @@ KR20(GradedTests)
 \end{verbatim}
 
 This is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
-test provide information about the knowledge students on the tested material.
+test provide information about the knowledge of the students on the tested material.
 
 It is calculated through the following simple formula:
 
 \[\alpha = \frac{K}{K+1}(1- \frac{\sum_{i=1}^{K} p_{i}q_{i}}{\sigma^{2}_{X}} \]
 
-where K is the total number of items, \[p_{i}\] is the probability of success on item i.
+where K is the total number of items and \[p_{i}\] is the probability of success on item i.
 
 \subsection{Ferguson's Delta}
 
@@ -418,6 +418,38 @@ GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = 
 \end{verbatim}
 
 \subsection{Individual Question Analysis}
+
+The \pkg{Sweavtest} package also analyzes each question individually, providing a number of useful statistics to aid in the 
+recognition of potential problem questions. This includes questions that have been keyed incorrectly, questions that have
+more than one plausible answer, questions that are misleading or ambiguous, and questions that may simply be too difficult.
+
+Analysis is accomplished using the following statistics:
+
+\begin{itemize}
+\item Option Frequency
+\item Distractor Discrimination
+\item Difficulty Rating
+\item Item Discrimination
+\item Point Biserial Correlation
+\item Option Frequency Plot
+\item Empirical Probability Plot
+\end{itemize}
+
+Each of these items will be discussed in detail.
+
+\subsection{Option Frequency}
+
+\subsection{Distractor Discrimination}
+
+\subsection{Difficulty Rating}
+
+\subsection{Item Discrimination}
+
+\subsection{Point Biserial Correlation}
+
+\subsection{Option Frequency Plot}
+
+\subsection{Empirical Probability Plot}
 
 \section{Cheating Detection}
 \label{sec:cheating}

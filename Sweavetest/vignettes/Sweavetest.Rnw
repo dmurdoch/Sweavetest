@@ -291,10 +291,11 @@ answerkey(symbols=LETTERS)
 \section{Reading Student Responses}
 \label{sec:reading}
 
-\section{Analysis and Report}
+\section{Analysis of a Test}
 \label{sec:analysis}
 
-The report uses the \pkg{tables} package \citep{pkg:tables}.
+The report uses the \pkg{tables} package \citep{pkg:tables}. This section will discuss the individual analysis tools used
+during the report creation process. The actual report creation process is discussed in the next section.
 
 Using the results of the \verb!readScanex()! and the \verb!grades()! functions, a report analyzing the test as a whole
 and each question individually can be easily created. The functions are called by using:
@@ -426,30 +427,156 @@ more than one plausible answer, questions that are misleading or ambiguous, and 
 Analysis is accomplished using the following statistics:
 
 \begin{itemize}
-\item Option Frequency
-\item Distractor Discrimination
 \item Difficulty Rating
 \item Item Discrimination
 \item Point Biserial Correlation
+\item Option Frequency
+\item Distractor Discrimination
 \item Option Frequency Plot
 \item Empirical Probability Plot
 \end{itemize}
 
 Each of these items will be discussed in detail.
 
-\subsection{Option Frequency}
-
-\subsection{Distractor Discrimination}
-
 \subsection{Difficulty Rating}
+
+Difficulty rating measures the number of respondents who answered the question correctly,
+as a percentage of all respondents. The formula for difficulty rating is very simple:
+
+\[ Difficulty Rating = \frac{C}{W + C} \]
+
+where C is the number of correct respondents, and W is the number of wrong respondents.
+
+Difficulty rating can be easily calculated using the built in function \verb!DifficultyRating()!.
+It takes the result of the \verb!grades()! function discussed above, and can be called as follows:
+
+\begin{verbatim}
+
+DifficultyRating(GradedTests)
+
+\end{verbatim} 
+
+The function produces the output as follows:
+
+% % % INSERT EXAMPLE OUTPUT % % %
+
+A question with a difficulty rating less than .2, or greater than .8 should be reviewed by the instructor.
 
 \subsection{Item Discrimination}
 
+Item discrimination is used to determine if the question adequately distinguishes between those
+students who have the required knowledge to answer the question and those who don't. It is calculated
+very simply using the following formula:
+
+\[ Item Discrimination = \frac{(Upper 25\% Correct) - (Lower 25\% Correct)}{Total Number of Respondents} \]
+
+Where the upper 25\% of the students are defined to be those students who scored in the top 25\% on the test and got the question correct.
+The lower 25\% of students are defined similarly.
+
+Item discrimination can be calculated using the \verb!ItemDiscrimination()! function. It takes as input
+the results of the \verb!grades()! function and can be called using the following syntax:
+
+\begin{verbatim}
+ItemDiscrimination(GradedTests)
+\end{verbatim}
+
+The function provides the following output:
+
+% % %INSERT EXAMPLE OUTPUT % % %
+
+A question with a negative item discrimination value should be reviewed by the instructor.
+
 \subsection{Point Biserial Correlation}
+
+Point biserial correlation is also a measure of test discrimination. It is easily calculated through
+the following formula:
+
+\[ Point Biserial = \frac{M_{p} - M_{q}}{\sigma\sqrt{pq}} \]
+
+where:
+
+\begin{itemize}
+\item \[M_{p}\] is the mean score of students answering the question correctly
+\item \[M_{q{}\] is the mean score of students answering the question incorrectly
+\item \[\sigma\] is the standard deviation of the exam mean
+\item p is the proportion of students answering the question correctly
+\item q is the proportion of students answering the question incorrectly
+\end{itemize}
+
+Point biserial correlation can be easily calculated using the \verb!PointBiserial()! function
+included in the \pkg{Sweavetest} package. It takes as input the results of the \verb!grades()! function,
+and is called using the following syntax:
+
+\begin{verbatim}
+PointBiserial(GradedTests)
+\end{verbatim}
+
+The function provides the following output:
+
+% % %INSERT EXAMPLE OURTPUT % % %
+
+Point biserial correlation should be used in conjunction with the calculated item discrimination
+statistic to determine if a question adequately discriminates between those students who have the
+required knowledge and those who don't.
+
+Any question with a point biserial value below .2 should be reviewed by the instructor. 
+
+\subsection{Option Frequency}
+
+Using the results of the \verb!CreateIndex()! function, a count of how many students chose
+each answer option is provided. This will aid the instructor in determining which answer choices were the
+most popular amongst the students, and which were the least popular.
+
+Any answer option which has very few respondents should be reviewed by the instructor.
+
+\subsection{Distractor Discrimination}
+
+An item discrimination value is also calculated for each of the answer options. This is accomplished
+in the exact same way as described above (where it is done for the entire test). Ideally, the only 
+answer option with a positive item discrimination value will be the correct answer. All other options
+should have a negative item discrimination value, which tells the instructor that the students who scored
+lowest on the test are choosing that option more frequently than the students who scored highest on the test.
+
+Any incorrect answer with a positive item discrimination should be evaluated by the instructor.
 
 \subsection{Option Frequency Plot}
 
+
+
 \subsection{Empirical Probability Plot}
+
+The empirical probability plot represents the cumulative distribution function for the probability of
+answering the question correctly. It plots the test scores along the x-axis and the probability that
+the test taker will answer the question correctly along the y-axis.
+
+From this graph, we can deduce the empirical probability of a student answering the question correctly
+given his score on the test.
+
+It would be expected that this graph would be monotonically increasing, from the lowest score achieved on
+the test to the highest score.
+
+The plot can be created using the \verb!EmpiricalProbabilityPlot()! function. It takes as input the results
+from the \verb!grades()! function, as well as the question number for which the plot will created. A plot
+for the first question can be created using the following syntax:
+
+\begin{verbatim}
+QuestionCounter <- 1
+EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
+\end{verbatim}
+
+Yielding the following graph:
+
+% % %INPUT EXAMPLE OUTPUT % % %
+
+A question in which the plot exhibits a decreasing trend overall as opposed to an increasing trend should
+be reviewed by the instructor.
+
+\section{Report Creation}
+\label{sec:report}
+
+\subsection{Full Report}
+
+\subsection{Analysis Only}
 
 \section{Cheating Detection}
 \label{sec:cheating}

@@ -541,7 +541,25 @@ Any incorrect answer with a positive item discrimination should be evaluated by 
 
 \subsection{Option Frequency Plot}
 
+The option frequency plot provides a way for the instructor to visualise which questions were most popular
+amongst the test takers. Frequencies are provided as boxes, and are separated by exam code (if more than one
+is given). The boxes of the correct answers are white, while the boxes of incorrect answers are shaded red.
 
+The plot is created by calling the function \verb!answerPlots()!. This function takes as input a matrix of the
+students' answers, a matrix of the corresponding correct answers, a vector of exam codes, and the question number
+of the plot to be produced. For example, the following will produce an option frequency plot for the first question
+of our sample data:
+
+\begin{verbatim}
+StudentAnswers <- GradedTests$Answers
+CorrectAnswers <- GradedTests$Correct
+ExamVersion <- GradedTests$ExamCode
+QuestionCounter <- 1
+
+answerPlots(StudentAnswers, CorrectAnswers, ExamVersion, QuestionCounter)
+\end{verbatim}
+
+% % %INSERT EXAMPLE PLOT % % %
 
 \subsection{Empirical Probability Plot}
 
@@ -574,7 +592,39 @@ be reviewed by the instructor.
 \section{Report Creation}
 \label{sec:report}
 
+The report creation process was designed to be very simple. There are two separate methods for the instructor
+to choose from - the full report, and the analysis only report. Both are discussed below.
+
 \subsection{Full Report}
+
+The full report is to be used by those instructors who have used created their entire test using the provided 
+Sweave template.
+
+The template provides a number of variables that are under the users control:
+
+\begin{verbatim}
+<<>>=
+set.seed(18)
+setwd(''C:\Users\Sample")
+library(Sweavetest)
+library(tables)
+testversion <- 4
+Version <- version("Student")
+NumberOfVersions <- 4
+
+if(Version == ``Report''){
+scanex <- readScanex(''sample.dat'')
+}
+@
+\end{verbatim}
+
+To create the report, the user needs to change the following:
+\begin{itemize}
+\item The Version variable to ``Report''
+\item The default ``sample.dat'' input for \verb!readScanex()! function to the Scantron file they wish to use.
+\end{itemize}
+
+
 
 \subsection{Analysis Only}
 

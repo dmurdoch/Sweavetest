@@ -589,6 +589,46 @@ Yielding the following graph:
 A question in which the plot exhibits a decreasing trend overall as opposed to an increasing trend should
 be reviewed by the instructor.
 
+\subsection{Warnings}
+
+Part of the analysis of the multiple choice test is providing the instructor with information on the
+appropriateness of the calculated values of the statistics. If the values of the Item Discrimination, 
+Difficulty Rating, or Point Biserial statistics fall below industry standards, 
+the built in function \verb!Warnings{}! will automatically produce a message informing the instructor,
+as well as pointing the instructor to resources with suggestions on improving (or possibly eliminating) 
+said question.
+
+Warnings are produced if any combination of the following occur:
+
+\begin{itemize}
+\item The item discrimination statistic falls below 0
+\item The difficulty rating falls below 0.2
+\item The point biserial correlation falls below 0.2
+\end{itemize}
+
+The \verb!Warnings()! function takes the calculated values of the item discrimination, difficulty
+rating, and point biserial correlation as inputs. The syntax is as follows:
+
+\begin{verbatim}
+DR <- DifficultyRating(GradedTests)
+ID <- ItemDiscrimination(GradedTests)
+PB <- PointBiserial(GradedTests)
+
+Warnings(DR, ID, PB)
+\end{verbatim}
+
+A number of different outputs can be produced dependent upon which statistics are at unacceptable
+levels. A couple examples are given below:
+
+% % %Insert Examples % % %
+
+The report also provides warning messages if the Kuder-Richardson 20 statistic or Ferguson's Delta
+fall below acceptable standards. These messages are produced directly by the \verb!StatisticalOverview()!
+function.
+
+Warnings are produced if the KR20 statistic falls below 0.7 or Ferguson's Delta falls below 0.9 and are 
+given on the Statistical Overview page.
+
 \section{Report Creation}
 \label{sec:report}
 
@@ -598,7 +638,9 @@ to choose from - the full report, and the analysis only report. Both are discuss
 \subsection{Full Report}
 
 The full report is to be used by those instructors who have used created their entire test using the provided 
-Sweave template.
+Sweave template. The creation of the test itself is discussed in the \ref{sec:preparing} section. By simply
+modifying a few global variables in the template, the instructor can create a full report to analyze the results
+of the test.
 
 The template provides a number of variables that are under the users control:
 
@@ -622,11 +664,27 @@ To create the report, the user needs to change the following:
 \begin{itemize}
 \item The Version variable to ``Report''
 \item The default ``sample.dat'' input for \verb!readScanex()! function to the Scantron file they wish to use.
+\item The working directory must be changed to that containing the Scantron file
 \end{itemize}
 
+The variables not mentioned above should not be changed or modified in any way.
 
+From here, everything else is achieved automatically through the built in functions.
+The instructor need only process the newly modified .Rnw file, and a pdf report will be created.
+This report will include all of the analysis described in the \ref{sec:analysis} section as well as
+the original questions, with answer choices in non-randomized order.
+
+An appendix is also provided at the end of the report. The appendix contains brief explanations of
+all the statistics used in the report. This will allow the instructor to quickly and efficiently
+look up the meaning of any of the statistics, as well as suggestions on how to improve
+the question if the calculated statistics were found to be below acceptable standards.
 
 \subsection{Analysis Only}
+
+If the instructor did not use Sweave to create their test, analysis is still possible
+using the \pkg{Sweavetest} package. 
+
+\subsection{Report Without Using A Scantron}
 
 \section{Cheating Detection}
 \label{sec:cheating}

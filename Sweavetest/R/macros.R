@@ -13,7 +13,7 @@ newCommands <- function(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE,
   if (Exp)
     cat("\\newcommand{\\Exp}{\\mbox{Exp}}\n")
   if (Poisson)
-    cat("\\newcommand{\\Poisson}{\\mbox{Poisson}}\n")
+    cat("\\newcommand{\\Poisson}{\\mbox{Poisson}}\n")	
   if (Unif)
     cat("\\newcommand{\\Unif}{\\mbox{Unif}}\n")
   if (E)

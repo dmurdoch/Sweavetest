@@ -11,7 +11,7 @@ This writes out the Latex definitions of some commonly used macros.
 \usage{
 newCommands(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE, 
                         Binom=TRUE, Exp=TRUE, Poisson=TRUE, Unif=TRUE,
-			X=TRUE, x=TRUE, Y=TRUE,
+			X=TRUE, x=TRUE, Y=TRUE, y=TRUE,
                         F=TRUE, G=TRUE, vs=TRUE,
                         Marks=TRUE, thesection=TRUE,
                         lowtilde=TRUE)
@@ -20,7 +20,7 @@ multiplechoice(names)
 }
 \arguments{
 \item{Cov, Var, E, Lik, lik, Binom, Exp, Poisson, Unif, 
-      X, x, Y, F, G, vs, Marks, thesection}{
+      X, x, Y, y, F, G, vs, Marks, thesection, lowtilde}{
 Whether to define macros with these names.
 }
 \item{marks}{

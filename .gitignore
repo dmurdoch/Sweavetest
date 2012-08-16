@@ -8,3 +8,4 @@
 *.out
 *.tex
 .DS_Store
+Sweavetest.Rcheck/*

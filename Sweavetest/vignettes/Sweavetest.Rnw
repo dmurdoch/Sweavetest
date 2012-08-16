@@ -93,9 +93,13 @@ but some of the work done here automatically will have to be done manually later
 \subsection{Writing questions}
 \label{sec:questions}
 
-The general format of a question is assumed to be text followed by an enumerated list of 
-possible responses.  \pkg{Sweavetest} supports four separate versions of each test; questions
-may contain from 2 to 5 answers.
+The functions to randomize answers all work on the responses to questions; the question text
+itself is not important, but it is assumed that all questions have multiple choice responses.  See below for how to handle tests where some questions are in other formats.
+
+\pkg{Sweavetest} supports four separate versions of each test; questions
+may contain from 2 to 5 answers.  The preamble to the test randomizes the test version
+numbers to be 4  numbers from 100 to 999 in sorted order.  Version 1 of the test has the smallest 
+test version number, version 4 the largest.
 
 The supplied functions do the work of formatting the answers.   For example,
 \begin{verbatim}
@@ -206,6 +210,11 @@ x | y,
 msg("None of the above"))
 @
 \end{enumerate}
+
+If some question numbers are not used for multiple choice questions, then the test author can
+manipulate the internal variables as follows.
+
+[Adam, I need to have the current format of the internals before I can write this.]
 
 \subsection{Introductory material at start of test}
 

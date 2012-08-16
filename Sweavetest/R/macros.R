@@ -1,6 +1,6 @@
 newCommands <- function(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE, 
                         Binom=TRUE, Exp=TRUE, Poisson=TRUE, Unif=TRUE,
-			X=TRUE, x=TRUE, Y=TRUE,
+			X=TRUE, x=TRUE, Y=TRUE, y=TRUE,
                         F=TRUE, G=TRUE, vs=TRUE,
                         Marks=TRUE, thesection=TRUE,
                         lowtilde=TRUE) {
@@ -28,6 +28,8 @@ newCommands <- function(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE,
     cat("\\newcommand{\\x}{\\lowtilde{x}}\n")
   if (Y) 
     cat("\\newcommand{\\Y}{\\lowtilde{Y}}\n")
+  if (y)
+    cat("\\newcommand{\\y}{\\lowtilde{y}}\n")
   if (F)
     cat("\\newcommand{\\F}{{\\cal F}}\n")
   if (G)

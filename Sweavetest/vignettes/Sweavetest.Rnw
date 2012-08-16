@@ -302,8 +302,61 @@ The report uses the \pkg{tables} package \citep{pkg:tables}.
 \section{Cheating Detection}
 \label{sec:cheating}
 
+\begin{figure}
+\begin{center}
+<<fig=TRUE>>=
+x <- 0:7
+y <- 1:8
+df <- expand.grid(x=x,y=y)
+df$version <- with(df, 2*(y %% 2) + (x %% 2) + 1)
+par(mar=c(0,0,0,0))
+plot(y ~ x, pch = as.character(version), data=df, axes=FALSE,
+      xlab=NULL, ylab=NULL, cex=1.2)
+@
+\caption{Seating pattern for four test versions to avoid having a student sit next
+to another student with the same version. \label{fig:seating}}
+\end{center}
+\end{figure}
+
+A common form of cheating on multiple choice tests is simply to copy the answers from a 
+neighbour's or confederate's paper.  \pkg{Sweavetest} produces multiple versions of the tests
+in order to make copying more difficult; with four test versions distributed in the pattern shown
+in Figure \ref{fig:seating}, no student sits next to another student with the same version of the test.
+The randomization functions described in section \ref{sec:questions} are designed so that
+randomized answers in up to four different versions of the test end up different;  thus 
+a student who copies from another student who has the correct answer will likely get the question
+wrong.
+
+To detect this kind of cheating, the \verb!wrongKey()! function re-marks each test using
+all the other answer keys.  If a student has a higher score when marked with a different
+answer key, it's a sign of either copying from a neighbour, or miscoding the answer key.
+
 
 \section{Future Directions}
+
+\pkg{Sweavetest} was originally developed by the first author (Murdoch) to support
+his own teaching needs; only in 2012 was an attempt made to make it more generally useful,
+so that others could use it.  There are still several changes planned to support this
+direction.  
+\begin{itemize}
+\item The randomization of multiple choice items is designed for running four versions of the
+tests.  Each version will have a different correct answer (unless the answer is one
+of the unrandomized ones, such as ``none of the above'').  However, this scheme allows
+a clever cheater to learn something by seeing what his/her neighbours have written, and
+some instructors would prefer independent randomizations.
+
+\item Not all instructors are comfortable with Sweave and \LaTeX.  Support for \pkg{odfWeave}
+\citep{pkg:odfWeave}
+or other schemes for test preparation will be considered.
+
+\item We do not currently assign seating for students.  While we do record seating arrangements,
+the records are on paper and are not normally digitized.   If these records were digitized, then
+the cheating detection could look for correspondences between neighbouring students,
+rather than between a student and the answer key for a different version of the test.
+Even without those records, it could look for unusual correspondents between all pairs of 
+students, albeit with reduced detection power.
+
+\end{itemize}
 
 \section*{Acknowledgments}
 
@@ -320,7 +373,7 @@ Still need to document
  [6]          "getglobal"          "grades"                              
 [11]       "mergeLists"                         
 [16] "nominalRoll"        "perms"                "readScanex"           
-[26] "versioncodes"       "wrongKey"   
+[26] "versioncodes"   
 
 
 \bibliography{Sweavetest}

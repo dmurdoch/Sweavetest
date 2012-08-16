@@ -637,10 +637,11 @@ to choose from - the full report, and the analysis only report. Both are discuss
 
 \subsection{Full Report}
 
-The full report is to be used by those instructors who have used created their entire test using the provided 
-Sweave template. The creation of the test itself is discussed in the \ref{sec:preparing} section. By simply
-modifying a few global variables in the template, the instructor can create a full report to analyze the results
-of the test.
+The full report is to be used by those instructors who have created their entire test using the provided 
+Sweave template. The creation of the test itself is discussed in the \ref{sec:preparing} section. 
+
+By simply modifying a few global variables in the template, the instructor can create a full report
+to analyze the results of the test.
 
 The template provides a number of variables that are under the users control:
 
@@ -671,20 +672,128 @@ The variables not mentioned above should not be changed or modified in any way.
 
 From here, everything else is achieved automatically through the built in functions.
 The instructor need only process the newly modified .Rnw file, and a pdf report will be created.
-This report will include all of the analysis described in the \ref{sec:analysis} section as well as
-the original questions, with answer choices in non-randomized order.
+The report will include reproduction of the original questions, with answers given in un-randomized
+order, as well as all of the analysis described in the \ref{sec:analysis} section.
 
 An appendix is also provided at the end of the report. The appendix contains brief explanations of
 all the statistics used in the report. This will allow the instructor to quickly and efficiently
 look up the meaning of any of the statistics, as well as suggestions on how to improve
 the question if the calculated statistics were found to be below acceptable standards.
 
+References are also provided if the instructor wants more information on any of the statistics
+in the report.
+
 \subsection{Analysis Only}
 
-If the instructor did not use Sweave to create their test, analysis is still possible
+If the instructor did not use the Sweave template to create their test, analysis is still possible
 using the \pkg{Sweavetest} package. 
 
+If the user only has the results of the test, they should use the low level template provided with
+the package. This template produces many of the same statistics as the full report, but it will not 
+be able to reproduce the questions and answer options, nor will it be able to undo any randomization
+in the answer options.
+
+This method does however, provide a function that will allow the report to recognize the correspondence
+between randomization in questions. The function that must be called is \verb!Unscramble()! function.
+
+The \verb!Unscramble()! function takes the following as input:
+
+\begin{itemize}
+\item The result of the \verb!readScanex()! function
+\item A vector of exam codes
+\item A matrix of question orders, with rows corresponding to the order the exam codes were entered
+\item A variable called Scramble, which takes on FALSE if there is no randomization in the question order, and TRUE otherwise
+\end{itemize}
+
+The syntax for using this function is as follows:
+
+\begin{verbatim}
+scanex <- readScanex(''sample.dat'')
+ExamCodes <- c(170,738,840,967)
+Master <- c(1:30)
+Order1 <- c(15:30, 1:14)
+Order2 <- c(20:30,1:10, 15:19,11:14)
+Order3 <- c(30:1)
+Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
+
+NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
+
+\end{verbatim}
+
+we can see below what the function does by comparing the original Scantron file to the new scantron file
+
+<<echo=TRUE>>=
+
+#First 5 lines of old scanex
+head(scanex)
+
+#First 5 lines of new scanex
+head(NewScanex)
+@
+
+We can clearly see that the answers have been re-ordered in the new Scantron file as specified by the
+instructor. This will allow the \verb!LowLevelReport()! function to create a report with the proper
+correspondences.
+
+Note: This function is unnecessary when running a full report, as question randomization is not done.
+
+The provided Sweave template provides several variables that are under the users control:
+
+\begin{verbatim}
+options(width=60)
+dir.create("figs", showWarn=FALSE)
+library(Sweavetest)
+library(tables)
+setwd("C:/Users/Sample")
+scanex <- readScanex("sample.dat")
+Unscramble(
+LowLevelReport(scanex)
+Appendix(Report == TRUE)
+\end{verbatim}
+
+Most of these variables can be left untouched. The user must only make two modifications
+to the variables above:
+
+\begin{itemize}
+\item The working directory must be changed to the location of the Scantron file that will be read in
+\item The file in the \verb!readScanex()! function must be changed to the desired Scantron file
+\end{itemize}
+
+No other variables should be modified, unless the instructor is familiar with \LaTeX formatting and 
+wishes to change the pre-set formatting done by the template.
+
+At this point the instructor need only process the Sweave document, and a report will be created
+in the working directory.
+
 \subsection{Report Without Using A Scantron}
+
+If the instructor uses grading technology other than that provided by Scantron, they may still use
+the analysis in the \pkg{Sweavetest} package, but must modify their input file to meet the specifications of 
+the functions.
+
+The instructor can create a .dat file with the following columns:
+
+\begin{itemize}
+\item Column 1 must contain the Student IDs
+\item Column 2 must contain the Section of the each student
+\item Column 3 must contain the Exam Codes for the test
+\item Column 4 must be blank. When read in from the Scantron file, this column is designated as ``Marker'', but is unused by the \pkg{Sweavetest} package
+\item Column 5 must count the number of exams that were taken
+\item Column 6 must be the students' answers concatenated into a single character
+\end{itemize}
+
+An example file is given below. For best results, the users file should mirror the contents of this file as closely as possible, including
+column titles.
+
+<<>>=
+head(scanex)
+@
+
+Note in the file above that the first four entries are the answer keys for the exam. These must be present in the Scantron file and are recognized by
+the package by having Student ID 999999999. The answer keys do not require a section number, and should not count in the total exam count.
+
+Once this file has been created, the instructor can carry on with the report process as described above (with either the full report or using the
+\verb!LowLevelReport()! function).
 
 \section{Cheating Detection}
 \label{sec:cheating}
@@ -703,7 +812,7 @@ Update this list as we cover things.
 
 Still need to document
 
- [1] "answerCorrelations"          "answerMatrix"       "answerPlots"        "clean"             
+ [1] "answerCorrelations"          "answerMatrix"        "clean"             
  [6]          "getglobal"          "grades"                              
 [11]       "mergeLists"                         
 [16] "nominalRoll"        "perms"                "readScanex"           

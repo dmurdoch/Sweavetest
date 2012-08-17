@@ -17,9 +17,9 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
   indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
     x[Correct] <- paste("\\Correct", x[Correct])
-    Answers <<- c(Answers, which(indices == Correct))
+    .GlobalEnv$Answers <- c(Answers, which(indices == Correct))
   }
-  LastIndices <<- indices
+  .GlobalEnv$LastIndices <- indices
   labels <- itemlabels[1:(n+KeepLast)]
   x <- x[indices]
   cat( paste(labels, "\\hspace{1ex}", x, "\\hfill") )

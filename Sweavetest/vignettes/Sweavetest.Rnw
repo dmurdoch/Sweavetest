@@ -297,12 +297,18 @@ answerkey(symbols=LETTERS)
 The report uses the \pkg{tables} package \citep{pkg:tables}. This section will discuss the individual analysis tools used
 during the report creation process. The actual report creation process is discussed in the next section.
 
+This package utilizes a sample data set to illustrate the statistics that can be calculated.
+
+<<echo=TRUE>>=
+Sample <- system.file(''sample/sample.dat'', package = ``Sweavetest'')
+@
+
 Using the results of the \verb!readScanex()! and the \verb!grades()! functions, a report analyzing the test as a whole
 and each question individually can be easily created. The functions are called by using:
 
 \begin{verbatim}
 <<<>>=
-scanex <- readScanex(''sample.dat'')
+scanex <- readScanex(''Sample'')
 GradedTests <- grades(scanex)
 @
 \end{verbatim}
@@ -321,7 +327,7 @@ StatisticalOverview(GradedTests)
 This function is used primarily for formatting in \LaTeX, utilizing the \pkg{tables} package to format the created tables
 and called functions. 
 
-When called, this package creates several statistics which analyze the overall quality of the test:
+When called, this package calls several functions that create the statistics which analyze the overall quality of the test. The provided statistics are:
 
 \begin{itemize}
 \item Descriptive Statistics Table
@@ -351,11 +357,92 @@ based on the results of the test:
 The table presents these statistics seperated by class section (if there is more than one section) and also presents them aggregated.
 \LaTeX formatting is done using the \pkg{tables} package.
 
-\subsection{Student Count Table}
+The table is created within the \verb!StatisticalOverview()! function using the following syntax:
+
+\begin{verbatim}
+Mean <- function(x) mean(x)
+Quantile25 <- function(x) quantile(x, .25)
+Quantile75 <- function(x) quantile(x, .75)
+Median <- function(x) quantile(x, .50)
+Max <- function(x) max(x)
+Min <- function(x) min(x)
+StdDev <- function(x) sqrt(var(x))
+
+latex(tabular((Heading(Section)*factor(Section)+1) ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())*Percentage*StdDev
+              +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75+(Heading())*Percentage*Median
+              +(Heading())*Percentage*Quantile25+(Heading())*Percentage*Min), data=GradedTests))
+\end{verbatim}
+
+Which produces the following table:
+
+<<>>=
+
+Mean <- function(x) mean(x)
+Quantile25 <- function(x) quantile(x, .25)
+Quantile75 <- function(x) quantile(x, .75)
+Median <- function(x) quantile(x, .50)
+Max <- function(x) max(x)
+Min <- function(x) min(x)
+StdDev <- function(x) sqrt(var(x))
+Percentage <- grades/weight
+weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+
+latex(tabular((Heading(Section)*factor(Section)+1) ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())*Percentage*StdDev
+              +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75+(Heading())*Percentage*Median
+              +(Heading())*Percentage*Quantile25+(Heading())*Percentage*Min), data=GradedTests))
+
+@
+
+\subsection{Student Count And Test Means Tables}
 
 The student count table provides a count of the number of students who wrote each different version of the exam, separated into class section
 and aggregated, providing a total count for each exam code, and a grand total. This is produced automatically when the \verb!StatisticalOverview()!
 function is called, with \LaTeX formatting using the \pkg{tables} package.
+
+The test means table calculates the overall test mean for each unique exam code and class section, as well as aggregate totals and a grand total.
+This tool is in place to help the instructor ensure that all test versions and class sections scored approximately the same. Any large discrepancies
+should be investigated.
+
+Using the \pkg{tables} it is quite easy to produce these two tables:
+
+\begin{verbatim}
+The Student Count table is produced by:
+
+latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1), data=GradedTests))
+
+And the Test Means table is produced by:
+
+pct <- function(x) 100*mean(x)/weight
+
+latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
+              *pct*Format(digits=3), data=GradedTests))
+
+\end{verbatim}
+
+The resulting tables look like this:
+
+<<>>=
+
+  cat("\\begin{table}[h]")
+  cat("\\caption{Student Counts and Test Means}")
+  cat("\\begin{subtable}[h]{.5\\linewidth}")
+  cat("\\centering")
+  cat("\\caption{Student Counts}")
+  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1), data=GradedTests))
+  cat("\\end{subtable}")
+  cat("\\begin{subtable}[h]{.5\\linewidth}")
+  cat("\\centering")
+  cat("\\caption{Test Means}")
+  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
+              *pct*Format(digits=3), data=GradedTests))
+  cat("\\end{subtable}")
+  cat("\\end{table}")
+
+@
 
 \subsection{Kuder-Richardson 20}
 
@@ -367,6 +454,12 @@ It uses the result of \verb!grades()! as input and can be called as follows:
 KR20(GradedTests)
 @
 \end{verbatim}
+
+The result of calling this function is a single test statistic:
+
+<<>>=
+KR20(GradedTests)
+@
 
 This is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
 test provide information about the knowledge of the students on the tested material.
@@ -387,6 +480,12 @@ It takes the results of \verb!grades! as input, and can be called by the user as
 FergusonsDelta(GradedTests)
 @
 \end{verbatim}
+
+The result of this function is also a single test statistic:
+
+<<>>=
+FergusonsDelta(GradedTests)
+@
 
 Similar to the KR20 statistic, Ferguson's Delta also measures the consistency of the test. However, instead of measuring internal
 reliability, it measures test reliability as ``the ratio between the number of discriminations made by the test to the greatest number
@@ -417,6 +516,14 @@ weight <- max(seq_len(max(nchar(GradedTests$Correct))))
 Percentage <- 100*GradedTests$Grade/weight
 GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
 \end{verbatim}
+
+The resulting plot is shown below:
+
+<<>>=
+weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+Percentage <- 100*GradedTests$Grade/weight
+GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
+@
 
 \subsection{Individual Question Analysis}
 
@@ -456,9 +563,11 @@ DifficultyRating(GradedTests)
 
 \end{verbatim} 
 
-The function produces the output as follows:
+This function produces one difficulty rating per question:
 
-% % % INSERT EXAMPLE OUTPUT % % %
+<<>>=
+DifficultyRating(GradedTests)
+@
 
 A question with a difficulty rating less than .2, or greater than .8 should be reviewed by the instructor.
 
@@ -480,9 +589,11 @@ the results of the \verb!grades()! function and can be called using the followin
 ItemDiscrimination(GradedTests)
 \end{verbatim}
 
-The function provides the following output:
+Similar to the outpur produced by the \verb!DifficultyRating()! function, one item discrimination value is produced per question:
 
-% % %INSERT EXAMPLE OUTPUT % % %
+<<>>=
+ItemDiscrimination(GradedTests)
+@
 
 A question with a negative item discrimination value should be reviewed by the instructor.
 
@@ -511,9 +622,11 @@ and is called using the following syntax:
 PointBiserial(GradedTests)
 \end{verbatim}
 
-The function provides the following output:
+Again, this function creates one value of the point biserial index per question:
 
-% % %INSERT EXAMPLE OURTPUT % % %
+<<>>=
+PointBiserial(GradedTests)
+@
 
 Point biserial correlation should be used in conjunction with the calculated item discrimination
 statistic to determine if a question adequately discriminates between those students who have the
@@ -539,6 +652,30 @@ lowest on the test are choosing that option more frequently than the students wh
 
 Any incorrect answer with a positive item discrimination should be evaluated by the instructor.
 
+Both the Option Frequency and Distractor Discrimination statistics are combined in a single table for convenience.
+
+<<>>=
+
+pct <- function(x) 100*mean(x)/weight
+
+ cat("\\begin{table}[h]")
+  cat("\\caption{Student Counts and Test Means}")
+  cat("\\begin{subtable}[h]{.5\\linewidth}")
+  cat("\\centering")
+  cat("\\caption{Student Counts}")
+  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1), data=GradedTests))
+  cat("\\end{subtable}")
+  cat("\\begin{subtable}[h]{.5\\linewidth}")
+  cat("\\centering")
+  cat("\\caption{Test Means}")
+  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
+              *pct*Format(digits=3), data=GradedTests))
+  cat("\\end{subtable}")
+  cat("\\end{table}")
+@
+
 \subsection{Option Frequency Plot}
 
 The option frequency plot provides a way for the instructor to visualise which questions were most popular
@@ -559,7 +696,16 @@ QuestionCounter <- 1
 answerPlots(StudentAnswers, CorrectAnswers, ExamVersion, QuestionCounter)
 \end{verbatim}
 
-% % %INSERT EXAMPLE PLOT % % %
+The resulting plot for the first question is shown below:
+
+<<>>=
+StudentAnswers <- GradedTests$Answers
+CorrectAnswers <- GradedTests$Correct
+ExamVersion <- GradedTests$ExamCode
+QuestionCounter <- 1
+
+answerPlots(StudentAnswers, CorrectAnswers, ExamVersion, QuestionCounter)
+@
 
 \subsection{Empirical Probability Plot}
 
@@ -584,7 +730,10 @@ EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
 
 Yielding the following graph:
 
-% % %INPUT EXAMPLE OUTPUT % % %
+<<>>=
+QuestionCounter <- 1
+EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
+@
 
 A question in which the plot exhibits a decreasing trend overall as opposed to an increasing trend should
 be reviewed by the instructor.
@@ -620,7 +769,31 @@ Warnings(DR, ID, PB)
 A number of different outputs can be produced dependent upon which statistics are at unacceptable
 levels. A couple examples are given below:
 
-% % %Insert Examples % % %
+If a single statistic is below acceptable standards:
+
+<<>>=
+DR <- 0
+Warnings(DR, ID, PB)
+@
+
+If there are two statistics that are below acceptable standards:
+
+<<>>=
+DR <- 0
+PB <- 0
+
+Warnings(DR, ID, PB)
+@
+
+If all three statistics are below acceptable standards:
+
+<<>>=
+DR <- 0
+PB <- 0
+ID <- -1
+
+Warnings(DR, ID, PB)
+@
 
 The report also provides warning messages if the Kuder-Richardson 20 statistic or Ferguson's Delta
 fall below acceptable standards. These messages are produced directly by the \verb!StatisticalOverview()!
@@ -721,6 +894,18 @@ NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
 \end{verbatim}
 
 we can see below what the function does by comparing the original Scantron file to the new scantron file
+
+<<>>=
+scanex <- readScanex(''Sample'')
+ExamCodes <- c(170,738,840,967)
+Master <- c(1:30)
+Order1 <- c(15:30, 1:14)
+Order2 <- c(20:30,1:10, 15:19,11:14)
+Order3 <- c(30:1)
+Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
+
+NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
+@
 
 <<echo=TRUE>>=
 

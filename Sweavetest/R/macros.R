@@ -1,13 +1,19 @@
-newCommands <- function(Cov=TRUE, Var=TRUE, Unif=TRUE, 
-                        E=TRUE, Lik=TRUE, lik=TRUE, 
-                        X=TRUE, x=TRUE, Y=TRUE,
-                        F=TRUE, G=TRUE, g=TRUE, vs=TRUE,
+newCommands <- function(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE, 
+                        Binom=TRUE, Exp=TRUE, Poisson=TRUE, Unif=TRUE,
+			X=TRUE, x=TRUE, Y=TRUE, y=TRUE,
+                        F=TRUE, G=TRUE, vs=TRUE,
                         Marks=TRUE, thesection=TRUE,
                         lowtilde=TRUE) {
   if (Cov)
     cat("\\newcommand{\\Cov}{\\mbox{Cov}}\n")
   if (Var)
     cat("\\newcommand{\\Var}{\\mbox{Var}}\n")
+  if (Binom)
+    cat("\\newcommand{\\Binom}{\\mbox{Binom}}\n")
+  if (Exp)
+    cat("\\newcommand{\\Exp}{\\mbox{Exp}}\n")
+  if (Poisson)
+    cat("\\newcommand{\\Poisson}{\\mbox{Poisson}}\n")	
   if (Unif)
     cat("\\newcommand{\\Unif}{\\mbox{Unif}}\n")
   if (E)
@@ -22,12 +28,12 @@ newCommands <- function(Cov=TRUE, Var=TRUE, Unif=TRUE,
     cat("\\newcommand{\\x}{\\lowtilde{x}}\n")
   if (Y) 
     cat("\\newcommand{\\Y}{\\lowtilde{Y}}\n")
+  if (y)
+    cat("\\newcommand{\\y}{\\lowtilde{y}}\n")
   if (F)
     cat("\\newcommand{\\F}{{\\cal F}}\n")
   if (G)
     cat("\\newcommand{\\G}{{\\cal G}}\n")
-  if (g)
-    cat("\\newcommand{\\g}{g(\\cdot)}\n")
   if (vs)
     cat("\\newcommand{\\vs}{\\hspace{2em}\\mbox{vs}\\hspace{2em}}\n")
   if (Marks)

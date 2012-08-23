@@ -21,9 +21,9 @@ function(..., Correct=NA, KeepLast=0, testversion, randomize, Answers) {
   indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
 #    x[Correct] <- paste("\\Correct", x[Correct])
-    Answers <<- c(Answers, which(indices == Correct))
+    .GlobalEnv$Answers <- c(Answers, which(indices == Correct))
   }
-  LastIndices <<- indices
+  .GlobalEnv$LastIndices <- indices
   x <- x[indices]
   cat(x, collapse="\n")
 }

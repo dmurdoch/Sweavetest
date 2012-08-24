@@ -22,7 +22,6 @@ set.seed(18)
 library(Sweavetest)
 library(tables)
 setwd("C:/Users/Adam Rahman/Desktop/Summer Project/Test Templates")
-newCommands()
 Version <- version("Teacher")
 testversion <- 4
 NumberOfVersions <- 4

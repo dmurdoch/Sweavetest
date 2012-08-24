@@ -42,6 +42,7 @@ Unscramble <- function(scanex, ExamCodes = unique(scanex$ExamCode), Orders, Scra
     }
     
     NewAnswers <- rbind(CorrectScanex,StudentScanex)
+    NewAnswers <- NewAnswers[,-c(1:5)]
     scanex$Answers <- NewAnswers
   }
   return(scanex)

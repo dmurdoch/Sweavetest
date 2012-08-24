@@ -1130,6 +1130,8 @@ This will append the results of the \verb!grades()! function to the classlist th
 
 This function uses another function, the \verb!MergeLists()! function, to actually append  the two files. The main purpose of the \verb!MergeClassList()! function is to format the file so that it is clean when it is exported back to the user.
 
+Note that the \verb!MergeClassList()! function is not called automatically at any point during the report creation process. This function must be called separately by instructor if they wish to merge the results into a pre-existing class list.
+
 \section{Cheating Detection}
 \label{sec:cheating}
 

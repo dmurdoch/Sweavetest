@@ -3,9 +3,16 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{verbatim}
 
 \usepackage[authoryear,round,comma]{natbib}
 \bibliographystyle{apa}
+
+\setlength{\oddsidemargin} {0.0in} 
+\setlength{\textwidth} {6.5in}
 
 %\VignetteIndexEntry{About the Sweavetest package}
 
@@ -17,6 +24,7 @@ options(width=60)
 set.seed(18)
 install.packages("~/git/Sweavetest/Sweavetest",type="source",repos=NULL)
 library(Sweavetest)
+library(tables)
 randomize <- TRUE
 testversion <- 1
 newCommands(thesection=FALSE)
@@ -306,31 +314,38 @@ answerkey(symbols=LETTERS)
 \section{Analysis of a Test}
 \label{sec:analysis}
 
-The report uses the \pkg{tables} package \citep{pkg:tables}. This section will discuss the individual analysis tools used
+The report creation process uses the \pkg{tables} package \citep{pkg:tables} to format all the tables created by the \pkg{Sweavetest} package. This section will discuss the individual analysis tools used
 during the report creation process. The actual report creation process is discussed in the next section.
 
-This package utilizes a sample data set to illustrate the statistics that can be calculated.
+This package utilizes a sample data set to illustrate the statistics that can be calculated:
 
 <<echo=TRUE>>=
-Sample <- system.file(''sample/sample.dat'', package = ``Sweavetest'')
+Sample <- system.file("sample/sample.dat", package = "Sweavetest")
+TestIndex.dat <- system.file("sample/TestIndex.dat", package = "Sweavetest")
+CorrectIndex.dat <- system.file("sample/CorrectIndex.dat", package = "Sweavetest")
 @
 
 Using the results of the \verb!readScanex()! and the \verb!grades()! functions, a report analyzing the test as a whole
-and each question individually can be easily created. The functions are called by using:
+and each question individually can be created. The functions are called using the following syntax:
 
 \begin{verbatim}
-<<<>>=
-scanex <- readScanex(''Sample'')
+
+scanex <- readScanex(Sample)
 GradedTests <- grades(scanex)
-@
+
 \end{verbatim}
 
-There are several individual functions that are used during the report creation process. Each is discussed below.
+<<>>=
+scanex <- readScanex(Sample)
+GradedTests <- grades(scanex)
+@
+
+There are several individual functions that are used during the report creation process. Each is discussed in detail below.
 
 \subsection{Statistical Overview}
 
 First, the report process creates a statistical overview of the test using the \verb!StatisticalOverview()! function.
-This function is called very simply, taking only the result of the \verb!grades()! function as input:
+This function is called by taking the result of the \verb!grades()! function as input, and utilyzing the following syntax:
 
 \begin{verbatim}
 StatisticalOverview(GradedTests)
@@ -339,7 +354,7 @@ StatisticalOverview(GradedTests)
 This function is used primarily for formatting in \LaTeX, utilizing the \pkg{tables} package to format the created tables
 and called functions. 
 
-When called, this package calls several functions that create the statistics which analyze the overall quality of the test. The provided statistics are:
+When called, this package calls several functions that create the statistics which analyze the overall quality of the test. The function produces the following:
 
 \begin{itemize}
 \item Descriptive Statistics Table
@@ -361,17 +376,20 @@ based on the results of the test:
 \item Standard Deviation
 \item Maximum Score
 \item Minimum Score
-\item 25th Quantile
+\item $25^{th}$ Quantile
 \item Median
-\item 75th Quantile
+\item $75^{th}$ Quantile
 \end{itemize}
 
-The table presents these statistics seperated by class section (if there is more than one section) and also presents them aggregated.
-\LaTeX formatting is done using the \pkg{tables} package.
+The table presents these statistics seperated by class section (if there is more than one section) and also for the class as a whole.
+\LaTeX\ formatting is done using the \pkg{tables} package.
 
 The table is created within the \verb!StatisticalOverview()! function using the following syntax:
 
 \begin{verbatim}
+grades <- GradedTests$Grade
+weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+
 Mean <- function(x) mean(x)
 Quantile25 <- function(x) quantile(x, .25)
 Quantile75 <- function(x) quantile(x, .75)
@@ -380,14 +398,22 @@ Max <- function(x) max(x)
 Min <- function(x) min(x)
 StdDev <- function(x) sqrt(var(x))
 
-latex(tabular((Heading(Section)*factor(Section)+1) ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())*Percentage*StdDev
-              +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75+(Heading())*Percentage*Median
-              +(Heading())*Percentage*Quantile25+(Heading())*Percentage*Min), data=GradedTests))
+latex(tabular((Heading(Section)*factor(Section)+1) 
+          ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())*Percentage*StdDev
+          +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75
+          +(Heading())*Percentage*Median
+          +(Heading())*Percentage*Quantile25
+          +(Heading())*Percentage*Min), data=GradedTests))
 \end{verbatim}
 
 Which produces the following table:
-
+\\
+\\
+\begin{center}
 <<>>=
+
+grades <- GradedTests$Grade
+weight <- max(seq_len(max(nchar(GradedTests$Correct))))
 
 Mean <- function(x) mean(x)
 Quantile25 <- function(x) quantile(x, .25)
@@ -397,25 +423,26 @@ Max <- function(x) max(x)
 Min <- function(x) min(x)
 StdDev <- function(x) sqrt(var(x))
 Percentage <- grades/weight
-weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+
 
 latex(tabular((Heading(Section)*factor(Section)+1) ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())*Percentage*StdDev
               +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75+(Heading())*Percentage*Median
               +(Heading())*Percentage*Quantile25+(Heading())*Percentage*Min), data=GradedTests))
 
 @
+\end{center}
 
 \subsection{Student Count And Test Means Tables}
 
-The student count table provides a count of the number of students who wrote each different version of the exam, separated into class section
-and aggregated, providing a total count for each exam code, and a grand total. This is produced automatically when the \verb!StatisticalOverview()!
-function is called, with \LaTeX formatting using the \pkg{tables} package.
+The student count table provides a count of the number of students who wrote each different version of the exam, separated into class section.
+Aggregated totals including a total count for each exam code, and a grand total are also provided. This is produced automatically when the \verb!StatisticalOverview()!
+function is called, with \LaTeX\ formatting using the \pkg{tables} package.
 
 The test means table calculates the overall test mean for each unique exam code and class section, as well as aggregate totals and a grand total.
 This tool is in place to help the instructor ensure that all test versions and class sections scored approximately the same. Any large discrepancies
 should be investigated.
 
-Using the \pkg{tables} it is quite easy to produce these two tables:
+Using the \pkg{tables} package, the two tables are produced using the following syntax:
 
 \begin{verbatim}
 The Student Count table is produced by:
@@ -436,6 +463,8 @@ latex(tabular((Heading("Exam Code")*factor(ExamCode)+1)
 The resulting tables look like this:
 
 <<>>=
+
+  pct <- function(x) 100*mean(x)/weight
 
   cat("\\begin{table}[h]")
   cat("\\caption{Student Counts and Test Means}")
@@ -458,34 +487,42 @@ The resulting tables look like this:
 
 \subsection{Kuder-Richardson 20}
 
-The Kuder-Richardson 20 statistics is produced by calling the \verb!KR20()! function, available in the \pkg{Sweavetest} package.
+The Kuder-Richardson 20 statistic is produced by calling the \verb!KR20()! function.
 It uses the result of \verb!grades()! as input and can be called as follows:
 
 \begin{verbatim}
-<<>>=
+
 KR20(GradedTests)
-@
+
 \end{verbatim}
 
 The result of calling this function is a single test statistic:
 
+\begin{verbatim}
 <<>>=
 KR20(GradedTests)
 @
+\end{verbatim}
 
-This is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
+The Kuder-Richardson 20  is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
 test provide information about the knowledge of the students on the tested material.
 
-It is calculated through the following simple formula:
+It is calculated through the following formula:
 
-\[\alpha = \frac{K}{K+1}(1- \frac{\sum_{i=1}^{K} p_{i}q_{i}}{\sigma^{2}_{X}} \]
+\[ \alpha = \frac{K}{K+1}(1- \frac{\sum_{i=1}^{K} p_{i}q_{i}}{\sigma^{2}_{X}}) \]
 
-where K is the total number of items and \[p_{i}\] is the probability of success on item i.
+where K is the total number of items, $p_{i}$ is the probability of success on item i, $q_{i}$ is the probability of failure on item i, and $\sigma^{2}$ is the variance of the student scores.
 
 \subsection{Ferguson's Delta}
 
-The Ferguson's Delta statistic is produced by calling the \verb!FergusonsDelta()! function, available in the \pkg{Sweavetest} package.
-It takes the results of \verb!grades! as input, and can be called by the user as follows:
+The Ferguson's Delta statistic is produced by calling the \verb!FergusonsDelta()! function.
+It takes the results of \verb!grades()! as input, and can be called by the instructor as follows:
+
+\begin{verbatim}
+FergusonsDelta(GradedTests)
+\end{verbatim}
+
+The result of this function is also a single test statistic:
 
 \begin{verbatim}
 <<>>=
@@ -493,32 +530,48 @@ FergusonsDelta(GradedTests)
 @
 \end{verbatim}
 
-The result of this function is also a single test statistic:
-
-<<>>=
-FergusonsDelta(GradedTests)
-@
-
 Similar to the KR20 statistic, Ferguson's Delta also measures the consistency of the test. However, instead of measuring internal
-reliability, it measures test reliability as ``the ratio between the number of discriminations made by the test to the greatest number
-of discriminations that the test can generate, given the size of the sample and the number of items'' (Kline, 1986). 
+reliability, it measures test reliability as "the ratio between the number of discriminations made by the test to the greatest number
+of discriminations that the test can generate, given the size of the sample and the number of items" (Kline, 1986). 
 
-It is calculated using the following easy formula:
+It is calculated using the following formula:
 
-\[ \delta = \frac{(m+1)(n^{2}-\sum(f^{2}_{s}}{mn^{2}}\]
+\[ \delta = \frac{(m+1)(n^{2}-\sum(f^{2}_{s}))}{mn^{2}}\]
 
-where n is the number of test takers, m is the number of items, and \[f_{s}\] is the number of test takers obtaining each possible test score.
+where n is the number of test takers, m is the number of items on the test, and $f_{s}$ is the number of test takers obtaining each possible test score.
 
-Both the Ferguson's Delta and Kuder-Richardson 20 statistics are formatted into a table using the \pkg{tables} package.
+Both Ferguson's Delta and the Kuder-Richardson 20 statistic are formatted into a table using the \pkg{tables} package.
 
 \subsection{Answer Correlation Plot}
 
-% % % % %Dr. Murdoch to Fill In % % % % % % % %
+The answer correlation plot can be used by the instructor to quickly determine if a question is miskeyed or worded poorly. It plots difficulty rating along the x-axis, and the correlation between the students' total score and their answer on each question along the y-axis. The plotting characters are numerical and correspond to the question number so the instructor can quickly identify where each question is located on the plot. 
+
+A good question that is also difficult should be located in the upper left quadrant of the plot. This question is very difficult, but those students answering correctly scored highest on the test. A good question of average difficulty is generally located in the center of the plot. A mix of all students are answering this question correctly, but mostly students scoring well on the test. A particularly easy question is located in the bottom right quadrant of the plot, as almost everyone is answering this question correctly, and therefore there is virtually no correlation between total score and question answer.
+
+As an overall trend, the questions should form a line from the upper left corner to the bottom right corner.
+
+The function \verb!answerCorrelations()! is used to create the answer correlation plot. It takes as input the answers provided by the students and the corresponding correct answers, and is called using the following syntax:
+
+\begin{verbatim}
+Student <- GradedTests$Answers
+Correct <- GradedTests$Correct
+
+answerCorrelations(Student,Correct)
+\end{verbatim}
+
+which produces the following output:
+
+<<fig = TRUE>>=
+Student <- GradedTests$Answers
+Correct <- GradedTests$Correct
+
+answerCorrelations(Student,Correct)
+@
 
 \subsection{Score Distribution}
 
 The \verb!StatisticalOverview()! function also produces a histogram of the scores achieved by the students on the test.
-The purpose of this plot is to show the instructor the distribution of his test scores, and to help identify possible
+The purpose of this plot is to show the instructor the distribution of the test scores, and to help identify possible
 problems with the test as a whole (when used in conjunction with the other statistics provided).
 
 It is created as follows in the \verb!StatisticalOverview()! function:
@@ -526,12 +579,13 @@ It is created as follows in the \verb!StatisticalOverview()! function:
 \begin{verbatim}
 weight <- max(seq_len(max(nchar(GradedTests$Correct))))
 Percentage <- 100*GradedTests$Grade/weight
-GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
+GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", 
+                        breaks = c(0,10,20,30,40,50,60,70,80,90,100))
 \end{verbatim}
 
 The resulting plot is shown below:
 
-<<>>=
+<<fig=TRUE>>=
 weight <- max(seq_len(max(nchar(GradedTests$Correct))))
 Percentage <- 100*GradedTests$Grade/weight
 GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
@@ -539,11 +593,11 @@ GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = 
 
 \subsection{Individual Question Analysis}
 
-The \pkg{Sweavtest} package also analyzes each question individually, providing a number of useful statistics to aid in the 
+The \pkg{Sweavetest} package also analyzes each question individually, providing a number of useful statistics to aid in the 
 recognition of potential problem questions. This includes questions that have been keyed incorrectly, questions that have
 more than one plausible answer, questions that are misleading or ambiguous, and questions that may simply be too difficult.
 
-Analysis is accomplished using the following statistics:
+Analysis is accomplished using the following:
 
 \begin{itemize}
 \item Difficulty Rating
@@ -560,13 +614,13 @@ Each of these items will be discussed in detail.
 \subsection{Difficulty Rating}
 
 Difficulty rating measures the number of respondents who answered the question correctly,
-as a percentage of all respondents. The formula for difficulty rating is very simple:
+as a percentage of all respondents. The formula for difficulty rating is given as:
 
 \[ Difficulty Rating = \frac{C}{W + C} \]
 
-where C is the number of correct respondents, and W is the number of wrong respondents.
+where C is the number of respondents answering correctly, and W is the number of respondents answering incorrectly.
 
-Difficulty rating can be easily calculated using the built in function \verb!DifficultyRating()!.
+Difficulty rating can be calculated using the function \verb!DifficultyRating()!.
 It takes the result of the \verb!grades()! function discussed above, and can be called as follows:
 
 \begin{verbatim}
@@ -575,43 +629,47 @@ DifficultyRating(GradedTests)
 
 \end{verbatim} 
 
-This function produces one difficulty rating per question:
+This function produces one difficulty rating per question.
 
+\begin{verbatim}
 <<>>=
 DifficultyRating(GradedTests)
 @
+\end{verbatim}
 
-A question with a difficulty rating less than .2, or greater than .8 should be reviewed by the instructor.
+A question with a difficulty rating less than .2 should be reviewed by the instructor.
 
 \subsection{Item Discrimination}
 
 Item discrimination is used to determine if the question adequately distinguishes between those
 students who have the required knowledge to answer the question and those who don't. It is calculated
-very simply using the following formula:
+using the following formula:
 
-\[ Item Discrimination = \frac{(Upper 25\% Correct) - (Lower 25\% Correct)}{Total Number of Respondents} \]
+\[ Item Discriminator = \frac{(Upper 25\% Correct) - (Lower 25\% Correct)}{Total Number of Respondents} \]
 
 Where the upper 25\% of the students are defined to be those students who scored in the top 25\% on the test and got the question correct.
 The lower 25\% of students are defined similarly.
 
-Item discrimination can be calculated using the \verb!ItemDiscrimination()! function. It takes as input
+Item discrimination can be calculated using the \verb!ItemDiscriminator()! function. It takes as input
 the results of the \verb!grades()! function and can be called using the following syntax:
 
 \begin{verbatim}
-ItemDiscrimination(GradedTests)
+ItemDiscriminator(GradedTests)
 \end{verbatim}
 
-Similar to the outpur produced by the \verb!DifficultyRating()! function, one item discrimination value is produced per question:
+Similar to the output produced by the \verb!DifficultyRating()! function, one item discrimination value is produced per question.
 
+\begin{verbatim}
 <<>>=
-ItemDiscrimination(GradedTests)
+ItemDiscriminator(GradedTests)
 @
+\end{verbatim}
 
 A question with a negative item discrimination value should be reviewed by the instructor.
 
 \subsection{Point Biserial Correlation}
 
-Point biserial correlation is also a measure of test discrimination. It is easily calculated through
+Point biserial correlation is also a measure of item discrimination. It is calculated through
 the following formula:
 
 \[ Point Biserial = \frac{M_{p} - M_{q}}{\sigma\sqrt{pq}} \]
@@ -619,26 +677,26 @@ the following formula:
 where:
 
 \begin{itemize}
-\item \[M_{p}\] is the mean score of students answering the question correctly
-\item \[M_{q{}\] is the mean score of students answering the question incorrectly
-\item \[\sigma\] is the standard deviation of the exam mean
+\item $M_{p}$ is the mean score of students answering the question correctly
+\item $M_{q}$ is the mean score of students answering the question incorrectly
+\item $\sigma$ is the standard deviation of the exam mean
 \item p is the proportion of students answering the question correctly
 \item q is the proportion of students answering the question incorrectly
 \end{itemize}
 
-Point biserial correlation can be easily calculated using the \verb!PointBiserial()! function
-included in the \pkg{Sweavetest} package. It takes as input the results of the \verb!grades()! function,
-and is called using the following syntax:
+Point biserial correlation can be easily calculated using the \verb!PointBiserial()! function.It takes as input the result of the \verb!grades()! function, and is called using the following syntax:
 
 \begin{verbatim}
 PointBiserial(GradedTests)
 \end{verbatim}
 
-Again, this function creates one value of the point biserial index per question:
+This function creates one value of the point biserial index per question.
 
+\begin{verbatim}
 <<>>=
 PointBiserial(GradedTests)
 @
+\end{verbatim}
 
 Point biserial correlation should be used in conjunction with the calculated item discrimination
 statistic to determine if a question adequately discriminates between those students who have the
@@ -648,44 +706,65 @@ Any question with a point biserial value below .2 should be reviewed by the inst
 
 \subsection{Option Frequency}
 
-Using the results of the \verb!CreateIndex()! function, a count of how many students chose
-each answer option is provided. This will aid the instructor in determining which answer choices were the
-most popular amongst the students, and which were the least popular.
+Using the \verb!CreateIndex()! function, a count of how many students chose each answer option is provided. This function takes as input the index automatically created by the test creation process (read in above as "TestIndex.dat"), as well as the result of the \verb!grades()! function.
 
-Any answer option which has very few respondents should be reviewed by the instructor.
+The purpose od the \verb!CreateIndex()! function is to undo the answer choice randomization that is done during the test creation process, so that firm counts can be given for each answer choice, not just counts of how many students chose "A", "B", "C", etc.
+
+The output of this function is a matrix containing the number of respondents choosing each answer option. The rows correspond to question numbers, while the columns are representative of the answer options. The answer options are in the same order that the instructor provided them on the Sweave template.
+
+Below is the first five rows of the output matrix for our sample test:
+
+\begin{verbatim}
+CreateIndex{TestIndex.dat, GradedTests}
+\end{verbatim}
+
+\begin{verbatim}
+<<>>=
+TestIndex <- read.table(TestIndex.dat)
+NumberOfVersions <- 4
+AnswerCountMatrix <- CreateIndex(TestIndex, GradedTests)
+AnswerCountMatrix[1:5,]
+@
+\end{verbatim}
+
+Any answer option which has very few respondents should be reviewed by the instructor. If the answer choice is NA, this means that no such option was available on the test (i.e. there were only four answer choices, not five).
 
 \subsection{Distractor Discrimination}
 
 An item discrimination value is also calculated for each of the answer options. This is accomplished
-in the exact same way as described above (where it is done for the entire test). Ideally, the only 
-answer option with a positive item discrimination value will be the correct answer. All other options
-should have a negative item discrimination value, which tells the instructor that the students who scored
+in the exact same way as described in the item discrimination section (where it is done for the question as a whole). Ideally, the only answer option with a positive item discrimination value will be the correct answer. All other options should have a negative item discrimination value, which tells the instructor that the students who scored
 lowest on the test are choosing that option more frequently than the students who scored highest on the test.
 
-Any incorrect answer with a positive item discrimination should be evaluated by the instructor.
+Any incorrect answer choice with a positive item discrimination should be evaluated by the instructor.
 
-Both the Option Frequency and Distractor Discrimination statistics are combined in a single table for convenience.
+Both the option frequency and distractor discrimination statistics are combined in a single table for convenience. We provide the table produced for the first question of our sample test.
 
 <<>>=
+QuestionCounter <- 1
+NumberOfVersions <- 4
+Index <- read.table(TestIndex.dat)
+AnswerCountMatrix <- CreateIndex(Index, GradedTests)
 
-pct <- function(x) 100*mean(x)/weight
+Values <- function(x){x}
+Frequency <- function(x){x}
+Percentage <- function(x){x}
+Discrimination <- function(x){x}
 
- cat("\\begin{table}[h]")
-  cat("\\caption{Student Counts and Test Means}")
-  cat("\\begin{subtable}[h]{.5\\linewidth}")
-  cat("\\centering")
-  cat("\\caption{Student Counts}")
-  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1), data=GradedTests))
-  cat("\\end{subtable}")
-  cat("\\begin{subtable}[h]{.5\\linewidth}")
-  cat("\\centering")
-  cat("\\caption{Test Means}")
-  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
-              *pct*Format(digits=3), data=GradedTests))
-  cat("\\end{subtable}")
-  cat("\\end{table}")
+AnswerCounts <- AnswerCountMatrix[QuestionCounter,]
+drop <- which(is.na(AnswerCounts))
+if(length(drop)>0){
+  AnswerCounts <- AnswerCounts[-drop]
+}
+Options <- paste(" ", c(1:length(AnswerCounts)), sep="")
+Resp <- 100*AnswerCounts/nrow(GradedTests)
+Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,Index)
+CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
+
+cat("\\begin{center}")
+latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency
+                                        +Heading()*Format(digits=2)*Resp*Percentage
+                                        +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
+cat("\\end{center}")
 @
 
 \subsection{Option Frequency Plot}
@@ -710,7 +789,8 @@ answerPlots(StudentAnswers, CorrectAnswers, ExamVersion, QuestionCounter)
 
 The resulting plot for the first question is shown below:
 
-<<>>=
+<<fig=TRUE>>=
+CorrectIndex <- read.table(CorrectIndex.dat)
 StudentAnswers <- GradedTests$Answers
 CorrectAnswers <- GradedTests$Correct
 ExamVersion <- GradedTests$ExamCode
@@ -726,12 +806,12 @@ answering the question correctly. It plots the test scores along the x-axis and 
 the test taker will answer the question correctly along the y-axis.
 
 From this graph, we can deduce the empirical probability of a student answering the question correctly
-given his score on the test.
+given his or her score on the test.
 
 It would be expected that this graph would be monotonically increasing, from the lowest score achieved on
 the test to the highest score.
 
-The plot can be created using the \verb!EmpiricalProbabilityPlot()! function. It takes as input the results
+The plot can be created using the \verb!EmpiricalProbabilityPlot()! function. It takes as input the result
 from the \verb!grades()! function, as well as the question number for which the plot will created. A plot
 for the first question can be created using the following syntax:
 
@@ -742,7 +822,7 @@ EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
 
 Yielding the following graph:
 
-<<>>=
+<<fig=TRUE>>=
 QuestionCounter <- 1
 EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
 @
@@ -753,8 +833,8 @@ be reviewed by the instructor.
 \subsection{Warnings}
 
 Part of the analysis of the multiple choice test is providing the instructor with information on the
-appropriateness of the calculated values of the statistics. If the values of the Item Discrimination, 
-Difficulty Rating, or Point Biserial statistics fall below industry standards, 
+appropriateness of the calculated values of the statistics. If the values of the item discrimination, 
+difficulty rating, or point biserial statistics fall below industry standards, 
 the built in function \verb!Warnings{}! will automatically produce a message informing the instructor,
 as well as pointing the instructor to resources with suggestions on improving (or possibly eliminating) 
 said question.
@@ -780,25 +860,31 @@ Warnings(DR, ID, PB)
 
 A number of different outputs can be produced dependent upon which statistics are at unacceptable
 levels. A couple examples are given below:
-
+\\
+\\
 If a single statistic is below acceptable standards:
-
+\\
+\\
 <<>>=
+DR <- DifficultyRating(GradedTests)[1]
+ID <- ItemDiscriminator(GradedTests)[1]
+PB <- PointBiserial(GradedTests)[1]
+
 DR <- 0
 Warnings(DR, ID, PB)
 @
-
 If there are two statistics that are below acceptable standards:
-
+\\
+\\
 <<>>=
 DR <- 0
 PB <- 0
 
 Warnings(DR, ID, PB)
 @
-
 If all three statistics are below acceptable standards:
-
+\\
+\\
 <<>>=
 DR <- 0
 PB <- 0
@@ -806,7 +892,6 @@ ID <- -1
 
 Warnings(DR, ID, PB)
 @
-
 The report also provides warning messages if the Kuder-Richardson 20 statistic or Ferguson's Delta
 fall below acceptable standards. These messages are produced directly by the \verb!StatisticalOverview()!
 function.
@@ -823,7 +908,7 @@ to choose from - the full report, and the analysis only report. Both are discuss
 \subsection{Full Report}
 
 The full report is to be used by those instructors who have created their entire test using the provided 
-Sweave template. The creation of the test itself is discussed in the \ref{sec:preparing} section. 
+Sweave template. The creation of the test itself is discussed in Section \ref{sec:preparing}. 
 
 By simply modifying a few global variables in the template, the instructor can create a full report
 to analyze the results of the test.
@@ -831,38 +916,39 @@ to analyze the results of the test.
 The template provides a number of variables that are under the users control:
 
 \begin{verbatim}
-<<>>=
 set.seed(18)
-setwd(''C:\Users\Sample")
 library(Sweavetest)
 library(tables)
-testversion <- 4
+setwd("C:/Users/Sample")
+newCommands()
 Version <- version("Student")
+testversion <- 4
 NumberOfVersions <- 4
 
-if(Version == ``Report''){
-scanex <- readScanex(''sample.dat'')
+if(Version == "Report"){
+  scanex <- readScanex("sample.dat")
 }
-@
+
+Initialization(Version = Version)
+
 \end{verbatim}
 
 To create the report, the user needs to change the following:
 \begin{itemize}
-\item The Version variable to ``Report''
-\item The default ``sample.dat'' input for \verb!readScanex()! function to the Scantron file they wish to use.
+\item The \verb!Version! variable to "Report"
+\item The default "sample.dat" input for the \verb!readScanex()! function to the Scantron file they wish to use.
 \item The working directory must be changed to that containing the Scantron file
 \end{itemize}
 
-The variables not mentioned above should not be changed or modified in any way.
+The variables not mentioned above should not be changed or modified in any way, unless the instructor is familiar with \LaTeX\ and wishes to modify the preset formatting done by the templates.
 
 From here, everything else is achieved automatically through the built in functions.
 The instructor need only process the newly modified .Rnw file, and a pdf report will be created.
 The report will include reproduction of the original questions, with answers given in un-randomized
-order, as well as all of the analysis described in the \ref{sec:analysis} section.
+order, as well as all of the analysis described in Section \ref{sec:analysis}.
 
-An appendix is also provided at the end of the report. The appendix contains brief explanations of
-all the statistics used in the report. This will allow the instructor to quickly and efficiently
-look up the meaning of any of the statistics, as well as suggestions on how to improve
+An appendix is also provided at the end of the report, using the function \verb!Appendix()!. This function takes no inputs and is called auatomatically when a report is ordered by the instructor. The appendix contains brief explanations of all the statistics used throughout the report. This will allow the instructor to quickly and efficiently
+look up the definition of any of the statistics, as well as suggestions on how to improve
 the question if the calculated statistics were found to be below acceptable standards.
 
 References are also provided if the instructor wants more information on any of the statistics
@@ -878,8 +964,7 @@ the package. This template produces many of the same statistics as the full repo
 be able to reproduce the questions and answer options, nor will it be able to undo any randomization
 in the answer options.
 
-This method does however, provide a function that will allow the report to recognize the correspondence
-between randomization in questions. The function that must be called is \verb!Unscramble()! function.
+This method does however, provide the instructor with a function that will allow the report to recognize the correspondence between randomization in questions, as opposed to the randomization in answer options that is done during the full report creation process. The function that must be called to determine these correspondences is the \verb!Unscramble()! function.
 
 The \verb!Unscramble()! function takes the following as input:
 
@@ -887,7 +972,7 @@ The \verb!Unscramble()! function takes the following as input:
 \item The result of the \verb!readScanex()! function
 \item A vector of exam codes
 \item A matrix of question orders, with rows corresponding to the order the exam codes were entered
-\item A variable called Scramble, which takes on FALSE if there is no randomization in the question order, and TRUE otherwise
+\item A variable called Scrambled, which takes on TRUE if there is randomization in the question order, and FALSE otherwise
 \end{itemize}
 
 The syntax for using this function is as follows:
@@ -905,10 +990,10 @@ NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
 
 \end{verbatim}
 
-we can see below what the function does by comparing the original Scantron file to the new scantron file
+we can see below what the function does by comparing the original Scantron file to the new scantron file:
 
 <<>>=
-scanex <- readScanex(''Sample'')
+scanex <- readScanex(Sample)
 ExamCodes <- c(170,738,840,967)
 Master <- c(1:30)
 Order1 <- c(15:30, 1:14)
@@ -919,16 +1004,24 @@ Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
 NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
 @
 
-<<echo=TRUE>>=
+First 6 student answers of old scanex
 
-#First 5 lines of old scanex
-head(scanex)
+\begin{verbatim}
+<<>>=
 
-#First 5 lines of new scanex
-head(NewScanex)
+scanex$Answers[5:10]
 @
+\end{verbatim}
 
-We can clearly see that the answers have been re-ordered in the new Scantron file as specified by the
+First 6 student answers of new scanex
+
+\begin{verbatim}
+<<>>=
+scanex$Answers[5:10]
+@
+\end{verbatim}
+\\
+We can see that the answers have been re-ordered in the new Scantron file as specified by the
 instructor. This will allow the \verb!LowLevelReport()! function to create a report with the proper
 correspondences.
 
@@ -937,26 +1030,24 @@ Note: This function is unnecessary when running a full report, as question rando
 The provided Sweave template provides several variables that are under the users control:
 
 \begin{verbatim}
-options(width=60)
-dir.create("figs", showWarn=FALSE)
+set.seed(18)
 library(Sweavetest)
 library(tables)
 setwd("C:/Users/Sample")
 scanex <- readScanex("sample.dat")
-Unscramble(
-LowLevelReport(scanex)
-Appendix(Report == TRUE)
+Scantron <- Unscramble(scanex,Scrambled = FALSE)
 \end{verbatim}
 
-Most of these variables can be left untouched. The user must only make two modifications
+Most of these variables can be left untouched. The user must only make three modifications
 to the variables above:
 
 \begin{itemize}
 \item The working directory must be changed to the location of the Scantron file that will be read in
 \item The file in the \verb!readScanex()! function must be changed to the desired Scantron file
+\item If the user has chosen to put the questions in different orders on each version of the exam, the \verb!Unscramble()! function must be used
 \end{itemize}
 
-No other variables should be modified, unless the instructor is familiar with \LaTeX formatting and 
+No other variables should be modified, unless the instructor is familiar with \LaTeX\ formatting and 
 wishes to change the pre-set formatting done by the template.
 
 At this point the instructor need only process the Sweave document, and a report will be created
@@ -979,18 +1070,71 @@ The instructor can create a .dat file with the following columns:
 \item Column 6 must be the students' answers concatenated into a single character
 \end{itemize}
 
-An example file is given below. For best results, the users file should mirror the contents of this file as closely as possible, including
-column titles.
+An example file is given below. For best results, the users file should mirror the contents of this file as closely as possible, including column titles.
+
+\begin{verbatim}
+<<>>=
+scanex[5:10,]
+@
+\end{verbatim}
+\\
+
+One important aspect of the Scantron file is the answer keys. They are denoted by Student ID 999999999, and have the same columns as the students. Thea answer keys for our sample test are provided below:
+
+\begin{verbatim}
+<<>>=
+scanex[1:4,]
+@
+\end{verbatim}
+
+Note that the answer keys do not require a section number, and should not count in the total exam count.
+
+Once this file has been created, the instructor can carry on with the report process as described above (with either the full report or using the \verb!LowLevelReport()! function).
+
+\section{Merging Class Lists}
+\label{sec:Merge}
+
+The final tool provided by the \pkg{Sweavetest} package allows the instructor to export the results of the \verb!grades()! function and appends it to a pre-existing class list. This is done by calling the \verb!MergeClassList()! function.
+
+This function takes as input the class list read in using the \verb!read.csv! function, to which we are appending the results of \verb!grades()!. A sample class list has been provided with this package, and the class list used should mirror its format. A small snapshot is provided below:
 
 <<>>=
-head(scanex)
+Classlist <- system.file("sample/ClassListTemplate.csv", package = "Sweavetest")
+MasterClasslist <- system.file("sample/MasterClassListTemplate.csv", package = "Sweavetest")
+
+SampleClassList <- read.csv(Classlist)
+SampleMasterClassList <- read.csv(MasterClasslist)
 @
 
-Note in the file above that the first four entries are the answer keys for the exam. These must be present in the Scantron file and are recognized by
-the package by having Student ID 999999999. The answer keys do not require a section number, and should not count in the total exam count.
+\begin{verbatim}
+<<>>=
+head(SampleClassList)
+@
+\end{verbatim}
 
-Once this file has been created, the instructor can carry on with the report process as described above (with either the full report or using the
-\verb!LowLevelReport()! function).
+Note that the column titles have been slightly modified by R. In the CSV file, the first column is entitled "Student #". All other periods in the title names correspond to blank spaces.
+
+A vector of class sections as characters, as well as a title for the test are also required as input. The original Scantron file must also be passed as input
+
+There are a couple optional variables under the instructors control. If the instructor has decided to exclude some of the questions from the exam (based on the analysis provided in the report), the \verb!weights! variable can be changed to a vector of 0s and 1s, corresponding to each question on the test. The user can change the name of the file to be exported from its default value of "MasterClassList", and the instructor can also request that one file be exported concatenating all class sections by changing the \verb!AcceptSectionCSV! variable to TRUE.
+
+The following syntax should be used when calling the \verb!MergeClassList()! function. In our example, we have decided to exclude the first question from the weighting:
+
+\begin{verbatim}
+
+classlist <- read.csv("MasterClassList.csv")
+Sections <- c("001", "002")
+TestTitle <- "Test 1"
+weights <- c(0, rep(1, 29))
+
+MergeClassList(classlist, scanex, weights, Sections, TestTitle,
+              MasterName = "MasterClassList", AcceptMasterCSV = TRUE)
+
+\end{verbatim}
+
+This will append the results of the \verb!grades()! function to the classlist that was specified.
+
+This function uses another function, the \verb!MergeLists()! function, to actually append  the two files. The main purpose of the \verb!MergeClassList()! function is to format the file so that it is clean when it is exported back to the user.
 
 \section{Cheating Detection}
 \label{sec:cheating}

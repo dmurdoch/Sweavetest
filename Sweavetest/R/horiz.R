@@ -31,8 +31,8 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
   DR <- DR[QuestionCounter]
   ID <- ID[QuestionCounter]
   PB <- PB[QuestionCounter]
-  Index <<- read.table("TestIndex.dat")
-  CorrectIndex <<- read.table("CorrectIndex.dat")
+  Index <- getglobal(Index, c())
+  CorrectIndex <- getglobal(CorrectIndex, c())
   }
    
   if(Version != "Report"){

@@ -32,6 +32,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, Answers, testversion, randomize,
     DR <- DR[QuestionCounter]
     ID <- ID[QuestionCounter]
     PB <- PB[QuestionCounter]
+    CorrectIndex <- getglobal(CorrectIndex, C())
   }
   
   if(Version != "Report"){

@@ -37,6 +37,7 @@ Initialization <- function(Initialize = TRUE, Version){
     randomize <<- FALSE
     itemlabels <<- paste("(", c(1:26), ")", sep="")
     Index <<- read.table("TestIndex.dat")
+    CorrectIndex <<- read.table("CorrectIndex.dat")
     GradedTests <<- grades(scanex)
     KR <<- KR20(GradedTests)
     FD <<- FergusonsDelta(GradedTests)

@@ -111,9 +111,8 @@ test version number, version 4 the largest.
 
 The supplied functions do the work of formatting the answers.   For example,
 \begin{verbatim}
- \item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if 
- $U > 0.3$, equal to 1 otherwise.  The distribution of 
- $X$ is
+ \item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if $U > 0.3$,
+       equal to 1 otherwise.  The distribution of $X$ is
  <<>>=
  enumerate("Binomial$(n=1, p=0.7)$", 
       "Binomial$(n=1, p=0.3)$",
@@ -176,8 +175,7 @@ For example, the input
 produces
 \begin{enumerate}
 \setcounter{enumi}{1}
-\item Which of the following gives the best approximation to \\
- $\int_0^5 (x + 4) \cos(x) dx$?
+\item Which of the following gives the best approximation to $\int_0^5 (x + 4) \cos(x) dx$?
 <<>>=
  Renumerate(Correct=2,
  "x <- runif(1000, 0, 5); mean((x + 4)*cos(x))",
@@ -920,7 +918,6 @@ set.seed(18)
 library(Sweavetest)
 library(tables)
 setwd("C:/Users/Sample")
-newCommands()
 Version <- version("Student")
 testversion <- 4
 NumberOfVersions <- 4
@@ -995,10 +992,10 @@ we can see below what the function does by comparing the original Scantron file 
 <<>>=
 scanex <- readScanex(Sample)
 ExamCodes <- c(170,738,840,967)
-Master <- c(1:30)
-Order1 <- c(15:30, 1:14)
-Order2 <- c(20:30,1:10, 15:19,11:14)
-Order3 <- c(30:1)
+Master <- c(30, 1:29)
+Order1 <- c(30, 1:29)
+Order2 <- c(30, 1:29)
+Order3 <- c(30, 1:29)
 Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
 
 NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
@@ -1017,7 +1014,7 @@ First 6 student answers of new scanex
 
 \begin{verbatim}
 <<>>=
-scanex$Answers[5:10]
+NewScanex$Answers[5:10]
 @
 \end{verbatim}
 \\
@@ -1100,10 +1097,7 @@ This function takes as input the class list read in using the \verb!read.csv! fu
 
 <<>>=
 Classlist <- system.file("sample/ClassListTemplate.csv", package = "Sweavetest")
-MasterClasslist <- system.file("sample/MasterClassListTemplate.csv", package = "Sweavetest")
-
 SampleClassList <- read.csv(Classlist)
-SampleMasterClassList <- read.csv(MasterClasslist)
 @
 
 \begin{verbatim}
@@ -1206,9 +1200,8 @@ Update this list as we cover things.
 
 Still need to document
 
- [1] "answerCorrelations"          "answerMatrix"        "clean"             
+ [1]          "answerMatrix"        "clean"             
  [6]          "getglobal"          "grades"                              
-[11]       "mergeLists"                         
 [16] "nominalRoll"        "perms"                "readScanex"           
 [26] "versioncodes"   
 

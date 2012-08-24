@@ -1,0 +1,44 @@
+\documentclass[12pt]{article}
+\usepackage{Sweave}
+\SweaveOpts{keep.source=TRUE,width=5,height=4,echo=FALSE,results=tex,concordance=TRUE,prefix.string=figs/}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\setkeys{Gin}{width=4in}
+
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\renewcommand{\labelenumii}{(\Alph{enumii})}
+\renewcommand{\labelenumi}{{\bf\arabic{enumi})}}
+\newcommand{\R}{$^\mbox{\scriptsize\textregistered}$}
+\newcommand{\Correct}{}
+
+\begin{document}
+
+<<>>=
+options(width=60)
+dir.create("figs", showWarn=FALSE)
+@
+
+<<>>=
+#The User Should Modify These Variables Only
+
+set.seed(18)
+library(Sweavetest)
+library(tables)
+setwd("C:/Users/Sample")
+scanex <- readScanex("sample.dat")
+Scantron <- Unscramble(scanex,Scrambled = FALSE)
+@
+
+<<>>=
+Version <- version("Report")
+LowLevelReport(Scantron)
+Appendix(Version)
+@
+
+\end{document}

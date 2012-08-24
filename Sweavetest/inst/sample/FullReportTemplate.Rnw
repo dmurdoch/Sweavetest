@@ -1,0 +1,172 @@
+\documentclass[12pt]{article}
+\usepackage{Sweave}
+\SweaveOpts{keep.source=TRUE,width=5,height=4,echo=FALSE,results=tex,concordance=TRUE,prefix.string=figs/}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\setkeys{Gin}{width=4in}
+
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\renewcommand{\labelenumii}{(\Alph{enumii})}
+\renewcommand{\labelenumi}{{\bf\arabic{enumi})}}
+\newcommand{\R}{$^\mbox{\scriptsize\textregistered}$}
+
+<<>>=
+#The User Should Modify These Variables To Suit Their Needs
+set.seed(18)
+library(Sweavetest)
+library(tables)
+setwd("C:/Users/Adam Rahman/Desktop/Summer Project/Test Templates")
+newCommands()
+Version <- version("Teacher")
+testversion <- 4
+NumberOfVersions <- 4
+
+if(Version == "Report"){
+  scanex <- readScanex("fakescans.dat")
+}
+
+Initialization(Version = Version)
+@
+
+\pagestyle{myheadings}
+\thispagestyle{plain}
+\newcounter{myitem}
+\hyphenation{Scantron}
+
+\markright{"Your Class Name Here" Exam \Sexpr{versioncodes[testversion]}}
+
+\begin{document}
+
+%The User Should Change the Information Below to Suite Their Needs
+
+\begin{center}
+THE UNIVERSITY OF WESTERN ONTARIO \\
+DEPARTMENT OF STATISTICAL AND ACTUARIAL SCIENCES \\
+KING'S UNIVERSITY COLLEGE \\
+STATISTICS 1024A TEST 1  \\
+\ \\
+Saturday, October 15, 2011, 10:00 AM - noon \\
+\ \\
+\end{center}
+
+<<>>=
+StatisticalOverview(GradedTests,KR,FD,fignum)
+@
+
+\begin{center}
+\fbox{\bf EXAM CODE \Sexpr{ExamNum[testversion]}}
+\end{center}
+\vspace{0.5in}
+
+INSTRUCTIONS:
+
+\begin{itemize}
+
+%All Instructions for the Test Should be given in this Itemize Environment. For our sample test,
+%we have the following instructions:
+
+\item This is a closed book test.  Table A from the text and a formula sheet are attached.
+
+\item Use only an HB pencil for the Scantron sheet.
+
+\item { Fill in NAME, INSTRUCTOR, SIGNATURE and COURSE  on the {Scantron} sheet.}
+
+\item { Fill in and {\bf code} your STUDENT NUMBER, SECTION and EXAM CODE on the Scantron sheet.  Your EXAM CODE is  \Sexpr{ExamNum[testversion]}.  }
+
+\item { Leave the ANSWER SHEET NUMBER blank on the Scantron sheet.}
+
+\item There are 30 multiple choice questions on pages 2 to \pageref{lastpage}.  A blank page for rough work, 
+the formula sheet, and Table A are at the end of the paper.
+
+\item
+{\bf Code} your answers on the Scantron sheet and submit it.  You may keep
+the question sheet.
+
+\item Only non-programmable calculators are permitted.
+
+\item {\bf NO EXTRA TIME WILL BE GIVEN TO CODE YOUR ANSWERS!!}
+
+\end{itemize}
+
+\vspace{0.5in}
+
+\begin{center}
+{\large\bf GOOD LUCK!}
+\end{center}
+
+\newpage
+
+\begin{enumerate}
+
+%All Questions Should be Typed in the Enumerate Environment.
+%Two Examples (One using the horiz() function and one using the enumerate() function)
+%are given below.
+
+\addtolength{\itemsep}{4\baselineskip}
+
+\item A national achievement test is administered annually to 3rd graders. The test scores follow
+a Normal distribution with a mean score of 100 and a standard deviation of 15.
+If a student has a z-score of 1.20, what was his score on the test?\\
+<<>>=
+horiz( 82,  88, 100, 118, Correct=4)
+@
+
+\item 
+The distribution of annual income per person is typically right-skewed.  With such a distribution, we would expect that
+<<>>=
+enumerate(
+"The average and the median income should be roughly the same, given that mean and median are both measures of spread.",
+"The average annual income is lower than the median annual income.",
+"The average annual income is greater than the median annual income.",
+"The spread around the center of the distribution should be very narrow.", Correct=3)
+@
+
+\end{enumerate}
+
+\label{lastpage}
+
+\newpage
+
+\thispagestyle{empty}
+
+\begin{center}
+{\LARGE
+FORMULA SHEET}
+\end{center}
+
+%Any Formulas That the User Wishes to Supply for the Students Should Be Given Below.
+%We Have Provided Some Common Ones.
+
+\[
+s_x^2 = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar x)^2
+\]
+
+\[
+r = \frac{1}{n-1} \sum_{i=1}^n \left(\frac{x_i - \bar x}{s_x}\right)\left(\frac{y_i - \bar y}{s_y}\right)
+\]
+
+\[
+\hat y = a + b x
+\]
+
+\[
+b = r \frac{s_y}{s_x}
+\]
+
+\[
+a = \bar y - b \bar x
+\]
+
+\newpage
+
+<<>>=
+Conclusion()
+@
+
+\end{document}

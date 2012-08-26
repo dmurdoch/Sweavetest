@@ -5,12 +5,10 @@ Merge information from graded tests to pre-existing class list
 }
 \description{
 MergeClassList should be used after analysis of the test has been done. After appropriate analysis has
-been completed, this function will re-grade the test with the desired weights and will merge the following columns to a pre-existing class list:
-  \item{Exam Code}
-  \item{Scantron Code}
-  \item{Student Answers}
-  \item{Correct Answers}
-  \item{Grade}
+been completed, this function will re-grade the test with the desired weights and will merge five columns to the existing class list.
+These columns are the test exam code, the Scantron code, the student's answers, the corresponding correct answers, and finally
+the student's grade on the test.
+
 This function also allows the user to choose to export these newly merged class lists as CSV files. The user can choose to export a Master Class List, which will be a
 class list which includes students from all sections of the course. The user can also choose to export one CSV file per section of the course.
 
@@ -54,8 +52,7 @@ If during the merger process, one or more student numbers do not match, the func
 If the user does not choose to export both Master and Section CSV files, this function will return messages to the user with instructions on how to export these files if they desire.
 }
 \author{
-Duncan Murdoch
-Adam Rahman
+Duncan Murdoch and Adam Rahman
 }
 \note{
 For this function to execute properly, a working directory must be specified by the user. The function will export the CSV files chosen by the user to the specified directory.
@@ -70,7 +67,6 @@ scanex <- readScanex(''SS1024A-001.dat'')																#Scantron File read int
 weights <- rep(1,50)																					#50 Questions present in 'scanex' worth 1 mark each
 sections <- c(''1'')																					#One section present in class list
 MergeClassList(classlist,scanex,weights, sections, TestTitle=''Test1'')									#Execution of function
-}
 
 #For multiple class lists
 library(Sweavetest)																						#This package contains the MergeClassList Function

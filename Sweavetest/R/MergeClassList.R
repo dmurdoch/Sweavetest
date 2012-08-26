@@ -1,7 +1,3 @@
-###Requires both SweaveTest and Tables libraries to be read in###
-library(Sweavetest)
-library(tables)
-
 MergeClassList <- function(classlist,scanex,weights=rep(1,200),sections,TestTitle, MasterName = "MasterClassList",AcceptSectionCSV = TRUE, AcceptMasterCSV = FALSE){
 
 ###Grade the tests###

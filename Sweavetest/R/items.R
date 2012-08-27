@@ -57,10 +57,8 @@ function(..., Correct=1, KeepLast=0, CheckDups, Answers, testversion, randomize,
   x <- x[indices]
   QuestionIndex <<- c(QuestionIndex,QuestionCounter)
   
-  cat("\\begin{enumerate}\n")
   y <- paste("\\item",x,"\n", sep=" ")
   cat(y)
-  cat("\\end{enumerate}\n")
   
   if(length(indices)<5){
     indices <- c(indices,rep(NA,5-length(indices)))

@@ -22,7 +22,7 @@
 <<>>=
 options(width=60)
 set.seed(18)
-#install.packages("Sweavetest/Sweavetest",type="source",repos=NULL)
+install.packages("..",type="source",repos=NULL)
 library(Sweavetest)
 library(tables)
 randomize <- TRUE
@@ -308,6 +308,47 @@ answerkey(symbols=LETTERS)
 
 \section{Reading Student Responses}
 \label{sec:reading}
+
+At UWO, multiple choice tests are normally recorded on ``Scantron'' sheets.  Scantron is a
+commercial company producing products for data entry; the sheets used at UWO are customized
+to our needs (Figure \ref{fig:scantron}).  Each sheet records a student number, section, exam
+code, and up to 180 multiple choice answers (60 on the front, 120 on the back) using mark-sense
+technology.  The student's name and signature, and the instructor's name and the course number
+are also written on the sheet.
+\begin{figure}
+\begin{center}
+\includegraphics[width=5in]{scantron_front.pdf}
+\end{center}
+\caption{The front of a UWO Scantron sheet.\label{fig:scantron}}
+\end{figure}
+
+A scanner reads and interprets the mark-sense fields, producing a raw file of data, with one line
+per sheet scanned.  The sheets are stamped with a sequence number that is also recorded in the file.
+The format of the file is shown in Table \ref{tab:scantron}.  Columns not listed contain
+punctuation that we ignore.
+
+\begin{table}
+\caption{Fixed format of Scantron raw data file.\label{tab:scantron}}
+\begin{center}
+\begin{tabular}{clclc}
+\hline
+Columns & \multicolumn{1}{c}{Contents} & \multicolumn{3}{c}{\texttt{readScanex} column} \\
+\hline
+1--9 & Student id number & & \texttt{"Student ID"} & \\
+11--13 & Course section number & & \texttt{"Section"} & \\
+15--17 & Exam code number & & \texttt{"ExamCode"} & \\
+19 & Answer sheet number & & \texttt{"Sheet"} & \\
+21--24 & Sequence number of Scantron sheet & & \texttt{"Scantron"} & \\
+26--205 & Recorded responses (or blanks) & & \texttt{"Answers"} & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The \texttt{readScanex()} function reads files in this format, producing a data frame with column names
+as shown in the table.  All fields are read as character data.  None of the 
+functions in \pkg{Sweavetest} make use of the \texttt{"Sheet"} field, as our tests always have fewer than
+180 questions.
 
 \section{Analysis of a Test}
 \label{sec:analysis}
@@ -988,16 +1029,8 @@ If the instructor uses grading technology other than that provided by Scantron, 
 the analysis in the \pkg{Sweavetest} package, but must modify their input file to meet the specifications of 
 the functions.
 
-The instructor can create a .dat file with the following columns:
-
-\begin{itemize}
-\item Column 1 must contain the Student IDs
-\item Column 2 must contain the Section of the each student
-\item Column 3 must contain the Exam Codes for the test
-\item Column 4 must be blank. When read in from the Scantron file, this column is designated as ``Marker'', but is unused by the \pkg{Sweavetest} package
-\item Column 5 must count the number of exams that were taken
-\item Column 6 must be the students' answers concatenated into a single character
-\end{itemize}
+The instructor can create a .dat file with columns matching those produced by the \texttt{readScanex()} function;
+see Table \ref{tab:scantron}.
 
 An example file is given below. For best results, the users file should mirror the contents of this file as closely as possible, including column titles.
 

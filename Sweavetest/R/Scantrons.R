@@ -1,7 +1,7 @@
 readScanex <- function(filename) {
     read.fwf(filename,
              widths=c(9,-1,3,-1,3,2,-1,4,-1,180),
-    	     col.names=c("Student ID", "Section", "ExamCode", "Marker", "Scantron", "Answers"),
+    	     col.names=c("Student ID", "Section", "ExamCode", "Sheet", "Scantron", "Answers"),
     	     as.is = TRUE, colClasses="character", check.names=FALSE)
 }
 

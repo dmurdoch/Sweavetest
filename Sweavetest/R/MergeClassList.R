@@ -7,7 +7,7 @@ grade.test <- grades(scanex, correct=weights)
 classlist <- mergeLists(classlist, grade.test, c("Student..", "Student ID"))
 
 ###Get rid of unnecessary columns from merger###
-drop <- which(names(classlist) %in% c("Section.y", "Marker"))
+drop <- which(names(classlist) %in% c("Section.y", "Sheet"))
 classlist <- classlist[,-drop]
 
 ###Check for NAs and send messages to user###

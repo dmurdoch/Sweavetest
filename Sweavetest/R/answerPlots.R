@@ -144,17 +144,11 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       	centres <- barplot(bar, ylim=c(0, length(versions)), main=title, 
       	                   col=col, axes=FALSE)
       
-        if(length(QIndex) == 5){
-          axis(1, at=centres, c(1:5))
-      	}
-        
-        if(length(QIndex) == 4){
-          axis(1, at=centres, c(1:4))
-        }
-        
       	axis(2, at=1:length(versions) - 1, versions, las=2)
       } else
         barplot(bar, add=TRUE, offset=j-1, col=col, axes=FALSE)
+        
+      text(x=centres, y=rep(j-1, length(QIndex)),adj=c(0.5, 1.3),labels=LETTERS[order(QIndex)], xpd=NA)
       
     }
   }

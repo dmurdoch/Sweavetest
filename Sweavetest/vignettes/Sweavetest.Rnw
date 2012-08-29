@@ -842,7 +842,7 @@ to choose from - the full report, and the analysis only report. Both are discuss
 
 \subsection{Full Report}
 
-The full report is to be used by those instructors who have created their entire test using the provided 
+The full report can be used by those instructors who have created their entire test using the provided 
 Sweave template. The creation of the test itself is discussed in Section \ref{sec:preparing}. 
 
 By simply modifying a few global variables in the template, the instructor can create a full report
@@ -855,7 +855,7 @@ set.seed(18)
 library(Sweavetest)
 library(tables)
 setwd("C:/Users/Sample")
-Version <- version("Student")
+version("Student")
 testversion <- 4
 NumberOfVersions <- 4
 

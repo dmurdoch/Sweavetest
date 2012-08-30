@@ -108,7 +108,7 @@ if(Version == "Report"){
   cat(paste("\\includegraphics[width=3.25in]{", filename, "}\n", sep=""))
 
   fignum <- fignum + 1
-  fignum <<- fignum
+  .STEnv$fignum <- fignum
 
   filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
 
@@ -126,7 +126,7 @@ if(Version == "Report"){
   cat("\\ \\\\")
   cat("\\vspace{.5in}")
 
-  testversion <<- 5
+  .STEnv$testversion <- 5
   
   }
 }

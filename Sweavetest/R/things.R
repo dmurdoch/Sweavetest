@@ -1,9 +1,8 @@
+
 getglobal <- function(var, default) {
-  if (missing(var)) {
-	name <- deparse(substitute(var))
-	if (exists(name, globalenv())) var <- get(name, globalenv())
-	else var <- default
-  }
+  name <- deparse(substitute(var))
+  if (exists(name, .STEnv)) var <- get(name, .STEnv)
+  else var <- default
   var
 }
 
@@ -31,8 +30,8 @@ function(..., Correct=NA, KeepLast=0, testversion, randomize, Answers,Index, Que
   x <- x[indices]
   
   QuestionCounter <- QuestionCounter + 1
-  QuestionCounter <<- QuestionCounter
-  QuestionIndex <<- c(QuestionIndex,QuestionCounter)
+  .STEnv$QuestionCounter <- QuestionCounter
+  .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter)
   
   cat(x, collapse="\n")
   
@@ -40,6 +39,6 @@ function(..., Correct=NA, KeepLast=0, testversion, randomize, Answers,Index, Que
     indices <- c(indices,rep(NA,5-length(indices)))
   }
   
-  Index <<- rbind(Index, indices)
+  .STEnv$Index <- rbind(Index, indices)
 }
 

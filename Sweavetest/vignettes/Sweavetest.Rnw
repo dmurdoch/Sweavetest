@@ -337,7 +337,7 @@ Columns & \multicolumn{1}{c}{Contents} & \multicolumn{3}{c}{\texttt{readScanex} 
 1--9 & Student id number & & \texttt{"Student ID"} & \\
 11--13 & Course section number & & \texttt{"Section"} & \\
 15--17 & Exam code number & & \texttt{"ExamCode"} & \\
-19 & Answer sheet number & & \texttt{"Sheet"} & \\
+18--19 & Answer sheet number & & \texttt{"Sheet"} & \\
 21--24 & Sequence number of Scantron sheet & & \texttt{"Scantron"} & \\
 26--205 & Recorded responses (or blanks) & & \texttt{"Answers"} & \\
 \hline

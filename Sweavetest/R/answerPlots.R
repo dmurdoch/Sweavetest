@@ -56,6 +56,8 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       }
       for(k in 1:NumOpt){
         Position <- which(Q == k)
+        if (!length(Position)) browser()
+        
         Position <- Position - 1
         
         if(Position == 1){

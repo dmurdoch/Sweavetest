@@ -12,56 +12,57 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
   correct <- getglobal(correct,c())
   Version <- getglobal(Version, "Student")
   QuestionCounter <- QuestionCounter+1
-  QuestionCounter <<- QuestionCounter
+  .STEnv$QuestionCounter <- QuestionCounter
   
   if(Version != "Report"){
-  correct <- c(correct, Correct)
-  correct <<- correct
+    correct <- c(correct, Correct)
+    .STEnv$correct <- correct
   }
   
   if(Version == "Report"){
-  DR <- getglobal(DR,c())
-  ID <- getglobal(ID,c())
-  PB <- getglobal(PB,c())
-  fignum <- getglobal(fignum,0)
-  AnswerCountMatrix <- getglobal(AnswerCountMatrix,c())
-  GradedTests <- getglobal(GradedTests,c())
-  student <- GradedTests$Answers
-  correct <- GradedTests$Correct
-  DR <- DR[QuestionCounter]
-  ID <- ID[QuestionCounter]
-  PB <- PB[QuestionCounter]
-  Index <- getglobal(Index, c())
-  CorrectIndex <- getglobal(CorrectIndex, c())
+    DR <- getglobal(DR,c())
+    ID <- getglobal(ID,c())
+    PB <- getglobal(PB,c())
+    fignum <- getglobal(fignum,0)
+    AnswerCountMatrix <- getglobal(AnswerCountMatrix,c())
+    GradedTests <- getglobal(GradedTests,c())
+    student <- GradedTests$Answers
+    correct <- GradedTests$Correct
+    DR <- DR[QuestionCounter]
+    ID <- ID[QuestionCounter]
+    PB <- PB[QuestionCounter]
+    Index <- getglobal(Index, c())
+    CorrectIndex <- getglobal(CorrectIndex, c())
   }
    
   if(Version != "Report"){
-  x <- unlist(list(...))
-  if (CheckDups && any(duplicated(format(x))))  
-    stop("Duplicated answers in Q", length(Answers)+1, ": ", 
+    x <- unlist(list(...))
+    if (CheckDups && any(duplicated(format(x))))  
+      stop("Duplicated answers in Q", length(Answers)+1, ": ", 
          paste(format(x), collapse=" ")) 
-  n <- length(x)-KeepLast  
-  rand <- sample(n)  
-  if (!randomize) rand <- 1:n  
-  indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
-  if (!is.na(Correct)) {
-    x[Correct] <- paste("\\Correct", x[Correct])
-    .GlobalEnv$Answers <- c(Answers, which(indices == Correct))
-  }
-    .GlobalEnv$LastIndices <- indices
-  
-  labels <- itemlabels[1:(n+KeepLast)]
-  x <- x[indices]
-  
-  QuestionIndex <<- c(QuestionIndex,QuestionCounter)
-  
-  cat( paste(labels, "\\hspace{1ex}", x, "\\hfill") )
-  
-  if(length(indices)<5){
-    indices <- c(indices,rep(NA,5-length(indices)))
-  }
-  
-  Index <<- rbind(Index,indices)
+    n <- length(x)-KeepLast  
+    rand <- sample(n)  
+    if (!randomize) rand <- 1:n  
+    indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
+    if (!is.na(Correct)) {
+      x[Correct] <- paste("\\Correct", x[Correct])
+      .STEnv$Answers <- c(Answers, which(indices == Correct))
+    }		 				  
+		 
+    .STEnv$LastIndices <- indices		 		 
+			 
+    labels <- itemlabels[1:(n+KeepLast)]		 	 
+    x <- x[indices]		 				  
+					  
+    .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter)	 
+					  
+    cat( paste(labels, "\\hspace{1ex}", x, "\\hfill") )	 
+	 
+    if(length(indices)<5){		 			 
+	indices <- c(indices,rep(NA,5-length(indices)))						 
+    }		 				  
+			 
+    .STEnv$Index <- rbind(Index,indices)		 	 
   }
   
   ###NEW ADDITIONS IF REPORT IS WANTED###
@@ -144,7 +145,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
     cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
     
     fignum <- fignum + 1
-    fignum <<- fignum
+    .STEnv$fignum <- fignum
     
     filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
                 

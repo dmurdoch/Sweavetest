@@ -8,10 +8,11 @@ perms[[5]] <- list(c(1,2,3,4,5), c(2,3,4,5,1), c(3,4,5,1,2),  c(5,2,1,3,4))
 
 .onLoad <- function(lib, pkg)
 {
-  ExamNum <- sort(sample(100:999, 4))
-  ExamNum <- c(ExamNum, 999)
-  ExamNum <<- ExamNum
-  versioncodes <- paste("Code", ExamNum, sep=" ")
-  versioncodes <- c(versioncodes, "Report", "")
-  versioncodes <<- versioncodes
+  assign(".STEnv", new.env(), envir=globalenv())
+  with(.STEnv, {
+    ExamNum <- sort(sample(100:999, 4))
+    ExamNum <- c(ExamNum, 999)
+    versioncodes <- paste("Code", ExamNum, sep=" ")
+    versioncodes <- c(versioncodes, "Report", "")
+  })
 }

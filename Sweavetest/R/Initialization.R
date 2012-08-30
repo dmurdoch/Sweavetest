@@ -5,7 +5,7 @@ Initialization <- function(Initialize = TRUE, Version){
   if(Initialize == TRUE){
   
   if(Version != "Report"){
-  cat("\\renewcommand{\\labelenumii}{(\\Alph{enumii})}")
+    cat("\\renewcommand{\\labelenumii}{(\\Alph{enumii})}")
   }
   if(Version == "Report"){
     cat("\\renewcommand{\\labelenumii}{\\arabic{enumii})}")
@@ -18,35 +18,32 @@ Initialization <- function(Initialize = TRUE, Version){
   newCommands()
   
   ###Test Creation Variables###
-  if(Version != "Teacher"){
-  randomize <<- TRUE
-  }
-  if(Version == "Teacher"){
-    randomize <<- FALSE
-  }
-  itemlabels <<- paste("(", LETTERS, ")", sep="")
-  Answers <<- c()
-  Index <<- c()
-  QuestionCounter <<- 0
-  QuestionIndex <<- c()
-  fignum <<- 0
-  correct <<- ExamNum[testversion]
+  with(.STEnv, {
+    randomize <- (Version != "Teacher")
+    itemlabels <- paste("(", LETTERS, ")", sep="")
+    Answers <- c()
+    Index <- c()
+    QuestionCounter <- 0
+    QuestionIndex <- c()
+    fignum <- 0
+    correct <- ExamNum[testversion]
+  })
   
   ###Report Creation Variables###
-  if(Version == "Report"){
-    randomize <<- FALSE
-    itemlabels <<- paste("(", c(1:26), ")", sep="")
-    Index <<- read.table("TestIndex.dat")
-    CorrectIndex <<- read.table("CorrectIndex.dat")
-    GradedTests <<- grades(scanex)
-    KR <<- KR20(GradedTests)
-    FD <<- FergusonsDelta(GradedTests)
-    DR <<- DifficultyRating(GradedTests)
-    ID <<- ItemDiscriminator(GradedTests)
-    PB <<- PointBiserial(GradedTests)
-    AnswerCountMatrix <<- CreateIndex(Index, GradedTests)
-    testversion <<- 6
-  }
+  if(Version == "Report") with(.STEnv, {
+    randomize <- FALSE
+    itemlabels <- paste("(", c(1:26), ")", sep="")
+    Index <- read.table("TestIndex.dat")
+    CorrectIndex <- read.table("CorrectIndex.dat")
+    GradedTests <- grades(scanex)
+    KR <- KR20(GradedTests)
+    FD <- FergusonsDelta(GradedTests)
+    DR <- DifficultyRating(GradedTests)
+    ID <- ItemDiscriminator(GradedTests)
+    PB <- PointBiserial(GradedTests)
+    AnswerCountMatrix <- CreateIndex(Index, GradedTests)
+    testversion <- 6
+  })
   
   if(Version == "Student"){
     cat("\\newcommand{\\Correct}{}")

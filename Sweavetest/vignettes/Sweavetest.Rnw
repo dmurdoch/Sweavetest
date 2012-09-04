@@ -56,10 +56,9 @@ statistics, measuring test reliability, and presenting item analysis.
 Errors in answer keys and poorly worded questions are easily
 recognized through the information generated. Several plots are also
 created to visually show the instructor how well the students are
-performing, and to help identify possible problem questions
-and answer patterns that suggest cheating.
+performing, to help identify possible problem questions,
+and to detect answer patterns that suggest cheating.
 }
-
 
 \tableofcontents
 
@@ -361,7 +360,7 @@ This package utilizes a sample data set to illustrate the statistics that can be
 <<echo=TRUE>>=
 Sample <- system.file("sample/sample.dat", package = "Sweavetest")
 TestIndex.dat <- system.file("sample/TestIndex.dat", package = "Sweavetest")
-CorrectIndex.dat <- system.file("sample/CorrectIndex.dat", package = "Sweavetest")
+CorrectIndex.csv <- system.file("sample/CorrectIndex.csv", package = "Sweavetest")
 @
 
 Using the results of the \verb!readScanex()! and the \verb!grades()! functions, a report analyzing the test as a whole
@@ -701,7 +700,7 @@ The output of this function is a matrix containing the number of respondents cho
 Below are the first five rows of the output matrix for our sample test:
 
 <<echo=true,results=verbatim>>=
-TestIndex <- read.table(TestIndex.dat)
+TestIndex <- read.table(TestIndex.dat, head=TRUE)
 NumberOfVersions <- 4
 CreateIndex(TestIndex, GradedTests)[1:5,]
 @
@@ -729,7 +728,7 @@ produced for the first question of our sample test.
 <<>>=
 QuestionCounter <- 1
 NumberOfVersions <- 4
-Index <- read.table(TestIndex.dat)
+Index <- read.table(TestIndex.dat, head=TRUE)
 AnswerCountMatrix <- CreateIndex(Index, GradedTests)
 
 Values <- function(x){x}
@@ -767,7 +766,7 @@ students' answers, a matrix of the corresponding correct answers, a vector of ex
 of the plot to be produced. For example, the following will produce an option frequency plot for the first question
 of our sample data:
 <<OptionFrequency,eval=false,echo=true>>=
-CorrectIndex <- read.table(CorrectIndex.dat)
+CorrectIndex <- read.csv(CorrectIndex.csv)
 StudentAnswers <- GradedTests$Answers
 CorrectAnswers <- GradedTests$Correct
 ExamVersion <- GradedTests$ExamCode

@@ -33,25 +33,26 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
   Index <- getglobal(Index, c())
   Index <- Index[,-c(1,2)]
   CorrectIndex <- getglobal(CorrectIndex, c())
-  CorrectIndex <- CorrectIndex[,-1]
   GradedTests <- getglobal(GradedTests,c())
   
-  qs <- seq_len(max(nchar(GradedTests$Correct)))
-  StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
-  NumQ <- max(qs)
+  qs <- unique(Index$Question)
+  versions <- unique(Index$ExamCode)
   
-  MatrixSize <- (ncol(Index)-1) * nrow(Index)
+  StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
+  NumQ <- length(qs)
+  
+  MatrixSize <- 5 * nrow(Index)
   
   Index <- as.matrix(Index)
   
-  AnswerCountMatrix <- matrix(rep(0,MatrixSize), nrow=nrow(Index), ncol=ncol(Index)-1)
+  AnswerCountMatrix <- matrix(0, nrow=nrow(Index), ncol=5)
   
-  for(i in 1:NumberOfVersions){
-    for(j in 1:NumQ){
-      Q <- Index[j+NumQ*(i-1),]
-      ExamCode <- Q[1]
-      NumOpt <- ncol(Index)-1
-      if(is.na(Q[6])){
+  for(i in seq_along(versions)){
+    for(j in seq_along(qs)){
+      Q <- Index[Index$Question == qs[j] & Index$ExamCode == versions[i],]
+      ExamCode <- Q$ExamCode
+      NumOpt <- 5
+      if(is.na(Q$E)){
         NumOpt <- NumOpt-1
       }
       for(k in 1:NumOpt){
@@ -113,8 +114,7 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       AnswerCounts <- AnswerCounts[-1]
       drop <- which(is.na(AnswerCounts))
       if(length(drop)>0) AnswerCounts <- AnswerCounts[-drop]
-      WhichCorrect <- which(CorrectIndex == v)
-      CorrectPosition <- CorrectIndex[WhichCorrect + i]
+      CorrectPosition <- CorrectIndex[ExamCode == v,"Correct"]
       
       
       RightIndex <- which(Index[,1]==v)

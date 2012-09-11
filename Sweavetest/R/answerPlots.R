@@ -25,41 +25,40 @@ answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))
 
 answerPlots <- function(Student, Correct, version, QuestionCount,
                         qs=seq_len(max(nchar(Correct))),
-                        decreasing=FALSE,
+                        decreasing=FALSE, Version,
                         col.wrong="pink", col.correct="white"){
-  ns <- length(Student)
-  student <- answerMatrix(Student, qs)
-  correct <- answerMatrix(Correct, qs)
+ 
+  Version <- getglobal(Version, "Student")
+  
+  if(Version == "Report"){
   Index <- getglobal(Index, c())
-  Index <- Index[,-c(1,2)]
+  Index <- Index[,-1]
   CorrectIndex <- getglobal(CorrectIndex, c())
   GradedTests <- getglobal(GradedTests,c())
   
-  qs <- unique(Index$Question)
-  versions <- unique(Index$ExamCode)
-  
+  qs <- seq_len(max(nchar(GradedTests$Correct)))
   StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
-  NumQ <- length(qs)
+  NumQ <- max(qs)
   
-  MatrixSize <- 5 * nrow(Index)
+  MatrixSize <- (ncol(Index)-1) * nrow(Index)
   
   Index <- as.matrix(Index)
   
-  AnswerCountMatrix <- matrix(0, nrow=nrow(Index), ncol=5)
+  AnswerCountMatrix <- matrix(rep(0,MatrixSize), nrow=nrow(Index), ncol=ncol(Index)-1)
   
-  for(i in seq_along(versions)){
-    for(j in seq_along(qs)){
-      Q <- Index[Index$Question == qs[j] & Index$ExamCode == versions[i],]
-      ExamCode <- Q$ExamCode
-      NumOpt <- 5
-      if(is.na(Q$E)){
+  Codes <- unique(CorrectIndex[,1])
+  
+  for(i in 1:NumberOfVersions){
+    for(j in 1:NumQ){
+      ExamCode <- Codes[i]
+      Q <- Index[which(Index[,1] == ExamCode),2:6]
+      Question <- Q[j,]
+      NumOpt <- ncol(Index)-1
+      if(is.na(Question[5])){
         NumOpt <- NumOpt-1
       }
       for(k in 1:NumOpt){
-        Position <- which(Q == k)
-        if (!length(Position)) browser()
-        
-        Position <- Position - 1
+        Position <- which(Question == k)
         
         if(Position == 1){
           CorrectNum <- "A"
@@ -92,17 +91,22 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
   }
   
   AnswerCountMatrix <- cbind(Index[,1], AnswerCountMatrix)
+
+}
   
+  ns <- length(Student)
+  student <- answerMatrix(Student, qs)
+  correct <- answerMatrix(Correct, qs)
   scores <- student == correct
+  o <- QuestionCount
 
   if (missing(version)) {
     versions <- unique(correct)
     version <- correct
   } else
     versions <- unique(version)
-  
-  o <- QuestionCount
-  
+
+if(Version == "Report"){
   for (i in o) {
     for (j in seq_len(length(versions))) {
       v <- versions[j]
@@ -114,8 +118,9 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       AnswerCounts <- AnswerCounts[-1]
       drop <- which(is.na(AnswerCounts))
       if(length(drop)>0) AnswerCounts <- AnswerCounts[-drop]
-      CorrectPosition <- CorrectIndex[ExamCode == v,"Correct"]
-      
+      WhichCorrect <- which(CorrectIndex[,1] == v)
+      RightCorrectIndex <- CorrectIndex[WhichCorrect,]
+      CorrectPosition <- RightCorrectIndex[i,2]
       
       RightIndex <- which(Index[,1]==v)
       EIndex <- Index[RightIndex,]
@@ -137,7 +142,6 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       names(col) <- names(bar)
       col[CorrectPosition] <- col.correct
 
-  
       bar <- AnswerCounts/sum(sub)  
       
       if (v == versions[[1]]) {
@@ -146,12 +150,45 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       	centres <- barplot(bar, ylim=c(0, length(versions)), main=title, 
       	                   col=col, axes=FALSE)
       
+        if(length(QIndex) == 5){
+          axis(1, at=centres, c(1:5))
+      	}
+        
+        if(length(QIndex) == 4){
+          axis(1, at=centres, c(1:4))
+        }
+        
       	axis(2, at=1:length(versions) - 1, versions, las=2)
       } else
         barplot(bar, add=TRUE, offset=j-1, col=col, axes=FALSE)
-        
-      text(x=centres, y=rep(j-1, length(QIndex)),adj=c(0.5, 1.3),labels=LETTERS[order(QIndex)], xpd=NA)
       
     }
   }
+}
+  
+if(Version == "Low Level"){
+  for (i in o) {
+    for (j in seq_len(length(versions))) {
+      v <- versions[j]
+      sub <- v == version
+      bar <- c(A=0, B=0, C=0, D=0, E=0)
+      col <- rep(col.wrong, 5)
+      names(col) <- names(bar)
+      col[unique(correct[sub,i])] <- col.correct
+      for (a in names(bar)) 
+        bar[a] <- sum(student[sub,i] == a)/sum(sub)
+      if (v == versions[[1]]) {
+        title <- paste("Q", qs[i], " ", round(100*sum(scores[,i])/ns), "% correct",
+                       sep="")
+        centres <- barplot(bar, ylim=c(0, length(versions)), main=title, 
+                           col=col, axes=FALSE)
+        axis(1, at=centres, LETTERS[1:5])
+        axis(2, at=1:length(versions) - 1, versions, las=2)
+      } else
+        barplot(bar, add=TRUE, offset=j-1, col=col, axes=FALSE)
+      
+    }
+  }
+}
+  
 }

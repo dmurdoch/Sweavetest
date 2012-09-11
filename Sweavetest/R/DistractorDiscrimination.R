@@ -1,6 +1,7 @@
-DistractorDiscrimination <- function(GradedTests,QuestionCounter,Index = getglobal(Index,c())){
+DistractorDiscrimination <- function(GradedTests,QuestionCounter,Index){
   
-  Index <- Index[,c("ExamCode", LETTERS[1:5]), drop=FALSE]
+  Index <- getglobal(Index,c())
+  Index <- Index[,-1]
   GradedTests <- getglobal(GradedTests,c())
   QuestionCounter <- getglobal(QuestionCounter,0)
   qs=seq_len(max(nchar(GradedTests$Correct[1])))

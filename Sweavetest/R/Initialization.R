@@ -33,8 +33,9 @@ Initialization <- function(Initialize = TRUE, Version){
   if(Version == "Report") with(.STEnv, {
     randomize <- FALSE
     itemlabels <- paste("(", c(1:26), ")", sep="")
-    Index <- read.table("TestIndex.dat")
-    CorrectIndex <- read.table("CorrectIndex.dat")
+    Index <- read.table("TestIndex.csv", header = TRUE)
+    CorrectIndex <- cbind(Index$ExamCode, Index$Correct)
+    Index <- Index[,-3]
     GradedTests <- grades(scanex)
     KR <- KR20(GradedTests)
     FD <- FergusonsDelta(GradedTests)

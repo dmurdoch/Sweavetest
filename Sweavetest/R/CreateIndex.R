@@ -1,6 +1,7 @@
-CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
+CreateIndex <- function(Index,GradedTests){
   
-Index <- Index[,c("ExamCode", LETTERS[1:5]),drop=FALSE]
+Index <- getglobal(Index,c())
+Index <- Index[,-1]
 GradedTests <- getglobal(GradedTests,c())
 NumberOfVersions <- getglobal(NumberOfVersions, 1)
 

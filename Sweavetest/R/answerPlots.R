@@ -1,6 +1,6 @@
 answerMatrix <- function(answers, qs=seq_len(max(nchar(answers)))) {
   answerS <- strsplit(answers, "")
-  len <- max(qs)
+  len <- length(qs)
   answerS <- lapply(answerS,  
                 function(x) {
                   if (length(x) < len) 
@@ -8,7 +8,9 @@ answerMatrix <- function(answers, qs=seq_len(max(nchar(answers)))) {
                   x[qs]
                 }
              )       
-  do.call(rbind, answerS)
+  result <- do.call(rbind, answerS)
+  colnames(result) <- qs
+  result
 }
 
 answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))) {
@@ -23,66 +25,50 @@ answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))
   text(questionRate, correlations, label = qs)
 }
 
-answerPlots <- function(Student, Correct, version, QuestionCount,
+answerPlots <- function(QuestionCount,
                         qs=seq_len(max(nchar(Correct))),
                         decreasing=FALSE,
                         col.wrong="pink", col.correct="white"){
-  ns <- length(Student)
-  student <- answerMatrix(Student, qs)
-  correct <- answerMatrix(Correct, qs)
+                        
+  # GradedTests$Answers is vector of student answers, e.g. c("DBDCBDACCBAABBCBCCABBDAACAAACC", ...
+  # student splits it out into matrix with questions as columns, students as rows
+  # GradedTests$Correct is vector of correct answers, e.g. c("ABDCBDACCBAACACBACBDBAEACAAACE", ...
+  # correct splits it out into matrix
+  # version is vector of test versions, e.g. c("840", "840", "170", ...
+  # QuestionCount is ??
+  # Index is dataframe giving coding for tests, with columns Question, ExamCode, A, B, C, D, E
+  # CorrectIndex is similar indicating the right answer, columns ExamCode, Question, Correct
+  #   the Correct column gives the answer number on the original prerandomization test
+  # GradedTests is a dataframe with results in columns "Student ID", Section, ExamCode, Sheet, Scantron,
+  #   Answers, Correct, Grade
+
   Index <- getglobal(Index, c())
   CorrectIndex <- getglobal(CorrectIndex, c())
   GradedTests <- getglobal(GradedTests,c())
-  
-  qs <- unique(Index$Question)
-  versions <- unique(Index$ExamCode)
-  
-  StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
+  NumS <- nrow(GradedTests)
+  qs <- as.character(unique(Index$Question))
   NumQ <- length(qs)
   
-  MatrixSize <- 5 * nrow(Index)
+  student <- answerMatrix(GradedTests$Answers, qs)
+  correct <- answerMatrix(GradedTests$Correct, qs)
   
-  AnswerCountMatrix <- matrix(0, nrow=nrow(Index), ncol=5)
+  versions <- as.character(unique(Index$ExamCode))
+  NumV <- length(versions)
   
-  for(i in seq_along(versions)){
-    for(j in seq_along(qs)){
-      Q <- Index[Index$Question == qs[j] & Index$ExamCode == versions[i],]
-      ExamCode <- Q$ExamCode
-      NumOpt <- 5
-      if(is.na(Q$E)){
-        NumOpt <- NumOpt-1
-      }
-      Opts <- LETTERS[1:NumOpt]
-      for(k in 1:NumOpt){
-        Position <- which(Q[Opts] == k)
-        
-        CorrectNum <- LETTERS[Position]
-        
-        StudentsInVersion <- which(GradedTests$ExamCode == ExamCode)
-        StudentVersionAnswers <- StudentAnswers[StudentsInVersion,j]
-        NumCorrAns <- length(which(StudentVersionAnswers == CorrectNum))
-        AnswerCountMatrix[j+NumQ*(i-1),k] <- NumCorrAns
-      }
-      if(NumOpt < 5){
-        AnswerCountMatrix[j+NumQ*(i-1),5] <- NA
-      }
-    }
+  AnswerCounts <- array(0, c(NumV, NumQ, 5))
+  dimnames(AnswerCounts) <- list(versions, qs, 1:5)
+  
+  for(i in seq_len(NumS)){
+    ExamCode <- as.character(GradedTests$ExamCode[i])
+    indices <- cbind(ExamCode, qs, student[i, qs])
+    AnswerCounts[indices] <- AnswerCounts[indices] + 1
   }
-  
-  AnswerCountMatrix <- cbind(Index[,1], AnswerCountMatrix)
   
   scores <- student == correct
 
-  if (missing(version)) {
-    versions <- unique(correct)
-    version <- correct
-  } else
-    versions <- unique(version)
-  
-  o <- QuestionCount
   
   for (i in o) {
-    for (j in seq_len(length(versions))) {
+    for (j in seq_len(NumV)) {
       v <- versions[j]
       sub <- v == version
       
@@ -119,7 +105,7 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       bar <- AnswerCounts/sum(sub)  
       
       if (v == versions[[1]]) {
-        title <- paste("Q", qs[i], " ", round(100*sum(scores[,i])/ns), "% correct",
+        title <- paste("Q", qs[i], " ", round(100*sum(scores[,i])/NumS), "% correct",
                        sep="")
       	centres <- barplot(bar, ylim=c(0, length(versions)), main=title, 
       	                   col=col, axes=FALSE)

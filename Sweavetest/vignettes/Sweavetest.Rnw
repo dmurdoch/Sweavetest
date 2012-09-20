@@ -22,6 +22,7 @@
 <<>>=
 options(width=60)
 set.seed(18)
+Sys.setenv(R_KEEP_PKG_SOURCE="yes")
 install.packages("..",type="source",repos=NULL)
 library(Sweavetest)
 library(tables)
@@ -729,7 +730,7 @@ produced for the first question of our sample test.
 QuestionCounter <- 1
 NumberOfVersions <- 4
 .STEnv$Index <- read.csv(TestIndex.dat, head=TRUE)
-AnswerCountMatrix <- CreateIndex(Index, GradedTests)
+AnswerCountMatrix <- CreateIndex(.STEnv$Index, GradedTests)
 
 Values <- function(x){x}
 Frequency <- function(x){x}
@@ -743,7 +744,7 @@ if(length(drop)>0){
 }
 Options <- factor(paste(" ", c(1:length(AnswerCounts)), sep=""))
 Resp <- 100*AnswerCounts/nrow(GradedTests)
-Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,Index)
+Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
 CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
 
 latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency
@@ -772,7 +773,7 @@ CorrectAnswers <- GradedTests$Correct
 ExamVersion <- GradedTests$ExamCode
 QuestionCounter <- 1
 
-answerPlots(StudentAnswers, CorrectAnswers, ExamVersion, QuestionCounter)
+answerPlots(QuestionCounter)
 @%$
 The resulting plot for the first question is shown in Figure \ref{fig:OptionFrequency}.
 \begin{figure}

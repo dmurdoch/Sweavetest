@@ -52,32 +52,13 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
       if(is.na(Q$E)){
         NumOpt <- NumOpt-1
       }
+      Opts <- LETTERS[1:NumOpt]
       for(k in 1:NumOpt){
-        Position <- which(Q == k)
-        if (!length(Position)) browser()
+        Position <- which(Q[Opts] == k)
         
-        Position <- Position - 1
+        CorrectNum <- LETTERS[Position]
         
-        if(Position == 1){
-          CorrectNum <- "A"
-        }
-        
-        if(Position == 2){
-          CorrectNum <- "B"
-        }
-        
-        if(Position == 3){
-          CorrectNum <- "C"
-        }
-        
-        if(Position == 4){
-          CorrectNum <- "D"
-        }
-        
-        if(Position == 5){
-          CorrectNum <- "E"
-        }
-        StudentsInVersion <- which(GradedTests[,3]==ExamCode)
+        StudentsInVersion <- which(GradedTests$ExamCode == ExamCode)
         StudentVersionAnswers <- StudentAnswers[StudentsInVersion,j]
         NumCorrAns <- length(which(StudentVersionAnswers == CorrectNum))
         AnswerCountMatrix[j+NumQ*(i-1),k] <- NumCorrAns

@@ -46,7 +46,7 @@ answerPlots <- function(QuestionCount,
   CorrectIndex <- getglobal(CorrectIndex, c())
   GradedTests <- getglobal(GradedTests,c())
   NumS <- nrow(GradedTests)
-  qs <- as.character(unique(Index$Question))
+  qs <- as.numeric(unique(Index$Question))
   NumQ <- length(qs)
   
   student <- answerMatrix(GradedTests$Answers, qs)
@@ -55,12 +55,14 @@ answerPlots <- function(QuestionCount,
   versions <- as.character(unique(Index$ExamCode))
   NumV <- length(versions)
   
-  AnswerCounts <- array(0, c(NumV, NumQ, 5))
-  dimnames(AnswerCounts) <- list(versions, qs, 1:5)
+  AnswerCounts <- array(0, c(NumV, NumQ, 7))
+  dimnames(AnswerCounts) <- list(versions, qs, c(LETTERS[1:5], " ", "Bad"))
   
   for(i in seq_len(NumS)){
     ExamCode <- as.character(GradedTests$ExamCode[i])
-    indices <- cbind(ExamCode, qs, student[i, qs])
+    answers <- student[i, qs]
+    answers[ ! (answers %in% c(LETTERS[1:5], " ")) ] <- "Bad"
+    indices <- cbind(ExamCode, as.character(qs), answers)
     AnswerCounts[indices] <- AnswerCounts[indices] + 1
   }
   

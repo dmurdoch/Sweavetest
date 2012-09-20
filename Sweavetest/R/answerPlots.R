@@ -31,7 +31,6 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
   student <- answerMatrix(Student, qs)
   correct <- answerMatrix(Correct, qs)
   Index <- getglobal(Index, c())
-  Index <- Index[,-c(1,2)]
   CorrectIndex <- getglobal(CorrectIndex, c())
   GradedTests <- getglobal(GradedTests,c())
   
@@ -42,8 +41,6 @@ answerPlots <- function(Student, Correct, version, QuestionCount,
   NumQ <- length(qs)
   
   MatrixSize <- 5 * nrow(Index)
-  
-  Index <- as.matrix(Index)
   
   AnswerCountMatrix <- matrix(0, nrow=nrow(Index), ncol=5)
   

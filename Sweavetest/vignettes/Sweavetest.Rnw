@@ -700,7 +700,7 @@ The output of this function is a matrix containing the number of respondents cho
 Below are the first five rows of the output matrix for our sample test:
 
 <<echo=true,results=verbatim>>=
-TestIndex <- read.table(TestIndex.dat, head=TRUE)
+TestIndex <- read.csv(TestIndex.dat, head=TRUE)
 NumberOfVersions <- 4
 CreateIndex(TestIndex, GradedTests)[1:5,]
 @
@@ -728,7 +728,7 @@ produced for the first question of our sample test.
 <<>>=
 QuestionCounter <- 1
 NumberOfVersions <- 4
-Index <- read.table(TestIndex.dat, head=TRUE)
+.STEnv$Index <- read.csv(TestIndex.dat, head=TRUE)
 AnswerCountMatrix <- CreateIndex(Index, GradedTests)
 
 Values <- function(x){x}

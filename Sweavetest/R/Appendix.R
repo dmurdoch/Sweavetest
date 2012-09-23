@@ -1,5 +1,5 @@
 Appendix <- function(Version){
-  if(Version == "Report"){
+  if(Version == "Report" | Version == "Low Level"){
     cat("\\markright{}")
     cat("\\begin{center}")
     cat("\\large\\bf Appendix")

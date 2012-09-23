@@ -7,7 +7,7 @@ Convert answer strings to matrix.
 Converts answer strings into a matrix, with one answer per cell.
 }
 \usage{
-answerMatrix(answers, qs = seq_len(max(nchar(answers))))
+answerMatrix(answers, qs)
 }
 \arguments{
   \item{answers}{

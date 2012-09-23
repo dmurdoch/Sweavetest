@@ -1,6 +1,4 @@
-Conclusion <- function(END = TRUE, Version){
-  
-  Version <- getglobal(Version, "Student")
+Conclusion <- function(END = TRUE, Version = getglobal(Version, "Student")){
   
   if(END == TRUE){
     

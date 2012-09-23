@@ -1,9 +1,9 @@
 \name{KR20}
 \alias{KR20}
-\title{
-Compute the Kuder-Richardson 20 Reliability Statistic for the Multiple Choice Test
+\title{Kuder-Richardson 20 Reliabilibility Statistic
 }
 \description{
+Computes the Kuder-Richardson 20 reliability statistic for the multiple choice test.
 
 }
 \usage{

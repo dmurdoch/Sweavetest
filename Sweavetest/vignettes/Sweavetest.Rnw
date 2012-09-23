@@ -360,7 +360,7 @@ This package utilizes a sample data set to illustrate the statistics that can be
 
 <<echo=TRUE>>=
 Sample <- system.file("sample/sample.dat", package = "Sweavetest")
-TestIndex.dat <- system.file("sample/TestIndex.dat", package = "Sweavetest")
+TestIndex.csv <- system.file("sample/TestIndex.csv", package = "Sweavetest")
 CorrectIndex.csv <- system.file("sample/CorrectIndex.csv", package = "Sweavetest")
 @
 
@@ -685,10 +685,10 @@ it does not sufficiently distinguish good and bad students.
 
 \subsection{Option Frequency}
 
-Using the \verb!CreateIndex()! function, a count of how many students
+Using the \verb!AnswerCounts()! function, a count of how many students
 chose each answer option is provided. This function takes as input the
 index automatically created by the test creation process (read in
-as ``TestIndex.dat"), as well as the result of the
+as ``TestIndex.csv"), as well as the result of the
 \verb!grades()! function.
 
 The purpose of the \verb!CreateIndex()! function is to undo the answer
@@ -701,9 +701,9 @@ The output of this function is a matrix containing the number of respondents cho
 Below are the first five rows of the output matrix for our sample test:
 
 <<echo=true,results=verbatim>>=
-TestIndex <- read.csv(TestIndex.dat, head=TRUE)
+TestIndex <- read.csv(TestIndex.csv, head=TRUE)
 NumberOfVersions <- 4
-CreateIndex(TestIndex, GradedTests)[1:5,]
+#CreateIndex(TestIndex, GradedTests)[1:5,]
 @
 
 Any answer option which has very few respondents should be reviewed by
@@ -729,27 +729,27 @@ produced for the first question of our sample test.
 <<>>=
 QuestionCounter <- 1
 NumberOfVersions <- 4
-.STEnv$Index <- read.csv(TestIndex.dat, head=TRUE)
-AnswerCountMatrix <- CreateIndex(.STEnv$Index, GradedTests)
+.STEnv$Index <- read.csv(TestIndex.csv, head=TRUE)
+AnswerCounts <- CreateIndex(.STEnv$Index, GradedTests)
 
 Values <- function(x){x}
 Frequency <- function(x){x}
 Percentage <- function(x){x}
 Discrimination <- function(x){x}
 
-AnswerCounts <- AnswerCountMatrix[QuestionCounter,]
+AnswerCounts <- subset(AnswerCounts, Question==1)
 drop <- which(is.na(AnswerCounts))
 if(length(drop)>0){
   AnswerCounts <- AnswerCounts[-drop]
 }
 Options <- factor(paste(" ", c(1:length(AnswerCounts)), sep=""))
 Resp <- 100*AnswerCounts/nrow(GradedTests)
-Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
-CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
+# Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
+# CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
 
-latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency
-                                        +Heading()*Format(digits=2)*Resp*Percentage
-                                        +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
+# latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency
+#                                        +Heading()*Format(digits=2)*Resp*Percentage
+#                                        +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
 @
 \end{center}
 \caption{Distractor discrimination results for the first question on the sample test.
@@ -772,8 +772,9 @@ StudentAnswers <- GradedTests$Answers
 CorrectAnswers <- GradedTests$Correct
 ExamVersion <- GradedTests$ExamCode
 QuestionCounter <- 1
+plot(1)
+#answerPlots(QuestionCounter)
 
-answerPlots(QuestionCounter)
 @%$
 The resulting plot for the first question is shown in Figure \ref{fig:OptionFrequency}.
 \begin{figure}

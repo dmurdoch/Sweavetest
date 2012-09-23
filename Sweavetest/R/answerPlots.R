@@ -1,18 +1,3 @@
-answerMatrix <- function(answers, qs=seq_len(max(nchar(answers)))) {
-  answerS <- strsplit(answers, "")
-  len <- length(qs)
-  answerS <- lapply(answerS,  
-                function(x) {
-                  if (length(x) < len) 
-                    x <- c(x, rep(" ", len-length(x)))
-                  x[qs]
-                }
-             )       
-  result <- do.call(rbind, answerS)
-  colnames(result) <- qs
-  result
-}
-
 answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))) {
   student <- answerMatrix(student, qs)
   correct <- answerMatrix(correct, qs)
@@ -55,16 +40,7 @@ answerPlots <- function(Questions=seq_len(NumQ),
   versions <- as.character(unique(Index$ExamCode))
   NumV <- length(versions)
   
-  AnswerCounts <- array(0, c(NumV, NumQ, 7))
-  dimnames(AnswerCounts) <- list(versions, qs, c(LETTERS[1:5], " ", "Bad"))
-  
-  for(i in seq_len(NumS)){
-    ExamCode <- as.character(GradedTests$ExamCode[i])
-    answers <- student[i, qs]
-    answers[ ! (answers %in% c(LETTERS[1:5], " ")) ] <- "Bad"
-    indices <- cbind(ExamCode, as.character(qs), answers)
-    AnswerCounts[indices] <- AnswerCounts[indices] + 1
-  }
+  Counts <- AnswerCounts(GradedTests, qs)
   
   scores <- student == correct
 

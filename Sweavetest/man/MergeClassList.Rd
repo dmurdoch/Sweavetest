@@ -14,7 +14,8 @@ class list which includes students from all sections of the course. The user can
 
 }
 \usage{
-MergeClassList(classlist, scanex, weights = rep(1, 200), sections, TestTitle, master.name = "MasterClassList.csv", AcceptSectionCSV = TRUE, AcceptMasterCSV = FALSE)
+MergeClassList(classlist, scanex, weights = rep(1, 200), sections, TestTitle, 
+  MasterName = "MasterClassList", AcceptSectionCSV = TRUE, AcceptMasterCSV = FALSE)
 }
 \arguments{
   \item{classlist}{

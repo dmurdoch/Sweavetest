@@ -1,61 +1,51 @@
-CreateIndex <- function(Index,GradedTests){
-  
-Index <- getglobal(Index,c())
-Index <- Index[,-1]
-GradedTests <- getglobal(GradedTests,c())
-NumberOfVersions <- getglobal(NumberOfVersions, 1)
-
-qs <- seq_len(max(nchar(GradedTests$Correct)))
-StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
-NumQ <- max(qs)
-
-MatrixSize <- (ncol(Index)-1) * nrow(Index)
-
-Index <- as.matrix(Index)
-
-AnswerCountMatrix <- matrix(rep(0,MatrixSize), nrow=nrow(Index), ncol=ncol(Index)-1)
-
-for(i in 1:NumberOfVersions){
-  for(j in 1:NumQ){
-    Q <- Index[j+NumQ*(i-1),]
-    ExamCode <- Q[1]
-    NumOpt <- ncol(Index)-1
-    if(is.na(Q[6])){
-      NumOpt <- NumOpt-1
-    }
-    for(k in 1:NumOpt){
-      Position <- which(Q == k)
-      Position <- Position - 1
-      
-      if(Position == 1){
-        Correct <- "A"
-      }
-      
-      if(Position == 2){
-        Correct <- "B"
-      }
-      
-      if(Position == 3){
-        Correct <- "C"
-      }
-      
-      if(Position == 4){
-        Correct <- "D"
-      }
-      
-      if(Position == 5){
-        Correct <- "E"
-      }
-    StudentsInVersion <- which(GradedTests[,3]==ExamCode)
-    StudentVersionAnswers <- StudentAnswers[StudentsInVersion,j]
-    NumCorrAns <- length(which(StudentVersionAnswers == Correct))
-    AnswerCountMatrix[j,k] <- AnswerCountMatrix[j,k] + NumCorrAns
-    }
-    if(NumOpt < 5){
-      AnswerCountMatrix[j,5] <- NA
-    }
-  }
+answerMatrix <- function(answers, qs) {
+  answerS <- strsplit(answers, "")
+  len <- length(qs)
+  answerS <- lapply(answerS,  
+                function(x) {
+                  if (length(x) < len) 
+                    x <- c(x, rep(" ", len-length(x)))
+                  x[qs]
+                }
+             )       
+  result <- do.call(rbind, answerS)
+  colnames(result) <- qs
+  result
 }
 
-return(AnswerCountMatrix)
+AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
+  NumS <- nrow(StudentAnswers)
+  NumQ <- length(qs)
+  
+  Answers <- StudentAnswers$Answers
+  
+  student <- answerMatrix(Answers, qs)
+  
+  versions <- as.character(unique(StudentAnswers$ExamCode))
+  NumV <- length(versions)
+  
+  result <- array(0, c(NumV, NumQ, 7))
+  dimnames(result) <- list(versions, qs, c(LETTERS[1:5], " ", "Bad"))
+  
+  for(i in seq_len(NumS)){
+    ExamCode <- as.character(GradedTests$ExamCode[i])
+    answers <- student[i, qs]
+    answers[ ! (answers %in% c(LETTERS[1:5], " ")) ] <- "Bad"
+    indices <- cbind(ExamCode, as.character(qs), answers)
+    result[indices] <- result[indices] + 1
+  }
+  result
+}
+
+CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
+  qs <- seq_len(max(nchar(GradedTests$Correct)))
+  Counts <- AnswerCounts(GradedTests, qs)
+  
+  Versions <- dimnames(Counts)[[1]]
+  result <- data.frame(ExamCode = character(0), Question=character(0), 
+                       A=numeric(0), B=numeric(0), C=numeric(0), D=numeric(0), E=numeric(0),
+                       Blank=numeric(0), Bad=numeric(0))
+  for (v in seq_along(Versions))
+    result <- rbind(result, data.frame(ExamCode=v, Question=qs, Counts[v,,]))
+  result
 }

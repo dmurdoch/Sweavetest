@@ -8,11 +8,11 @@ Create an Appendix During the Report Process
 If a report is ordered by the instructor, creates an appendix explaining the statistical concepts used throughout the report
 }
 \usage{
-Appendix(Report)
+Appendix(Version)
 }
 \arguments{
-  \item{Report}{
-    A logical vector set at the beginning of the file by the instructor. TRUE if a report is wanted, FALSE otherwise.
+  \item{Version}{
+    What sort of report is wanted?  May be \code{"Report"}, \code{"Low Level"}, \code{"Student"}.
 }
 }
 \value{
@@ -23,7 +23,7 @@ Adam Rahman
 }
 
 \examples{
-Report <- TRUE
-Appendix(Report)
+Version <- "Report"
+Appendix(Version)
 }
 

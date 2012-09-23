@@ -741,14 +741,15 @@ Frequency <- function(x){x}
 Percentage <- function(x){x}
 Discrimination <- function(x){x}
 
-AnswerCounts <- subset(AnswerCounts, Question==1)
+AnswerCounts <- subset(AnswerCounts, Question==1, 
+                                    select=paste0("A", 1:5))
 drop <- which(is.na(AnswerCounts))
 if(length(drop)>0){
   AnswerCounts <- AnswerCounts[-drop]
 }
 Options <- factor(paste(" ", c(1:length(AnswerCounts)), sep=""))
 Resp <- 100*AnswerCounts/nrow(GradedTests)
-# Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
+Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
 # CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
 
 # latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency

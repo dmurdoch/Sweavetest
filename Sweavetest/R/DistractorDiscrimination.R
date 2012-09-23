@@ -3,7 +3,6 @@ DistractorDiscrimination <- function(
    QuestionCounter = getglobal(QuestionCounter, 0),
    Index = getglobal(Index, NULL)){
   
-  Index <- Index[,LETTERS[1:5]]
   qs <- seq_len(max(nchar(GradedTests$Correct[1])))
   Student <- answerMatrix(GradedTests$Answers, qs)
   
@@ -23,7 +22,7 @@ DistractorDiscrimination <- function(
   Top25Counter <- rep(0,Qlength)
   Bottom25Counter <- rep(0,Qlength)
   
-  NewIndex <- matrix(rep(0, ncol(Index)*nrow(Index)), nrow = nrow(Index), ncol=ncol(Index))
+  NewIndex <- matrix(0, nrow = nrow(Index), ncol=ncol(Index))
   NewIndex[,1] <- Index[,1]
   
   for(i in 1:nrow(Index)){

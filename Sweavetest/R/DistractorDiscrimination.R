@@ -3,8 +3,8 @@ DistractorDiscrimination <- function(
    QuestionCounter = getglobal(QuestionCounter, 0),
    Index = getglobal(Index, NULL)){
   
-  Index <- Index[,-1]
-  qs=seq_len(max(nchar(GradedTests$Correct[1])))
+  Index <- Index[,LETTERS[1:5]]
+  qs <- seq_len(max(nchar(GradedTests$Correct[1])))
   Student <- answerMatrix(GradedTests$Answers, qs)
   
   Quantile75 <- quantile(GradedTests$Grade, .75)

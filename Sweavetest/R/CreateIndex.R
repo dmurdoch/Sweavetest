@@ -25,12 +25,13 @@ AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
   NumV <- length(versions)
   
   result <- array(0, c(NumV, NumQ, 7))
-  dimnames(result) <- list(versions, qs, c(LETTERS[1:5], " ", "Bad"))
+  dimnames(result) <- list(versions, qs, c(LETTERS[1:5], "Blank", "Bad"))
   
   for(i in seq_len(NumS)){
     ExamCode <- as.character(GradedTests$ExamCode[i])
     answers <- student[i, qs]
     answers[ ! (answers %in% c(LETTERS[1:5], " ")) ] <- "Bad"
+    answers[ answers == " " ] <- "Blank"
     indices <- cbind(ExamCode, as.character(qs), answers)
     result[indices] <- result[indices] + 1
   }
@@ -46,6 +47,7 @@ CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
                        A=numeric(0), B=numeric(0), C=numeric(0), D=numeric(0), E=numeric(0),
                        Blank=numeric(0), Bad=numeric(0))
   for (v in seq_along(Versions))
-    result <- rbind(result, data.frame(ExamCode=v, Question=qs, Counts[v,,]))
+    result <- rbind(result, data.frame(ExamCode=Versions[v], 
+                    Question=qs, Counts[v,,]))
   result
 }

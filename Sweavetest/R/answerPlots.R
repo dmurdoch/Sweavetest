@@ -25,7 +25,7 @@ answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))
   text(questionRate, correlations, label = qs)
 }
 
-answerPlots <- function(QuestionCount,
+answerPlots <- function(Questions=seq_len(NumQ),
                         qs=seq_len(max(nchar(Correct))),
                         decreasing=FALSE,
                         col.wrong="pink", col.correct="white"){
@@ -69,7 +69,7 @@ answerPlots <- function(QuestionCount,
   scores <- student == correct
 
   
-  for (i in o) {
+  for (i in Questions) {
     for (j in seq_len(NumV)) {
       v <- versions[j]
       sub <- v == version

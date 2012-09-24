@@ -20,7 +20,7 @@
 \SweaveOpts{echo=TRUE,results=verbatim} % to show R code and results
 \SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex}
 <<>>=
-options(width=60)
+options(width=65)
 set.seed(18)
 Sys.setenv(R_KEEP_PKG_SOURCE="yes")
 install.packages("..",type="source",repos=NULL)
@@ -689,25 +689,27 @@ Using the \verb!AnswerCounts()! function, a count of how many students
 chose each answer option is provided. This function takes as input the
 index automatically created by the test creation process (read in
 as ``TestIndex.csv"), as well as the result of the
-\verb!grades()! function.
+\verb!grades()! function.  Also included are counts of blank responses
+and responses that don't correspond to one of the offered choices.
 
 The purpose of the \verb!CreateIndex()! function is to undo the answer
 choice randomization that is done during the test creation process, so
 that firm counts can be given for each answer choice, not just counts
 of how many students chose ``A", ``B", ``C", etc.
 
-The output of this function is a matrix containing the number of
-respondents choosing each answer option. The rows correspond to
-question numbers, while the columns are representative of the answer
-options. The answer options are in the same order that the instructor
-provided them on the Sweave template.
+The output of this function is a dataframe containing the \verb!AnswerCount! data
+rearranged to undo the test randomization.  Columns \verb!A1! to \verb!A5!
+contain the counts of students choosing those answers, and columns \verb!R1!
+to \verb!R5! give the letter chosen by the randomization.
 
-Below are the first five rows of the output matrix for our sample test:
+Below are some of the rows of the output dataframe for our sample test:
 
 <<echo=true,results=verbatim>>=
 TestIndex <- read.csv(TestIndex.csv, head=TRUE)
 NumberOfVersions <- 4
-CreateIndex(TestIndex, GradedTests)[1:5,]
+Counts <- CreateIndex(TestIndex, GradedTests)
+o <- with(Counts, order(Question, ExamCode))
+Counts[o[1:6],]
 @
 
 Any answer option which has very few respondents should be reviewed by
@@ -749,7 +751,7 @@ if(length(drop)>0){
 }
 Options <- factor(paste(" ", c(1:length(AnswerCounts)), sep=""))
 Resp <- 100*AnswerCounts/nrow(GradedTests)
-Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
+# Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
 # CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
 
 # latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency

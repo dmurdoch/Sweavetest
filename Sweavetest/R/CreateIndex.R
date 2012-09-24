@@ -46,23 +46,43 @@ CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
   result <- data.frame(ExamCode = character(0), Question=character(0), 
                        A1=numeric(0), A2=numeric(0), A3=numeric(0), 
                        A4=numeric(0), A5=numeric(0),
-                       Blank=numeric(0), Bad=numeric(0))
+                       Blank=numeric(0), Bad=numeric(0),
+                       R1=character(0), R2=character(0), R3=character(0),
+                       R4=character(0), R5=character(0))
   for (v in Versions) {
     counts <- Counts[v,,]
     index <- Index[Index$ExamCode == v,]
     if (nrow(index)) {
       for (q in qs) {
         A <- rep(NA, 5)
+        R <- rep(NA, 5)
         thisq <- index[index$Question == q,,drop=FALSE]
-        if (!is.na(thisq$A)) A[thisq$A] <- counts[q, "A"]
-        if (!is.na(thisq$B)) A[thisq$B] <- counts[q, "B"]
-        if (!is.na(thisq$C)) A[thisq$C] <- counts[q, "C"]
-        if (!is.na(thisq$D)) A[thisq$D] <- counts[q, "D"]
-        if (!is.na(thisq$E)) A[thisq$E] <- counts[q, "E"]
+        if (!is.na(thisq$A)) {
+          A[thisq$A] <- counts[q, "A"]
+          R[thisq$A] <- "A"
+        }
+        if (!is.na(thisq$B)) {
+          A[thisq$B] <- counts[q, "B"]
+          R[thisq$B] <- "B"
+        }
+        if (!is.na(thisq$C)) {
+          A[thisq$C] <- counts[q, "C"]
+          R[thisq$C] <- "C"
+        }
+        if (!is.na(thisq$D)) {
+          A[thisq$D] <- counts[q, "D"]
+          R[thisq$D] <- "D"
+        }
+        if (!is.na(thisq$E)) {
+          A[thisq$E] <- counts[q, "E"]
+          R[thisq$E] <- "E"
+        }
         result <- rbind(result, data.frame(ExamCode=v, 
-                      Question=q, A1=A[1], A2=A[2], A3=A[3],
-                      A4=A[4], A5=A[5], Blank=counts[q,"Blank"],
-                      Bad=counts[q,"Bad"]))
+                      Question=q, 
+                      A1=A[1], A2=A[2], A3=A[3], A4=A[4], A5=A[5], 
+                      Blank=counts[q,"Blank"],
+                      Bad=counts[q,"Bad"], 
+                      R1=R[1], R2=R[2], R3=R[3], R4=R[4], R5=R[5]))
       }
     }
   }

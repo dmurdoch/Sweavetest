@@ -20,7 +20,7 @@
 \SweaveOpts{echo=TRUE,results=verbatim} % to show R code and results
 \SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex}
 <<>>=
-options(width=65)
+options(width=70)
 set.seed(18)
 Sys.setenv(R_KEEP_PKG_SOURCE="yes")
 install.packages("..",type="source",repos=NULL)
@@ -744,19 +744,14 @@ Percentage <- function(x){x}
 Discrimination <- function(x){x}
 
 AnswerCounts <- subset(AnswerCounts, Question==1, 
-                                    select=paste0("A", 1:5))
-drop <- which(is.na(AnswerCounts))
-if(length(drop)>0){
-  AnswerCounts <- AnswerCounts[-drop]
-}
-Options <- factor(paste(" ", c(1:length(AnswerCounts)), sep=""))
-Resp <- 100*AnswerCounts/nrow(GradedTests)
-# Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
-# CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
+                                    select=c("ExamCode", paste0("A", 1:4)))
+Resp <- 100*AnswerCounts[,-1]/nrow(GradedTests)
+Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
+CountFrame <- data.frame(AnswerCounts,Resp,Dis)
 
-# latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency
-#                                        +Heading()*Format(digits=2)*Resp*Percentage
-#                                        +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
+latex(tabular(ExamCode~Heading()*Format(digits=2)*AnswerCounts*Frequency
+                                        +Heading()*Format(digits=2)*Resp*Percentage
+                                        +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
 @
 \end{center}
 \caption{Distractor discrimination results for the first question on the sample test.

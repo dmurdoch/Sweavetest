@@ -44,6 +44,7 @@ CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
   
   Versions <- dimnames(Counts)[[1]]
   result <- data.frame(ExamCode = character(0), Question=character(0), 
+  		       Correct=numeric(0),
                        A1=numeric(0), A2=numeric(0), A3=numeric(0), 
                        A4=numeric(0), A5=numeric(0),
                        Blank=numeric(0), Bad=numeric(0),
@@ -77,8 +78,10 @@ CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
           A[thisq$E] <- counts[q, "E"]
           R[thisq$E] <- "E"
         }
+        Correct <- thisq$Correct
         result <- rbind(result, data.frame(ExamCode=v, 
                       Question=q, 
+                      Correct=Correct,
                       A1=A[1], A2=A[2], A3=A[3], A4=A[4], A5=A[5], 
                       Blank=counts[q,"Blank"],
                       Bad=counts[q,"Bad"], 

@@ -10,4 +10,6 @@ Renumerate <- function(..., Correct = 1, KeepLast = 0) {
   cat("\\begin{enumerate}\n")
   Ritems(..., Correct=Correct, KeepLast=KeepLast)
   cat("\\end{enumerate}\n")
+  
+  QReport()
 }

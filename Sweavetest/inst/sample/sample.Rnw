@@ -56,7 +56,7 @@ multiplechoice(1:4)
 @
 \end{center}
 \newpage
-\markright{SS 2864b Exam \Sexpr{versioncodes[testversion()]}}
+\markright{SS 2864b Exam Code \Sexpr{versioncode()}}
 \begin{center}
 \bf \large Multiple Choice Questions.  Write your answers on the answer sheet (page 1).  The correct
 answer is worth 1 mark.  A blank is worth 0.25 marks.

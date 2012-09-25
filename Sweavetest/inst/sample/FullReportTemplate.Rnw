@@ -23,7 +23,6 @@ library(Sweavetest)
 
 Version("Teacher")
 testversion(4)
-.STEnv$NumberOfVersions <- 4
 
 if(Version() == "Report"){
   # Replace the system.file call with a filename of Scanex results
@@ -37,7 +36,7 @@ Initialization()
 \newcounter{myitem}
 \hyphenation{Scantron}
 
-\markright{"Your Class Name Here" Exam \Sexpr{with(.STEnv, versioncodes[testversion()])}}
+\markright{"Your Class Name Here" Exam Code \Sexpr{versioncode()}}
 
 \begin{document}
 
@@ -58,7 +57,7 @@ StatisticalOverview(GradedTests,KR,FD,fignum)
 @
 
 \begin{center}
-\fbox{\bf EXAM CODE \Sexpr{with(.STEnv, ExamNum[testversion()])}}
+\fbox{\bf EXAM CODE \Sexpr{versioncode()}}
 \end{center}
 \vspace{0.5in}
 
@@ -75,7 +74,7 @@ INSTRUCTIONS:
 
 \item { Fill in NAME, INSTRUCTOR, SIGNATURE and COURSE  on the {Scantron} sheet.}
 
-\item { Fill in and {\bf code} your STUDENT NUMBER, SECTION and EXAM CODE on the Scantron sheet.  Your EXAM CODE is  \Sexpr{with(.STEnv, ExamNum[testversion()])}.  }
+\item { Fill in and {\bf code} your STUDENT NUMBER, SECTION and EXAM CODE on the Scantron sheet.  Your EXAM CODE is  \Sexpr{versioncode()}.  }
 
 \item { Leave the ANSWER SHEET NUMBER blank on the Scantron sheet.}
 

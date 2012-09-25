@@ -46,7 +46,7 @@ newCommands <- function(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE,
 
 marklist <- function(marks, names=1:length(marks)) {
   cat("\\begin{minipage}[t]{2in}
-Marks (exam code ", versioncodes[testversion()], ") \\\\
+Marks (Code ", versioncode(), ") \\\\
 \\ \\vspace{0.5ex} \\\\
 \\begin{tabular}{|c|c|}
 \\hline

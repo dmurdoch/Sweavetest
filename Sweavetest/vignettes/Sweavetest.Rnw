@@ -294,7 +294,7 @@ and is used to produce an answer key.  (This information is also used in the
 test analysis functions; see section \ref{sec:analysis}.) For example, the answer key from the questions
 above is requested via
 
-\noindent\verb!Answer key for version \Sexpr!\verb!{versioncodes[testversion()]}:\\!
+\noindent\verb!Answer key for version \Sexpr!\verb!{versioncode()}:\\!
 \begin{verbatim}
  <<>>=
  answerkey(symbols=LETTERS)
@@ -302,7 +302,7 @@ above is requested via
 \end{verbatim}
 and displayed as \\
 
-Answer key for version \Sexpr{versioncodes[testversion()]}:\\
+Answer key for version \Sexpr{versioncode()}:\\
 <<>>=
 answerkey(symbols=LETTERS)
 @
@@ -707,7 +707,6 @@ Below are some of the rows of the output dataframe for our sample test:
 
 <<echo=true,results=verbatim>>=
 TestIndex <- read.csv(TestIndex.csv, head=TRUE)
-NumberOfVersions <- 4
 Counts <- CreateIndex(TestIndex, GradedTests)
 o <- with(Counts, order(Question, ExamCode))
 Counts[o[1:6],]
@@ -894,7 +893,6 @@ library(tables)
 setwd("C:/Users/Sample")
 version("Student")
 testversion(4)
-NumberOfVersions <- 4
 
 if(Version() == "Report"){
   scanex <- readScanex("sample.dat")
@@ -1159,7 +1157,6 @@ Still need to document
  [1]          "answerMatrix"        "clean"             
  [6]          "getglobal"          "grades"                              
 [16] "nominalRoll"        "perms"                "readScanex"           
-[26] "versioncodes"   
 
 
 \bibliography{Sweavetest}

@@ -23,3 +23,6 @@ testversion <- function(x = 1){
   .STEnv$testversion
 }
 
+versioncode <- function() {
+  .STEnv$ExamNum[testversion()]
+}

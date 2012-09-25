@@ -2,7 +2,7 @@ Conclusion <- function(END = TRUE){
   
   if(END == TRUE){
     if(Version() == "Teacher"){
-      cat("Answer key for version", with(.STEnv, ExamNum[testversion()]), ":")
+      cat("Answer key for version", versioncode(), ":")
       cat("\\\\")
       answerkey(symbols=LETTERS)
     }
@@ -11,8 +11,7 @@ Conclusion <- function(END = TRUE){
     
     if(Version() == "Student") {
       with(.STEnv, {
-        Code <- strsplit(versioncodes[testversion()], " ")
-        Code <- as.integer(Code[[1]][2])
+        Code <- as.integer(versioncode())
         ExamCode <- rep(Code, QuestionCounter)
         Correct <- correct
         Index <- cbind(QuestionIndex,ExamCode,Correct,Index)

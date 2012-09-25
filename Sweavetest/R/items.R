@@ -8,12 +8,10 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   CheckDups <- getglobal(CheckDups, TRUE)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
-  QuestionCounter <- getglobal(QuestionCounter,0)
   QuestionIndex <- getglobal(QuestionIndex,c())
   correct <- getglobal(correct,c())
   
-  QuestionCounter <- QuestionCounter + 1
-  .STEnv$QuestionCounter <- QuestionCounter
+  QuestionCounter(QuestionCounter() + 1)
   
   correct <- c(correct, Correct)
   .STEnv$correct <- correct
@@ -36,7 +34,7 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   
   .STEnv$LastIndices <- indices
   x <- x[indices]
-  .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter)
+  .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter())
   
   y <- paste("\\item",x,"\n", sep=" ")
   cat(y)
@@ -56,7 +54,6 @@ QReport <- function() {
   CheckDups <- getglobal(CheckDups, TRUE)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
-  QuestionCounter <- getglobal(QuestionCounter,0)
   QuestionIndex <- getglobal(QuestionIndex,c())
   correct <- getglobal(correct,c())
   
@@ -68,9 +65,9 @@ QReport <- function() {
   GradedTests <- getglobal(GradedTests,c())
   student <- GradedTests$Answers
   correct <- GradedTests$Correct
-  DR <- DR[QuestionCounter]
-  ID <- ID[QuestionCounter]
-  PB <- PB[QuestionCounter]
+  DR <- DR[QuestionCounter()]
+  ID <- ID[QuestionCounter()]
+  PB <- PB[QuestionCounter()]
   CorrectIndex <- getglobal(CorrectIndex, C())
 
   if(testversion() > 4){
@@ -79,14 +76,14 @@ QReport <- function() {
     
   cat("\\ \\\\")
   
-  AnswerCounts <- AnswerCountMatrix[QuestionCounter,]
+  AnswerCounts <- AnswerCountMatrix[QuestionCounter(),]
   drop <- which(is.na(AnswerCounts))
   if(length(drop) > 0){
     AnswerCounts <- AnswerCounts[-drop]
   }
   Options <- paste(" ", c(1:length(AnswerCounts)), sep="")
   Resp <- 100*AnswerCounts/nrow(GradedTests)
-  Dis <- DistractorDiscrimination(GradedTests,QuestionCounter)
+  Dis <- DistractorDiscrimination(GradedTests,QuestionCounter())
   CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
   
   StatNames <- c("Difficulty Rating", "Item Discriminator", "Point Biserial")
@@ -121,7 +118,7 @@ QReport <- function() {
   filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
-  answerPlots(student,correct,GradedTests$ExamCode, QuestionCount = QuestionCounter)
+  answerPlots(student,correct,GradedTests$ExamCode, QuestionCount = QuestionCounter())
   dev.off()
   cat("\\hspace{.05in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
@@ -132,7 +129,7 @@ QReport <- function() {
   filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
-  EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
+  EmpiricalProbabilityPlot(GradedTests, QuestionCounter())
   dev.off()
   cat("\\hspace{.08in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))

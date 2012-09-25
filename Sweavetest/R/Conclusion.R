@@ -12,7 +12,7 @@ Conclusion <- function(END = TRUE){
     if(Version() == "Student") {
       with(.STEnv, {
         Code <- as.integer(versioncode())
-        ExamCode <- rep(Code, QuestionCounter)
+        ExamCode <- rep(Code, QuestionCounter())
         Correct <- correct
         Index <- cbind(QuestionIndex,ExamCode,Correct,Index)
         if(testversion() == 1){

@@ -733,12 +733,12 @@ produced for the first question of our sample test.
 \begin{table}
 \begin{center}
 <<>>=
-QuestionCounter <- 1
+QuestionCounter(1)
 .STEnv$Index <- read.csv(TestIndex.csv, head=TRUE)
 Summary <- CreateIndex(.STEnv$Index, GradedTests)
 
-Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index) #$
-AnswerCounts <- subset(Summary, Question==QuestionCounter, 
+Dis <- DistractorDiscrimination(GradedTests,.STEnv$Index) #$
+AnswerCounts <- subset(Summary, Question==QuestionCounter(), 
                        select=paste0("A", 1:nrow(Dis)))
 Frequency <- apply(AnswerCounts, 2, sum)
 Percentage <- 100*Frequency/nrow(GradedTests)
@@ -767,8 +767,8 @@ CorrectIndex <- read.csv(CorrectIndex.csv)
 StudentAnswers <- GradedTests$Answers
 CorrectAnswers <- GradedTests$Correct
 ExamVersion <- GradedTests$ExamCode
-QuestionCounter <- 1
-answerPlots(QuestionCounter)
+QuestionCounter(1)
+answerPlots(QuestionCounter())
 @%$
 The resulting plot for the first question is shown in Figure \ref{fig:OptionFrequency}.
 \begin{figure}
@@ -796,8 +796,8 @@ The plot can be created using the \verb!EmpiricalProbabilityPlot()! function. It
 from the \verb!grades()! function, as well as the question number for which the plot will created. A plot
 for the first question can be created as follows:
 <<Empirical,eval=false,echo=true>>=
-QuestionCounter <- 1
-EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
+QuestionCounter(1)
+EmpiricalProbabilityPlot(GradedTests, QuestionCounter())
 @
 The result is shown in Figure \ref{fig:Empirical}.
 \begin{figure}

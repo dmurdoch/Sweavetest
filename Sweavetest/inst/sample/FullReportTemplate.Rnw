@@ -22,7 +22,7 @@ set.seed(18)
 library(Sweavetest)
 
 Version("Teacher")
-testversion(4)
+testversion(1)
 
 if(Version() == "Report"){
   # Replace the system.file call with a filename of Scanex results

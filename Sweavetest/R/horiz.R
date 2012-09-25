@@ -1,16 +1,14 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, Index, QuestionCounter,QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct) {
+function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
   Answers <- getglobal(Answers, c())
   CheckDups <- getglobal(CheckDups, TRUE)
   Index <- getglobal(Index, c())
-  QuestionCounter <- getglobal(QuestionCounter,0)
   QuestionIndex <- getglobal(QuestionIndex,c())
   correct <- getglobal(correct,c())
-  QuestionCounter <- QuestionCounter+1
-  .STEnv$QuestionCounter <- QuestionCounter
+  QuestionCounter(QuestionCounter()+1)
   
   if(Version() != "Report"){
     correct <- c(correct, Correct)
@@ -26,9 +24,9 @@ function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, 
     GradedTests <- getglobal(GradedTests,c())
     student <- GradedTests$Answers
     correct <- GradedTests$Correct
-    DR <- DR[QuestionCounter]
-    ID <- ID[QuestionCounter]
-    PB <- PB[QuestionCounter]
+    DR <- DR[QuestionCounter()]
+    ID <- ID[QuestionCounter()]
+    PB <- PB[QuestionCounter()]
     Index <- getglobal(Index, c())
     CorrectIndex <- getglobal(CorrectIndex, c())
   }
@@ -52,7 +50,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, 
     labels <- itemlabels[1:(n+KeepLast)]		 	 
     x <- x[indices]		 				  
 					  
-    .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter)	 
+    .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter())	 
 					  
     cat( paste(labels, "\\hspace{1ex}", x, "\\hfill") )	 
 	 
@@ -92,14 +90,14 @@ function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, 
     
     cat( paste(labels, "\\hspace{1ex}", x, "\\hfill") )
     
-    AnswerCounts <- AnswerCountMatrix[QuestionCounter,]
+    AnswerCounts <- AnswerCountMatrix[QuestionCounter(),]
     drop <- which(is.na(AnswerCounts))
     if(length(drop)>0){
     AnswerCounts <- AnswerCounts[-drop]
     }
     Options <- paste(" ", c(1:length(AnswerCounts)), sep="")
     Resp <- 100*AnswerCounts/nrow(GradedTests)
-    Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,Index)
+    Dis <- DistractorDiscrimination(GradedTests,QuestionCounter(),Index)
     CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
     
     StatNames <- c("Difficulty Rating", "Item Discriminator", "Point Biserial")
@@ -137,7 +135,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, 
     filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
     
     pdf(filename, width=8, height=4)
-    answerPlots(student,correct,GradedTests$ExamCode, QuestionCount = QuestionCounter)
+    answerPlots(student,correct,GradedTests$ExamCode, QuestionCount = QuestionCounter())
     dev.off()
     cat("\\hspace{.05in}")
     cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
@@ -148,7 +146,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, 
     filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
                 
     pdf(filename, width=8, height=4)
-    EmpiricalProbabilityPlot(GradedTests, QuestionCounter)
+    EmpiricalProbabilityPlot(GradedTests, QuestionCounter())
     dev.off()
     cat("\\hspace{.08in}")
     cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))

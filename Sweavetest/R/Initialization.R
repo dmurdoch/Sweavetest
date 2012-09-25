@@ -21,7 +21,7 @@ Initialization <- function(Initialize = TRUE){
     itemlabels <- paste("(", LETTERS, ")", sep="")
     Answers <- c()
     Index <- c()
-    QuestionCounter <- 0
+    QuestionCounter(0)
     QuestionIndex <- c()
     fignum <- 0
     correct <- ExamNum[testversion()]

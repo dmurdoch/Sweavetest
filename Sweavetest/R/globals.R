@@ -11,7 +11,7 @@ Version <- function(x = "Student"){
     x <- match.arg(x, c("Teacher",  "Student", "Report", "Low Level"))
     .STEnv$Version <- x
     return(invisible(x))
-  }
+  } 
   .STEnv$Version
 }
 
@@ -21,6 +21,22 @@ testversion <- function(x = 1){
     return(invisible(x))
   }
   .STEnv$testversion
+}
+
+testversion <- function(x = 1){
+  if (!missing(x)) {
+    .STEnv$testversion <- x
+    return(invisible(x))
+  }
+  .STEnv$testversion
+}
+
+QuestionCounter <- function(x = 0){
+  if (!missing(x)) {
+    .STEnv$QuestionCounter <- x
+    return(invisible(x))
+  }
+  .STEnv$QuestionCounter
 }
 
 versioncode <- function() {

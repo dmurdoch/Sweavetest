@@ -137,6 +137,7 @@ above will be processed and displayed as
 \item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if $U > 0.3$, equal to 1 otherwise.  The
 distribution of $X$ is
 <<>>=
+.STEnv$Version <- "Teacher"
 enumerate("$\\Binom(n=1, p=0.7)$", 
       "$\\Binom(n=1, p=0.3)$",
       "$\\Poisson(\\mu = 0.3)$",

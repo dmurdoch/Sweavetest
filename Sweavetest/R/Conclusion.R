@@ -13,7 +13,7 @@ Conclusion <- function(END = TRUE){
       with(.STEnv, {
         Code <- as.integer(versioncode())
         ExamCode <- rep(Code, QuestionCounter())
-        Correct <- correct
+        Correct <- correct()
         Index <- cbind(QuestionIndex,ExamCode,Correct,Index)
         if(testversion() == 1){
           colnames(Index) <- c("Question", "ExamCode", "Correct", "A", "B", "C", "D", "E")

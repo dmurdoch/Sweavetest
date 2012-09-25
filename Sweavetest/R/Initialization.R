@@ -24,7 +24,7 @@ Initialization <- function(Initialize = TRUE){
     QuestionCounter(0)
     QuestionIndex <- c()
     fignum <- 0
-    correct <- ExamNum[testversion()]
+    correct(c())
   })
   
   ###Report Creation Variables###

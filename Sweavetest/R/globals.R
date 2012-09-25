@@ -39,6 +39,14 @@ QuestionCounter <- function(x = 0){
   .STEnv$QuestionCounter
 }
 
+correct <- function(x = c()){
+  if (!missing(x)) {
+    .STEnv$correct <- x
+    return(invisible(x))
+  }
+  .STEnv$correct
+}
+
 versioncode <- function() {
   .STEnv$ExamNum[testversion()]
 }

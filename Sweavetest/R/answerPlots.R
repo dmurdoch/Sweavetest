@@ -1,7 +1,7 @@
-answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))) {
+answerCorrelations <- function(student, CorrectAnswers, qs=seq_len(max(nchar(CorrectAnswers)))) {
   student <- answerMatrix(student, qs)
-  correct <- answerMatrix(correct, qs)
-  scores <- student == correct
+  answers <- answerMatrix(CorrectAnswers, qs)
+  scores <- student == answers
   studentTotal <- rowSums(scores)
   questionRate <- colSums(scores)/nrow(scores)
   correlations <- apply(scores, 2, function(x) if (sd(x) > 0) cor(x, studentTotal) else 0)

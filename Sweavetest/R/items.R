@@ -9,12 +9,10 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
   QuestionIndex <- getglobal(QuestionIndex,c())
-  correct <- getglobal(correct,c())
   
   QuestionCounter(QuestionCounter() + 1)
   
-  correct <- c(correct, Correct)
-  .STEnv$correct <- correct
+  correct(c(correct(), Correct))
   
   x <- unlist(list(...))
   if (CheckDups && any(duplicated(format(x))))  
@@ -55,7 +53,6 @@ QReport <- function() {
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
   QuestionIndex <- getglobal(QuestionIndex,c())
-  correct <- getglobal(correct,c())
   
   DR <- getglobal(DR,c())
   ID <- getglobal(ID,c())

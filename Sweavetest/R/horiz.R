@@ -1,5 +1,5 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Answers, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Answers, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
@@ -7,11 +7,9 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
   CheckDups <- getglobal(CheckDups, TRUE)
   Index <- getglobal(Index, c())
   QuestionIndex <- getglobal(QuestionIndex,c())
-  correct <- getglobal(correct,c())
   QuestionCounter(QuestionCounter()+1)
   
-  correct <- c(correct, Correct)
-  .STEnv$correct <- correct
+  correct(c(correct(), Correct))
   
   x <- unlist(list(...))
   if (CheckDups && any(duplicated(format(x))))  

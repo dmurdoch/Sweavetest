@@ -10,80 +10,48 @@ answerCorrelations <- function(student, correct, qs=seq_len(max(nchar(correct)))
   text(questionRate, correlations, label = qs)
 }
 
-answerPlots <- function(Questions=seq_len(NumQ),
-                        qs=seq_len(max(nchar(Correct))),
-                        decreasing=FALSE,
+answerPlots <- function(Questions=qs,
                         col.wrong="pink", col.correct="white"){
                         
   # GradedTests$Answers is vector of student answers, e.g. c("DBDCBDACCBAABBCBCCABBDAACAAACC", ...
-  # student splits it out into matrix with questions as columns, students as rows
   # GradedTests$Correct is vector of correct answers, e.g. c("ABDCBDACCBAACACBACBDBAEACAAACE", ...
-  # correct splits it out into matrix
-  # version is vector of test versions, e.g. c("840", "840", "170", ...
-  # QuestionCount is ??
   # Index is dataframe giving coding for tests, with columns Question, ExamCode, A, B, C, D, E
-  # CorrectIndex is similar indicating the right answer, columns ExamCode, Question, Correct
-  #   the Correct column gives the answer number on the original prerandomization test
   # GradedTests is a dataframe with results in columns "Student ID", Section, ExamCode, Sheet, Scantron,
   #   Answers, Correct, Grade
 
   Index <- getglobal(Index, c())
-  CorrectIndex <- getglobal(CorrectIndex, c())
   GradedTests <- getglobal(GradedTests,c())
-  NumS <- nrow(GradedTests)
   qs <- as.numeric(unique(Index$Question))
-  NumQ <- length(qs)
-  
-  student <- answerMatrix(GradedTests$Answers, qs)
-  correct <- answerMatrix(GradedTests$Correct, qs)
   
   versions <- as.character(unique(Index$ExamCode))
   NumV <- length(versions)
   
-  Counts <- AnswerCounts(GradedTests, qs)
-  
-  scores <- student == correct
-
-  
+  summary <- CreateIndex(Index, GradedTests)
   for (i in Questions) {
+    Qsummary <- with(summary, summary[Question == i,])
+    if (all(is.na(Qsummary$A5))) NumResp <- 4
+    else NumResp <- 5
+    names <- paste0("A", 1:NumResp)
+    if (any(Qsummary$Blank > 0))
+    	names <- c(names, "Blank")
+    if (any(Qsummary$Bad > 0))
+    	names <- c(names, "Bad")
+    max <- max(Qsummary[, names])
+    score <- sum(Qsummary[, "Score"])
+    NumS <- sum(Qsummary[, names])
+    
     for (j in seq_len(NumV)) {
       v <- versions[j]
-      sub <- v == version
-      
-      WhichIndex <- which(AnswerCountMatrix[,1] == v)
-      AnswerCountIndex <- AnswerCountMatrix[WhichIndex,]
-      AnswerCounts <- AnswerCountIndex[i,]
-      AnswerCounts <- AnswerCounts[-1]
-      drop <- which(is.na(AnswerCounts))
-      if(length(drop)>0) AnswerCounts <- AnswerCounts[-drop]
-      CorrectPosition <- CorrectIndex[ExamCode == v,"Correct"]
-      
-      
-      RightIndex <- which(Index[,1]==v)
-      EIndex <- Index[RightIndex,]
-      QIndex <- EIndex[o,]
-      QIndex <- QIndex[-1]
-  
-      if(is.na(QIndex[5]) == FALSE){
-      bar <- c("1"=0, "2"=0, "3"=0, "4"=0, "5"=0)
-      col <- rep(col.wrong, 5)
-      }
-  
-      if(is.na(QIndex[5]) == TRUE){
-        QIndex <- QIndex[-5]
-        bar <- c("1"=0, "2"=0, "3"=0, "4"=0)
-        col <- rep(col.wrong, 4)
-      }
-      
-      names(QIndex) <- names(bar)
+      Vsummary <- with(Qsummary, Qsummary[ExamCode == v,])
+      bar <- 0.75*as.numeric(Vsummary[,names]/max)
+      names(bar) <- c("A1"="1", "A2"="2", "A3"="3", "A4"="4", "A5"="5",
+                    "Blank"="Blank", "Bad"="Bad")[names]
+      col <- rep(col.wrong, length(bar))      
       names(col) <- names(bar)
-      col[CorrectPosition] <- col.correct
-
-  
-      bar <- AnswerCounts/sum(sub)  
+      col[Vsummary$Correct] <- col.correct
       
-      if (v == versions[[1]]) {
-        title <- paste("Q", qs[i], " ", round(100*sum(scores[,i])/NumS), "% correct",
+      if (j == 1) {
+        title <- paste("Q", qs[i], " ", round(100*score/NumS), "% correct",
                        sep="")
       	centres <- barplot(bar, ylim=c(0, length(versions)), main=title, 
       	                   col=col, axes=FALSE)
@@ -92,7 +60,8 @@ answerPlots <- function(Questions=seq_len(NumQ),
       } else
         barplot(bar, add=TRUE, offset=j-1, col=col, axes=FALSE)
         
-      text(x=centres, y=rep(j-1, length(QIndex)),adj=c(0.5, 1.3),labels=LETTERS[order(QIndex)], xpd=NA)
+      text(x=centres[1:NumResp], y=rep(j-1, NumResp),adj=c(0.5, 1.3),
+           labels=Vsummary[1,paste0("R", 1:NumResp)], xpd=NA)
       
     }
   }

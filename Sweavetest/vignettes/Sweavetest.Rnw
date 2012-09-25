@@ -775,9 +775,7 @@ StudentAnswers <- GradedTests$Answers
 CorrectAnswers <- GradedTests$Correct
 ExamVersion <- GradedTests$ExamCode
 QuestionCounter <- 1
-plot(1)
-#answerPlots(QuestionCounter)
-
+answerPlots(QuestionCounter)
 @%$
 The resulting plot for the first question is shown in Figure \ref{fig:OptionFrequency}.
 \begin{figure}

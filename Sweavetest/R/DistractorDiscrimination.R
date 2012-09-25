@@ -16,14 +16,16 @@ DistractorDiscrimination <- function(
   columns <- paste0("A", 1:Qlength)
   
   topSummary <- CreateIndex(Index, GradedTests[Top25,])
-  topSummary <- topSummary[topSummary$Question == QuestionCounter, columns]
-    
+  topSummary <- apply(topSummary[topSummary$Question == QuestionCounter,columns], 2, sum)
+  
   botSummary <- CreateIndex(Index, GradedTests[Bottom25,])
-  botSummary <- botSummary[botSummary$Question == QuestionCounter, columns]
-    
+  botSummary <- apply(botSummary[botSummary$Question == QuestionCounter,columns], 2, sum)
+  
   Top25Percentage <- topSummary/NumTop25
   Bottom25Percentage <- botSummary/NumBottom25
     
-  Distractor <- Top25Percentage-Bottom25Percentage
-  return(Distractor)
+  result <- data.frame(Option = 1:Qlength,
+                       Discrimination = as.numeric(Top25Percentage - Bottom25Percentage))
+  
+  result
 }

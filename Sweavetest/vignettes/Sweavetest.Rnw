@@ -734,25 +734,18 @@ produced for the first question of our sample test.
 \begin{center}
 <<>>=
 QuestionCounter <- 1
-NumberOfVersions <- 4
 .STEnv$Index <- read.csv(TestIndex.csv, head=TRUE)
-AnswerCounts <- CreateIndex(.STEnv$Index, GradedTests)
+Summary <- CreateIndex(.STEnv$Index, GradedTests)
 
-Values <- function(x){x}
-Frequency <- function(x){x}
-Percentage <- function(x){x}
-Discrimination <- function(x){x}
-
-AnswerCounts <- subset(AnswerCounts, Question==1, 
-                                    select=c("ExamCode", paste0("A", 1:4)))
-Resp <- 100*AnswerCounts[,-1]/nrow(GradedTests)
-Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
-CountFrame <- data.frame(AnswerCounts,Resp,Dis)
-
-latex(tabular(Factor(ExamCode)~Frequency*Format(digits=2)*(A1+A2+A3+A4)
-                                        +Percentage*Format(digits=2)*(A1.1+A2.1+A3.1+A4.1)
-                                        +Discrimination*Format(digits=2)*(A1.2+A2.2+A3.2+A4.2), data=CountFrame))
-
+Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index) #$
+AnswerCounts <- subset(Summary, Question==QuestionCounter, 
+                       select=paste0("A", 1:nrow(Dis)))
+Frequency <- apply(AnswerCounts, 2, sum)
+Percentage <- 100*Frequency/nrow(GradedTests)
+CountFrame <- data.frame(Dis,Frequency,Percentage)
+latex(tabular(Factor(Option)*Heading()*identity 
+              ~ Frequency + Percentage + Discrimination,
+              data=CountFrame), digits=2)
 @
 \end{center}
 \caption{Distractor discrimination results for the first question on the sample test.

@@ -749,9 +749,10 @@ Resp <- 100*AnswerCounts[,-1]/nrow(GradedTests)
 Dis <- DistractorDiscrimination(GradedTests,QuestionCounter,.STEnv$Index)
 CountFrame <- data.frame(AnswerCounts,Resp,Dis)
 
-latex(tabular(ExamCode~Heading()*Format(digits=2)*AnswerCounts*Frequency
-                                        +Heading()*Format(digits=2)*Resp*Percentage
-                                        +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
+latex(tabular(Factor(ExamCode)~Frequency*Format(digits=2)*(A1+A2+A3+A4)
+                                        +Percentage*Format(digits=2)*(A1.1+A2.1+A3.1+A4.1)
+                                        +Discrimination*Format(digits=2)*(A1.2+A2.2+A3.2+A4.2), data=CountFrame))
+
 @
 \end{center}
 \caption{Distractor discrimination results for the first question on the sample test.

@@ -1,5 +1,5 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Answers, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
@@ -41,5 +41,6 @@ function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, 
 		 
   .STEnv$Index <- rbind(Index,indices)	
   
-  QReport()
+  if (report)
+    QReport()
 }

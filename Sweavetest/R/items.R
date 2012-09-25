@@ -57,6 +57,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, Answers, testversion, randomize,
     x <- x[indices]
     .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter)
   
+    cat("\\begin{enumerate}\n")
     y <- paste("\\item",x,"\n", sep=" ")
     cat(y)
   

@@ -14,7 +14,7 @@ Initialization <- function(Initialize = TRUE, Version){
   
   ###Initialization Variables###
   options(width=60)
-  dir.create("figs", showWarn=FALSE)
+  dir.create("figs", showWarnings=FALSE)
   newCommands()
   
   ###Test Creation Variables###
@@ -26,7 +26,7 @@ Initialization <- function(Initialize = TRUE, Version){
     QuestionCounter <- 0
     QuestionIndex <- c()
     fignum <- 0
-    correct <- ExamNum[testversion]
+    correct <- .STEnv$ExamNum[testversion]
   })
   
   ###Report Creation Variables###

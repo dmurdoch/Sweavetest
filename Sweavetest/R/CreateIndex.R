@@ -28,7 +28,7 @@ AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
   dimnames(result) <- list(versions, qs, c(LETTERS[1:5], "Blank", "Bad"))
   
   for(i in seq_len(NumS)){
-    ExamCode <- as.character(GradedTests$ExamCode[i])
+    ExamCode <- as.character(StudentAnswers$ExamCode[i])
     answers <- student[i, qs]
     answers[ ! (answers %in% c(LETTERS[1:5], " ")) ] <- "Bad"
     answers[ answers == " " ] <- "Blank"

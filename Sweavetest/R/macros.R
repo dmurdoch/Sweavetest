@@ -44,10 +44,9 @@ newCommands <- function(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE,
     cat("\\newcommand{\\lowtilde}[1]{\\mathop{#1}\\limits_{\\textstyle\\tilde{}}}\n")
 }
 
-marklist <- function(marks, names=1:length(marks), testversion) {
-  testversion <- getglobal(testversion, 1)
-cat("\\begin{minipage}[t]{2in}
-Marks (exam code ", versioncodes[testversion], ") \\\\
+marklist <- function(marks, names=1:length(marks)) {
+  cat("\\begin{minipage}[t]{2in}
+Marks (exam code ", versioncodes[testversion()], ") \\\\
 \\ \\vspace{0.5ex} \\\\
 \\begin{tabular}{|c|c|}
 \\hline

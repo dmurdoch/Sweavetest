@@ -1,7 +1,6 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabels, Answers, Index, QuestionCounter,QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct, Version) {
+function(..., Correct=1, KeepLast=0, CheckDups, randomize, itemlabels, Answers, Index, QuestionCounter,QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum, correct) {
   
-  testversion <- getglobal(testversion, 1)
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
   Answers <- getglobal(Answers, c())
@@ -10,16 +9,15 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
   QuestionCounter <- getglobal(QuestionCounter,0)
   QuestionIndex <- getglobal(QuestionIndex,c())
   correct <- getglobal(correct,c())
-  Version <- getglobal(Version, "Student")
   QuestionCounter <- QuestionCounter+1
   .STEnv$QuestionCounter <- QuestionCounter
   
-  if(Version != "Report"){
+  if(Version() != "Report"){
     correct <- c(correct, Correct)
     .STEnv$correct <- correct
   }
   
-  if(Version == "Report"){
+  if(Version() == "Report"){
     DR <- getglobal(DR,c())
     ID <- getglobal(ID,c())
     PB <- getglobal(PB,c())
@@ -35,7 +33,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
     CorrectIndex <- getglobal(CorrectIndex, c())
   }
    
-  if(Version != "Report"){
+  if(Version() != "Report"){
     x <- unlist(list(...))
     if (CheckDups && any(duplicated(format(x))))  
       stop("Duplicated answers in Q", length(Answers)+1, ": ", 
@@ -43,7 +41,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
     n <- length(x)-KeepLast  
     rand <- sample(n)  
     if (!randomize) rand <- 1:n  
-    indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
+    indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
     if (!is.na(Correct)) {
       x[Correct] <- paste("\\Correct", x[Correct])
       .STEnv$Answers <- c(Answers, which(indices == Correct))
@@ -67,10 +65,10 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
   
   ###NEW ADDITIONS IF REPORT IS WANTED###
   
-  if(Version == "Report"){
+  if(Version() == "Report"){
     
-    if(testversion > 4){
-      testversion <- 1
+    if(testversion() > 4){
+      testversion(1)
     }
     
     x <- unlist(list(...))
@@ -80,7 +78,7 @@ function(..., Correct=1, KeepLast=0, CheckDups, testversion, randomize, itemlabe
     n <- length(x)-KeepLast  
     rand <- sample(n)  
     if (!randomize) rand <- 1:n  
-    indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
+    indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
     if (!is.na(Correct)) {
       x[Correct] <- paste("\\Correct", x[Correct])
       .GlobalEnv$Answers <- c(Answers, which(indices == Correct))

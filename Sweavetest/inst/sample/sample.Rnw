@@ -12,7 +12,7 @@ dir.create("figs", showWarn=FALSE)
 set.seed(17)
 library(Sweavetest)  # Should come after set.seed, to make reproducible.
 newCommands()
-testversion <- 4
+testversion(4)
 randomize <- TRUE
 @
 \pagestyle{myheadings}
@@ -56,7 +56,7 @@ multiplechoice(1:4)
 @
 \end{center}
 \newpage
-\markright{SS 2864b Exam \Sexpr{versioncodes[testversion]}}
+\markright{SS 2864b Exam \Sexpr{versioncodes[testversion()]}}
 \begin{center}
 \bf \large Multiple Choice Questions.  Write your answers on the answer sheet (page 1).  The correct
 answer is worth 1 mark.  A blank is worth 0.25 marks.

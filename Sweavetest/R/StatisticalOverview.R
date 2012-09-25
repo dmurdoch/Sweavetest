@@ -1,8 +1,6 @@
-StatisticalOverview <- function(GradedTests, KR, FD, fignum, Version){
+StatisticalOverview <- function(GradedTests, KR, FD, fignum){
 
-  Version <- getglobal(Version, "Student")
-  
-if(Version == "Report"){
+if(Version() == "Report"){
   
   KR <- getglobal(KR,0)
   FD <- getglobal(FD,0)
@@ -126,7 +124,7 @@ if(Version == "Report"){
   cat("\\ \\\\")
   cat("\\vspace{.5in}")
 
-  .STEnv$testversion <- 5
+  testversion(5)
   
   }
 }

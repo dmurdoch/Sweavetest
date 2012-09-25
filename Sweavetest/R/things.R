@@ -1,15 +1,6 @@
-
-getglobal <- function(var, default) {
-  name <- deparse(substitute(var))
-  if (exists(name, .STEnv)) var <- get(name, .STEnv)
-  else var <- default
-  var
-}
-
 things <-
-function(..., Correct=NA, KeepLast=0, testversion, randomize, Answers,Index, QuestionCounter,QuestionIndex) {
+function(..., Correct=NA, KeepLast=0, randomize, Answers,Index, QuestionCounter,QuestionIndex) {
   
-  testversion <- getglobal(testversion, 1)
   randomize <- getglobal(randomize, FALSE)
   Answers <- getglobal(Answers, c())
   Index <- getglobal(Index,c())
@@ -20,7 +11,7 @@ function(..., Correct=NA, KeepLast=0, testversion, randomize, Answers,Index, Que
   n <- length(x) - KeepLast
   rand <- sample(n)
   if (!randomize) rand <- 1:n  
-  indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
+  indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
 #    x[Correct] <- paste("\\Correct", x[Correct])
     .GlobalEnv$Answers <- c(Answers, which(indices == Correct))

@@ -1,13 +1,11 @@
-Initialization <- function(Initialize = TRUE, Version){
-  
-  Version <- getglobal(Version, "Student")
+Initialization <- function(Initialize = TRUE){
   
   if(Initialize == TRUE){
   
-  if(Version != "Report"){
+  if(Version() != "Report"){
     cat("\\renewcommand{\\labelenumii}{(\\Alph{enumii})}")
   }
-  if(Version == "Report"){
+  if(Version() == "Report"){
     cat("\\renewcommand{\\labelenumii}{\\arabic{enumii})}")
   }
   cat("\\renewcommand{\\labelenumi}{{\\bf\\arabic{enumi})}}")
@@ -19,18 +17,18 @@ Initialization <- function(Initialize = TRUE, Version){
   
   ###Test Creation Variables###
   with(.STEnv, {
-    randomize <- (Version != "Teacher")
+    randomize <- (Version() != "Teacher")
     itemlabels <- paste("(", LETTERS, ")", sep="")
     Answers <- c()
     Index <- c()
     QuestionCounter <- 0
     QuestionIndex <- c()
     fignum <- 0
-    correct <- .STEnv$ExamNum[testversion]
+    correct <- ExamNum[testversion()]
   })
   
   ###Report Creation Variables###
-  if(Version == "Report") with(.STEnv, {
+  if(Version() == "Report") with(.STEnv, {
     randomize <- FALSE
     itemlabels <- paste("(", c(1:26), ")", sep="")
     Index <- read.table("TestIndex.csv", header = TRUE)
@@ -43,13 +41,13 @@ Initialization <- function(Initialize = TRUE, Version){
     ID <- ItemDiscriminator(GradedTests)
     PB <- PointBiserial(GradedTests)
     AnswerCountMatrix <- CreateIndex(Index, GradedTests)
-    testversion <- 6
+    testversion(6)
   })
   
-  if(Version == "Student"){
+  if(Version() == "Student"){
     cat("\\newcommand{\\Correct}{}")
   }
-  if(Version == "Report" | Version == "Teacher"){
+  if(Version() == "Report" | Version() == "Teacher"){
     cat("\\newcommand{\\Correct}{*}")
   }
   

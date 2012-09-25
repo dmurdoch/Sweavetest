@@ -27,7 +27,7 @@ install.packages("..",type="source",repos=NULL)
 library(Sweavetest)
 library(tables)
 randomize <- TRUE
-testversion <- 1
+testversion(1)
 newCommands(thesection=FALSE)
 @
 
@@ -137,7 +137,7 @@ above will be processed and displayed as
 \item Let $U \sim \Unif(0,1)$.  Set $X$ equal to 0 if $U > 0.3$, equal to 1 otherwise.  The
 distribution of $X$ is
 <<>>=
-.STEnv$Version <- "Teacher"
+Version("Teacher")
 enumerate("$\\Binom(n=1, p=0.7)$", 
       "$\\Binom(n=1, p=0.3)$",
       "$\\Poisson(\\mu = 0.3)$",
@@ -294,7 +294,7 @@ and is used to produce an answer key.  (This information is also used in the
 test analysis functions; see section \ref{sec:analysis}.) For example, the answer key from the questions
 above is requested via
 
-\noindent\verb!Answer key for version \Sexpr!\verb!{versioncodes[testversion]}:\\!
+\noindent\verb!Answer key for version \Sexpr!\verb!{versioncodes[testversion()]}:\\!
 \begin{verbatim}
  <<>>=
  answerkey(symbols=LETTERS)
@@ -302,7 +302,7 @@ above is requested via
 \end{verbatim}
 and displayed as \\
 
-Answer key for version \Sexpr{versioncodes[testversion]}:\\
+Answer key for version \Sexpr{versioncodes[testversion()]}:\\
 <<>>=
 answerkey(symbols=LETTERS)
 @
@@ -893,20 +893,20 @@ library(Sweavetest)
 library(tables)
 setwd("C:/Users/Sample")
 version("Student")
-testversion <- 4
+testversion(4)
 NumberOfVersions <- 4
 
-if(Version == "Report"){
+if(Version() == "Report"){
   scanex <- readScanex("sample.dat")
 }
 
-Initialization(Version = Version)
+Initialization()
 
 \end{verbatim}
 
 To create the report, the user needs to change the following:
 \begin{itemize}
-\item The \verb!Version! variable to "Report"
+\item Set the \verb!Version()! to "Report" 
 \item The default "sample.dat" input for the \verb!readScanex()! function to the Scantron file they wish to use.
 \item The working directory must be changed to that containing the Scantron file
 \end{itemize}

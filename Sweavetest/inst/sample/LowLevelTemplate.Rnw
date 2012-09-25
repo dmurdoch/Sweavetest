@@ -36,9 +36,9 @@ Scantron <- Unscramble(scanex,Scrambled = FALSE)
 @
 
 <<>>=
-Version <- version("Report")
+Version("Report")
 LowLevelReport(Scantron)
-Appendix(Version)
+Appendix(Version())
 @
 
 \end{document}

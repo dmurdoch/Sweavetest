@@ -6,13 +6,11 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
     
   Answers <- getglobal(Answers, c())
   CheckDups <- getglobal(CheckDups, TRUE)
-  testversion <- getglobal(testversion, 1)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
   QuestionCounter <- getglobal(QuestionCounter,0)
   QuestionIndex <- getglobal(QuestionIndex,c())
   correct <- getglobal(correct,c())
-  Version <- getglobal(Version, "Student")
   
   QuestionCounter <- QuestionCounter + 1
   .STEnv$QuestionCounter <- QuestionCounter
@@ -29,7 +27,7 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   rand <- sample(n)
   
   if (!randomize) rand <- 1:n  
-  indices <- c(if (n) perms[[n]][[testversion]][rand], n+seq_len(KeepLast))
+  indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   
   if (!is.na(Correct)) {
     x[Correct] <- paste("\\Correct", x[Correct])
@@ -52,12 +50,10 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
 }
 
 QReport <- function() {
-  Version <- getglobal(Version, "Student")
-  if (Version != "Report") return(invisible())
+  if (Version() != "Report") return(invisible())
   
   Answers <- getglobal(Answers, c())
   CheckDups <- getglobal(CheckDups, TRUE)
-  testversion <- getglobal(testversion, 1)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
   QuestionCounter <- getglobal(QuestionCounter,0)
@@ -77,8 +73,8 @@ QReport <- function() {
   PB <- PB[QuestionCounter]
   CorrectIndex <- getglobal(CorrectIndex, C())
 
-  if(testversion > 4){
-    testversion <- 1
+  if(testversion() > 4){
+    testversion(1)
   }
     
   cat("\\ \\\\")

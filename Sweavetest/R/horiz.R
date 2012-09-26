@@ -1,11 +1,10 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Index, DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
   CheckDups <- getglobal(CheckDups, TRUE)
   Index <- getglobal(Index, c())
-  QuestionIndex <- getglobal(QuestionIndex,c())
   QuestionCounter(QuestionCounter()+1)
   
   correct(c(correct(), Correct))
@@ -26,7 +25,7 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
   labels <- itemlabels[1:(n+KeepLast)]		 	 
   x <- x[indices]		 				  
 				  
-  .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter())	 
+  QuestionIndex(c(QuestionIndex(),QuestionCounter()))	 
 				  
   cat( paste(labels, "\\hspace{1ex}", x, "\\hfill") )	 
  

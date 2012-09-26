@@ -7,7 +7,6 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   CheckDups <- getglobal(CheckDups, TRUE)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
-  QuestionIndex <- getglobal(QuestionIndex,c())
   
   QuestionCounter(QuestionCounter() + 1)
   
@@ -30,7 +29,7 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   }
   
   x <- x[indices]
-  .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter())
+  QuestionIndex(c(QuestionIndex(),QuestionCounter()))
   
   y <- paste("\\item",x,"\n", sep=" ")
   cat(y)
@@ -49,7 +48,6 @@ QReport <- function() {
   CheckDups <- getglobal(CheckDups, TRUE)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
-  QuestionIndex <- getglobal(QuestionIndex,c())
   
   DR <- getglobal(DR,c())
   ID <- getglobal(ID,c())

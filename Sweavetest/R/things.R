@@ -1,9 +1,8 @@
 things <-
-function(..., Correct=NA, KeepLast=0, randomize, Index, QuestionIndex) {
+function(..., Correct=NA, KeepLast=0, randomize, Index) {
   
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
-  QuestionIndex <- getglobal(QuestionIndex,c())
     
   x <- unlist(list(...))
   n <- length(x) - KeepLast
@@ -18,7 +17,7 @@ function(..., Correct=NA, KeepLast=0, randomize, Index, QuestionIndex) {
   x <- x[indices]
   
   QuestionCounter(QuestionCounter() + 1)
-  .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter())
+  QuestionIndex(c(QuestionIndex(),QuestionCounter()))
   
   cat(x, collapse="\n")
   

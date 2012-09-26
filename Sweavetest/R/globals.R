@@ -12,6 +12,7 @@ getglobal <- function(var, default) {
 #  QuestionCounter -- which is the current question number
 #  correct -- a vector of correct responses (in the authored order)
 #  Answers -- a vector of correct responses (in the randomized order)
+#  QuestionIndex -- a vector of question numbers corresponding to the above
 
 Version <- function(x = "Student"){
   if (!missing(x)) {
@@ -60,6 +61,14 @@ Answers <- function(x = c()){
     return(invisible(x))
   }
   .STEnv$Answers
+}
+
+QuestionIndex <- function(x = c()){
+  if (!missing(x)) {
+    .STEnv$QuestionIndex <- x
+    return(invisible(x))
+  }
+  .STEnv$QuestionIndex
 }
 
 versioncode <- function() {

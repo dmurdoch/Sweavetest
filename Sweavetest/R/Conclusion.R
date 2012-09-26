@@ -14,7 +14,7 @@ Conclusion <- function(END = TRUE){
         Code <- as.integer(versioncode())
         ExamCode <- rep(Code, QuestionCounter())
         Correct <- correct()
-        Index <- cbind(QuestionIndex,ExamCode,Correct,Index)
+        Index <- cbind(QuestionIndex(),ExamCode,Correct,Index)
         if(testversion() == 1){
           colnames(Index) <- c("Question", "ExamCode", "Correct", "A", "B", "C", "D", "E")
           write.table(Index,"TestIndex.csv", append=TRUE, row.names = FALSE, col.names = TRUE)

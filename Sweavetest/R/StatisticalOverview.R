@@ -1,10 +1,13 @@
-StatisticalOverview <- function(GradedTests, KR, FD){
+StatisticalOverview <- function(){
 
 if(Version() == "Report"){
+  GradedTests <- GradedTests()
   
-  KR <- getglobal(KR,0)
-  FD <- getglobal(FD,0)
-  GradedTests <- getglobal(GradedTests,c())
+  KR <- KR20(GradedTests)
+  FD <- FergusonsDelta(GradedTests)
+  DR <- DifficultyRating(GradedTests)
+  ID <- ItemDiscriminator(GradedTests)
+  PB <- PointBiserial(GradedTests)
   
   weight <- max(seq_len(max(nchar(GradedTests$Correct))))
   

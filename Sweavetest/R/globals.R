@@ -18,6 +18,7 @@ getglobal <- function(var, default) {
 #  randomize -- whether to randomize answers
 #  versioncode -- read-only access to the ExamNum vector:  just gives the testversion() entry
 #  itemlabels -- the labels to use for answer options
+#  GradedTests -- the dataframe of test results
 
 Version <- function(x = "Student"){
   if (!missing(x)) {
@@ -106,6 +107,14 @@ itemlabels <- function(x = TRUE) {
     return(invisible(x))
   }
   .STEnv$itemlabels
+}
+
+GradedTests <- function(x = NULL) {
+  if (!missing(x)) {
+    .STEnv$GradedTests <- x
+    return(invisible(x))
+  }
+  .STEnv$GradedTests
 }
 
 

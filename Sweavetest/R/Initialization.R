@@ -16,7 +16,7 @@ Initialization <- function(Initialize = TRUE){
   
   ###Test Creation Variables###
     randomize(Version() != "Teacher")
-    itemlabels(paste0("(", LETTERS, ")")
+    itemlabels(paste0("(", LETTERS, ")"))
     Answers(c())
     Index(data.frame(Question=numeric(0), ExamCode=character(0), 
                      Correct=numeric(0), A=numeric(0), B=numeric(0), 
@@ -31,7 +31,7 @@ Initialization <- function(Initialize = TRUE){
     randomize(FALSE)
     itemlabels(paste0("(", c(1:26), ")"))
     Index(read.csv("TestIndex.csv"))
-    GradedTests <- grades(scanex)
+    GradedTests(grades(scanex))
     KR <- KR20(GradedTests)
     FD <- FergusonsDelta(GradedTests)
     DR <- DifficultyRating(GradedTests)

@@ -1,5 +1,4 @@
-DistractorDiscrimination <- function(
-   GradedTests = getglobal(GradedTests, NULL)){
+DistractorDiscrimination <- function(GradedTests){
   
   Quantile75 <- quantile(GradedTests$Grade, .75)
   Quantile25 <- quantile(GradedTests$Grade, .25)

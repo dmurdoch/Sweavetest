@@ -371,13 +371,13 @@ and each question individually can be created. The functions are called using th
 \begin{verbatim}
 
 scanex <- readScanex(Sample)
-GradedTests <- grades(scanex)
+GradedTests(grades(scanex))
 
 \end{verbatim}
 
 <<>>=
 scanex <- readScanex(Sample)
-GradedTests <- grades(scanex)
+GradedTests(grades(scanex))
 @
 
 There are several individual functions that are used during the report creation process. Each is discussed in detail below.
@@ -388,7 +388,7 @@ First, the report process creates a statistical overview of the test using the \
 This function is called by taking the result of the \verb!grades()! function as input, and utilyzing the following syntax:
 
 \begin{verbatim}
-StatisticalOverview(GradedTests)
+StatisticalOverview()
 \end{verbatim}
 
 This function is used primarily for formatting in \LaTeX, utilizing the \pkg{tables} package to format the created tables
@@ -427,8 +427,8 @@ The table presents these statistics seperated by class section (if there is more
 The table is created within the \verb!StatisticalOverview()! function using the following syntax:
 
 <<StatisticalOverview,eval=FALSE,echo=TRUE>>=
-grades <- GradedTests$Grade
-weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+grades <- GradedTests()$Grade
+weight <- max(seq_len(max(nchar(GradedTests()$Correct))))
 
 Mean <- function(x) mean(x)
 Quantile25 <- function(x) quantile(x, .25)
@@ -445,7 +445,7 @@ latex(tabular((Heading(Section)*factor(Section)+1)
           +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75
           +(Heading())*Percentage*Median
           +(Heading())*Percentage*Quantile25
-          +(Heading())*Percentage*Min), data=GradedTests))
+          +(Heading())*Percentage*Min), data=GradedTests()))
 @
 This produces the output shown in Table \ref{tab:StatisticalOverview}.
 \begin{table}
@@ -472,7 +472,7 @@ Using the \pkg{tables} package, the two tables are produced using the following 
 The Student Count table is produced by:
 <<StudentCount, echo=true, eval=false>>=
 latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1), data=GradedTests))
+              ~ (Heading(Section)*factor(Section)+1), data=GradedTests()))
 @
 and the Test Means table is produced by:
 <<TestMeans, echo=true, eval=false>>=
@@ -480,7 +480,7 @@ pct <- function(x) 100*mean(x)/weight
 
 latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
               ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
-              *pct*Format(digits=3), data=GradedTests))
+              *pct*Format(digits=3), data=GradedTests()))
 @
 The resulting tables are displayed as Tables \ref{tab:StudentCount} and \ref{tab:TestMeans}
 respectively.
@@ -507,7 +507,7 @@ The Kuder-Richardson 20 statistic is produced by calling the \verb!KR20()! funct
 It uses the result of \verb!grades()! as input and can be called as follows:
 
 <<echo=TRUE, results=verbatim>>=
-KR20(GradedTests)
+KR20(GradedTests())
 @
 
 The Kuder-Richardson 20  is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
@@ -525,7 +525,7 @@ The Ferguson's Delta statistic is produced by calling the \verb!FergusonsDelta()
 It takes the results of \verb!grades()! as input, and can be called by the instructor as follows:
 
 <<echo=true, results=verbatim>>=
-FergusonsDelta(GradedTests)
+FergusonsDelta(GradedTests())
 @
 
 Similar to the KR20 statistic, Ferguson's Delta also measures the consistency of the test. However, instead of measuring internal
@@ -551,8 +551,8 @@ As an overall trend, the questions should form a line from the upper left corner
 The function \verb!answerCorrelations()! is used to create the answer correlation plot. It takes as input the answers provided by the students and the corresponding correct answers, and is called using the following syntax:
 
 <<answerCorrelations, eval=false, echo=true>>=
-Student <- GradedTests$Answers
-Correct <- GradedTests$Correct
+Student <- GradedTests()$Answers
+Correct <- GradedTests()$Correct
 
 answerCorrelations(Student,Correct)
 @
@@ -575,8 +575,8 @@ problems with the test as a whole (when used in conjunction with the other stati
 It is created as follows in the \verb!StatisticalOverview()! function:
 
 <<ScoreDistribution,echo=true,eval=false>>=
-weight <- max(seq_len(max(nchar(GradedTests$Correct))))
-Percentage <- 100*GradedTests$Grade/weight
+weight <- max(seq_len(max(nchar(GradedTests()$Correct))))
+Percentage <- 100*GradedTests()$Grade/weight
 GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", 
                         breaks = c(0,10,20,30,40,50,60,70,80,90,100))
 @
@@ -625,7 +625,7 @@ It takes the result of the \verb!grades()! function discussed above, and produce
 It can be called as follows:
 
 <<echo=true, results=verbatim>>=
-DifficultyRating(GradedTests)
+DifficultyRating(GradedTests())
 @
 
 A question with a difficulty rating less than 0.2 has such a low success rate 
@@ -647,7 +647,7 @@ Item discrimination can be calculated using the \verb!ItemDiscriminator()! funct
 the results of the \verb!grades()! function and produces one result per question.  It can be called using the following syntax:
 
 <<echo=true, results=verbatim>>=
-ItemDiscriminator(GradedTests)
+ItemDiscriminator(GradedTests())
 @
 
 A question with a negative item discrimination value should be reviewed by the instructor, as
@@ -674,7 +674,7 @@ Point biserial correlation can be calculated using the \verb!PointBiserial()! fu
 It takes as input the result of the \verb!grades()! function, and produces one result 
 per question.  It is called using the following syntax:
 <<echo=true,results=verbatim>>=
-PointBiserial(GradedTests)
+PointBiserial(GradedTests())
 @
 
 Point biserial correlation should be used in conjunction with the calculated item discrimination
@@ -707,7 +707,7 @@ Below are some of the rows of the output dataframe for our sample test:
 
 <<echo=true,results=verbatim>>=
 TestIndex <- read.csv(TestIndex.csv, head=TRUE)
-Counts <- CreateIndex(GradedTests, TestIndex)
+Counts <- CreateIndex(mainIndex = TestIndex)
 o <- with(Counts, order(Question, ExamCode))
 Counts[o[1:6],]
 @
@@ -735,13 +735,13 @@ produced for the first question of our sample test.
 <<>>=
 QuestionCounter(1)
 Index(read.csv(TestIndex.csv))
-Summary <- CreateIndex(GradedTests)
+Summary <- CreateIndex()
 
-Dis <- DistractorDiscrimination(GradedTests) 
+Dis <- DistractorDiscrimination(GradedTests()) 
 AnswerCounts <- subset(Summary, Question==QuestionCounter(), 
                        select=paste0("A", 1:nrow(Dis)))
 Frequency <- apply(AnswerCounts, 2, sum)
-Percentage <- 100*Frequency/nrow(GradedTests)
+Percentage <- 100*Frequency/nrow(GradedTests())
 CountFrame <- data.frame(Dis,Frequency,Percentage)
 latex(tabular(Factor(Option)*Heading()*identity 
               ~ Frequency + Percentage + Discrimination,
@@ -763,9 +763,9 @@ students' answers, a matrix of the corresponding correct answers, a vector of ex
 of the plot to be produced. For example, the following will produce an option frequency plot for the first question
 of our sample data:
 <<OptionFrequency,eval=false,echo=true>>=
-StudentAnswers <- GradedTests$Answers
-CorrectAnswers <- GradedTests$Correct
-ExamVersion <- GradedTests$ExamCode
+StudentAnswers <- GradedTests()$Answers
+CorrectAnswers <- GradedTests()$Correct
+ExamVersion <- GradedTests()$ExamCode
 QuestionCounter(1)
 answerPlots(QuestionCounter())
 @%$
@@ -796,7 +796,7 @@ from the \verb!grades()! function, as well as the question number for which the 
 for the first question can be created as follows:
 <<Empirical,eval=false,echo=true>>=
 QuestionCounter(1)
-EmpiricalProbabilityPlot(GradedTests, QuestionCounter())
+EmpiricalProbabilityPlot(GradedTests(), QuestionCounter())
 @
 The result is shown in Figure \ref{fig:Empirical}.
 \begin{figure}
@@ -831,9 +831,9 @@ Warnings are produced if any combination of the following occur:
 The \verb!Warnings()! function takes the calculated values of the item discrimination, difficulty
 rating, and point biserial correlation as inputs. The syntax is as follows:
 <<echo=true>>=
-DR <- DifficultyRating(GradedTests)
-ID <- ItemDiscriminator(GradedTests)
-PB <- PointBiserial(GradedTests)
+DR <- DifficultyRating(GradedTests())
+ID <- ItemDiscriminator(GradedTests())
+PB <- PointBiserial(GradedTests())
 
 Warnings(DR, ID, PB)
 @

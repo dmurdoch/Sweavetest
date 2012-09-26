@@ -38,9 +38,9 @@ AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
   result
 }
 
-CreateIndex <- function(GradedTests, mainIndex=Index()){
-  qs <- seq_len(max(nchar(GradedTests$Correct)))
-  Counts <- AnswerCounts(GradedTests, qs)
+CreateIndex <- function(fromGradedTests=GradedTests(), mainIndex=Index()){
+  qs <- seq_len(max(nchar(fromGradedTests$Correct)))
+  Counts <- AnswerCounts(fromGradedTests, qs)
   
   Versions <- dimnames(Counts)[[1]]
   result <- data.frame(ExamCode = character(0), Question=character(0), 

@@ -1,5 +1,5 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, DR,ID,PB,AnswerCountMatrix, GradedTests) {
+function(..., Correct=1, KeepLast=0, report=TRUE) {
   
   CheckDups <- getglobal(CheckDups, TRUE)
   QuestionCounter(QuestionCounter()+1)

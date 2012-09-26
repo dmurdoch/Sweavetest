@@ -19,13 +19,12 @@ answerPlots <- function(Questions=qs,
   # GradedTests is a dataframe with results in columns "Student ID", Section, ExamCode, Sheet, Scantron,
   #   Answers, Correct, Grade
 
-  GradedTests <- getglobal(GradedTests,c())
   qs <- as.numeric(unique(Index()$Question))
   
   versions <- as.character(unique(Index()$ExamCode))
   NumV <- length(versions)
   
-  summary <- CreateIndex(GradedTests)
+  summary <- CreateIndex()
   for (i in Questions) {
     Qsummary <- with(summary, summary[Question == i,])
     if (all(is.na(Qsummary$A5))) NumResp <- 4

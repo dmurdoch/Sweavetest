@@ -708,7 +708,7 @@ Below are some of the rows of the output dataframe for our sample test:
 
 <<echo=true,results=verbatim>>=
 TestIndex <- read.csv(TestIndex.csv, head=TRUE)
-Counts <- CreateIndex(TestIndex, GradedTests)
+Counts <- CreateIndex(GradedTests, TestIndex)
 o <- with(Counts, order(Question, ExamCode))
 Counts[o[1:6],]
 @

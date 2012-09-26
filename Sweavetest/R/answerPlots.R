@@ -25,7 +25,7 @@ answerPlots <- function(Questions=qs,
   versions <- as.character(unique(Index()$ExamCode))
   NumV <- length(versions)
   
-  summary <- CreateIndex(Index(), GradedTests)
+  summary <- CreateIndex(GradedTests)
   for (i in Questions) {
     Qsummary <- with(summary, summary[Question == i,])
     if (all(is.na(Qsummary$A5))) NumResp <- 4

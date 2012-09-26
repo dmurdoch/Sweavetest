@@ -1,9 +1,8 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Answers, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Index, QuestionIndex,DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
-  Answers <- getglobal(Answers, c())
   CheckDups <- getglobal(CheckDups, TRUE)
   Index <- getglobal(Index, c())
   QuestionIndex <- getglobal(QuestionIndex,c())
@@ -13,7 +12,7 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
   
   x <- unlist(list(...))
   if (CheckDups && any(duplicated(format(x))))  
-    stop("Duplicated answers in Q", length(Answers)+1, ": ", 
+    stop("Duplicated answers in Q", length(Answers())+1, ": ", 
        paste(format(x), collapse=" ")) 
   n <- length(x)-KeepLast  
   rand <- sample(n)  
@@ -21,7 +20,7 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
   indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
     x[Correct] <- paste("\\Correct", x[Correct])
-    .STEnv$Answers <- c(Answers, which(indices == Correct))
+    Answers(c(Answers(), which(indices == Correct)))
   }		 				  
 	 
   .STEnv$LastIndices <- indices		 		 

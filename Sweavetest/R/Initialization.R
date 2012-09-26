@@ -1,5 +1,4 @@
 Initialization <- function(Initialize = TRUE){
-  
   if(Initialize == TRUE){
   
   if(Version() != "Report"){
@@ -19,7 +18,7 @@ Initialization <- function(Initialize = TRUE){
   with(.STEnv, {
     randomize <- (Version() != "Teacher")
     itemlabels <- paste("(", LETTERS, ")", sep="")
-    Answers <- c()
+    Answers(c())
     Index <- c()
     QuestionCounter(0)
     QuestionIndex <- c()

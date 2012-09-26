@@ -4,7 +4,6 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   if (report) 
     stop("items() cannot produce a report; you need to call QReport()")
     
-  Answers <- getglobal(Answers, c())
   CheckDups <- getglobal(CheckDups, TRUE)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())
@@ -16,7 +15,7 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   
   x <- unlist(list(...))
   if (CheckDups && any(duplicated(format(x))))  
-    stop("Duplicated answers in Q", length(Answers)+1, ": ", 
+    stop("Duplicated answers in Q", length(Answers())+1, ": ", 
          paste(format(x), collapse=" "))
   
   n <- length(x) - KeepLast
@@ -27,7 +26,7 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   
   if (!is.na(Correct)) {
     x[Correct] <- paste("\\Correct", x[Correct])
-    .STEnv$Answers <- c(Answers, which(indices == Correct))
+    Answers(c(Answers(), which(indices == Correct)))
   }
   
   .STEnv$LastIndices <- indices
@@ -48,7 +47,6 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
 QReport <- function() {
   if (Version() != "Report") return(invisible())
   
-  Answers <- getglobal(Answers, c())
   CheckDups <- getglobal(CheckDups, TRUE)
   randomize <- getglobal(randomize, FALSE)
   Index <- getglobal(Index,c())

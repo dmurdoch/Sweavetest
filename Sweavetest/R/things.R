@@ -1,8 +1,7 @@
 things <-
-function(..., Correct=NA, KeepLast=0, randomize, Answers,Index,QuestionIndex) {
+function(..., Correct=NA, KeepLast=0, randomize, Index, QuestionIndex) {
   
   randomize <- getglobal(randomize, FALSE)
-  Answers <- getglobal(Answers, c())
   Index <- getglobal(Index,c())
   QuestionIndex <- getglobal(QuestionIndex,c())
     
@@ -13,7 +12,7 @@ function(..., Correct=NA, KeepLast=0, randomize, Answers,Index,QuestionIndex) {
   indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
 #    x[Correct] <- paste("\\Correct", x[Correct])
-    .GlobalEnv$Answers <- c(Answers, which(indices == Correct))
+    Answers(c(Answers(), which(indices == Correct)))
   }
   .GlobalEnv$LastIndices <- indices
   

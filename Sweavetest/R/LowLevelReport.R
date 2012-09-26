@@ -7,7 +7,7 @@ LowLevelReport <- function(scanex){
   DR <- DifficultyRating(GradedTests)
   ID <- ItemDiscriminator(GradedTests)
   PB <- PointBiserial(GradedTests)
-  fignum <- 0
+  fignum(0)
   weight <- max(seq_len(max(nchar(GradedTests$Correct))))
   NumQ <- weight
   qs <- seq_len(max(nchar(GradedTests$Correct[1])))
@@ -99,19 +99,19 @@ LowLevelReport <- function(scanex){
   ###Produce Histogram of Percentages Achieved by Student & Answer Correlation Plot###
   Percentage <- 100*GradedTests$Grade/weight
   
-  fignum <- fignum + 1
+  fignum(fignum() + 1)
   
   dir.create("Sweavetest", showWarnings=FALSE)
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
   GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
   dev.off()            
   cat(paste("\\includegraphics[width=3.25in]{", filename, "}\n", sep=""))
   
-  fignum <- fignum + 1
+  fignum(fignum() + 1)
   
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
   answerCorrelations(GradedTests$Answers, GradedTests$Correct)
@@ -191,12 +191,12 @@ LowLevelReport <- function(scanex){
   
   Warnings(Dr,Id,Pb)
   
-  fignum <- fignum + 1
+  fignum(fignum() + 1)
   
   cat("\\begin{figure}[h!]")
   cat("\\vspace{-.40in}")
   dir.create("Sweavetest", showWarnings=FALSE)
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
   answerPlots(GradedTests$Answers,GradedTests$Correct,GradedTests$ExamCode,i)
@@ -204,9 +204,9 @@ LowLevelReport <- function(scanex){
   cat("\\hspace{.05in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
   
-  fignum <- fignum + 1
+  fignum(fignum() + 1)
   
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
   EmpiricalProbabilityPlot(GradedTests, i)

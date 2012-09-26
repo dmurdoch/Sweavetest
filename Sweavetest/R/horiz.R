@@ -1,5 +1,5 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, DR,ID,PB,AnswerCountMatrix, GradedTests) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))

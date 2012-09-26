@@ -14,6 +14,7 @@ getglobal <- function(var, default) {
 #  Answers -- a vector of correct responses (in the randomized order)
 #  QuestionIndex -- a vector of question numbers corresponding to the above
 #  Index -- a dataframe giving the randomization for the test
+#  versioncode -- read-only access to the ExamNum vector:  just gives the testversion() entry
 
 Version <- function(x = "Student"){
   if (!missing(x)) {
@@ -79,6 +80,15 @@ Index <- function(x = c()){
   }
   .STEnv$Index
 }
+
+fignum <- function(x = 0){
+  if (!missing(x)) {
+    .STEnv$fignum <- x
+    return(invisible(x))
+  }
+  .STEnv$fignum
+}
+
 
 versioncode <- function() {
   .STEnv$ExamNum[testversion()]

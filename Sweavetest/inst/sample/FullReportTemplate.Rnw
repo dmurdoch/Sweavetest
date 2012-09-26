@@ -53,7 +53,7 @@ Saturday, October 15, 2011, 10:00 AM - noon \\
 \end{center}
 
 <<>>=
-StatisticalOverview(GradedTests,KR,FD,fignum)
+StatisticalOverview(GradedTests,KR,FD)
 @
 
 \begin{center}

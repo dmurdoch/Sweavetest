@@ -24,7 +24,7 @@ Initialization <- function(Initialize = TRUE){
                      C=numeric(0), D=numeric(0), E=numeric(0)))
     QuestionCounter(0)
     QuestionIndex(c())
-    fignum <- 0
+    fignum(0)
     correct(c())
   })
   

@@ -56,7 +56,6 @@ QReport <- function() {
   DR <- getglobal(DR,c())
   ID <- getglobal(ID,c())
   PB <- getglobal(PB,c())
-  fignum <- getglobal(fignum,0)
   AnswerCountMatrix <- getglobal(AnswerCountMatrix,c())
   GradedTests <- getglobal(GradedTests,c())
   student <- GradedTests$Answers
@@ -107,11 +106,11 @@ QReport <- function() {
   
   Warnings(DR,ID,PB)
   
-  fignum <- fignum + 1
+  fignum(fignum() + 1)
   
   cat("\\begin{figure}[h]")
   dir.create("Sweavetest", showWarnings=FALSE)
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
   answerPlots(student,correct,GradedTests$ExamCode, QuestionCount = QuestionCounter())
@@ -119,10 +118,9 @@ QReport <- function() {
   cat("\\hspace{.05in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
   
-  fignum <- fignum + 1
-  fignum <<- fignum
+  fignum(fignum() + 1)
   
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
   EmpiricalProbabilityPlot(GradedTests, QuestionCounter())

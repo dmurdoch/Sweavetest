@@ -1,11 +1,10 @@
-StatisticalOverview <- function(GradedTests, KR, FD, fignum){
+StatisticalOverview <- function(GradedTests, KR, FD){
 
 if(Version() == "Report"){
   
   KR <- getglobal(KR,0)
   FD <- getglobal(FD,0)
   GradedTests <- getglobal(GradedTests,c())
-  fignum <- getglobal(fignum,0)
   
   weight <- max(seq_len(max(nchar(GradedTests$Correct))))
   
@@ -95,20 +94,19 @@ if(Version() == "Report"){
   ###Produce Histogram of Percentages Achieved by Student & Answer Correlation Plot###
   Percentage <- 100*GradedTests$Grade/weight
 
-  fignum <- fignum + 1
+  fignum(fignum() + 1)
 
   dir.create("Sweavetest", showWarnings=FALSE)
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
 
   pdf(filename, width=8, height=4)
   GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
   dev.off()            
   cat(paste("\\includegraphics[width=3.25in]{", filename, "}\n", sep=""))
 
-  fignum <- fignum + 1
-  .STEnv$fignum <- fignum
+  fignum(fignum() + 1)
 
-  filename <- file.path( "Sweavetest", paste("fig", fignum, ".pdf", sep=""))
+  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
 
   pdf(filename, width=8, height=4)
   answerCorrelations(GradedTests$Answers, GradedTests$Correct)

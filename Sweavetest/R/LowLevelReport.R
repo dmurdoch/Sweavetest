@@ -11,7 +11,6 @@ LowLevelReport <- function(scanex){
   weight <- max(seq_len(max(nchar(GradedTests$Correct))))
   NumQ <- weight
   qs <- seq_len(max(nchar(GradedTests$Correct[1])))
-  .STEnv$Report <- TRUE
   
   ###Report Begins###
   cat("\\begin{center}")

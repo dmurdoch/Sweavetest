@@ -31,7 +31,6 @@ Initialization <- function(Initialize = TRUE){
     randomize(FALSE)
     itemlabels(paste0("(", c(1:26), ")"))
     Index(read.csv("TestIndex.csv"))
-    CorrectIndex <- cbind(Index$ExamCode, Index$Correct)
     GradedTests <- grades(scanex)
     KR <- KR20(GradedTests)
     FD <- FergusonsDelta(GradedTests)

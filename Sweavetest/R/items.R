@@ -61,7 +61,6 @@ QReport <- function() {
   DR <- DR[QuestionCounter()]
   ID <- ID[QuestionCounter()]
   PB <- PB[QuestionCounter()]
-  CorrectIndex <- getglobal(CorrectIndex, C())
 
   if(testversion() > 4){
     testversion(1)

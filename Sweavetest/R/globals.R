@@ -17,6 +17,7 @@ getglobal <- function(var, default) {
 #  fignum -- the figure number in reports
 #  randomize -- whether to randomize answers
 #  versioncode -- read-only access to the ExamNum vector:  just gives the testversion() entry
+#  itemlabels -- the labels to use for answer options
 
 Version <- function(x = "Student"){
   if (!missing(x)) {
@@ -98,6 +99,15 @@ randomize <- function(x = TRUE) {
   }
   .STEnv$randomize
 }
+
+itemlabels <- function(x = TRUE) {
+  if (!missing(x)) {
+    .STEnv$itemlabels <- x
+    return(invisible(x))
+  }
+  .STEnv$itemlabels
+}
+
 
 versioncode <- function() {
   .STEnv$ExamNum[testversion()]

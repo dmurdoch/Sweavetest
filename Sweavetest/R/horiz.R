@@ -1,7 +1,6 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, itemlabels, DR,ID,PB,AnswerCountMatrix, GradedTests) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, DR,ID,PB,AnswerCountMatrix, GradedTests) {
   
-  itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
   CheckDups <- getglobal(CheckDups, TRUE)
   QuestionCounter(QuestionCounter()+1)
   
@@ -20,7 +19,7 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, itemlabels, DR,ID,P
     Answers(c(Answers(), which(indices == Correct)))
   }		 				  
 	 
-  labels <- itemlabels[1:(n+KeepLast)]		 	 
+  labels <- itemlabels()[1:(n+KeepLast)]		 	 
   x <- x[indices]		 				  
 				  
   QuestionIndex(c(QuestionIndex(),QuestionCounter()))	 

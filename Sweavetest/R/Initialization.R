@@ -15,9 +15,8 @@ Initialization <- function(Initialize = TRUE){
   newCommands()
   
   ###Test Creation Variables###
-  with(.STEnv, {
     randomize(Version() != "Teacher")
-    itemlabels <- paste("(", LETTERS, ")", sep="")
+    itemlabels(paste0("(", LETTERS, ")")
     Answers(c())
     Index(data.frame(Question=numeric(0), ExamCode=character(0), 
                      Correct=numeric(0), A=numeric(0), B=numeric(0), 
@@ -26,12 +25,11 @@ Initialization <- function(Initialize = TRUE){
     QuestionIndex(c())
     fignum(0)
     correct(c())
-  })
   
   ###Report Creation Variables###
   if(Version() == "Report") with(.STEnv, {
     randomize(FALSE)
-    itemlabels <- paste("(", c(1:26), ")", sep="")
+    itemlabels(paste0("(", c(1:26), ")"))
     Index(read.csv("TestIndex.csv"))
     CorrectIndex <- cbind(Index$ExamCode, Index$Correct)
     GradedTests <- grades(scanex)

@@ -4,14 +4,12 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   if (report) 
     stop("items() cannot produce a report; you need to call QReport()")
     
-  CheckDups <- getglobal(CheckDups, TRUE)
-  
   QuestionCounter(QuestionCounter() + 1)
   
   correct(c(correct(), Correct))
   
   x <- unlist(list(...))
-  if (CheckDups && any(duplicated(format(x))))  
+  if (CheckDups() && any(duplicated(format(x))))  
     stop("Duplicated answers in Q", length(Answers())+1, ": ", 
          paste(format(x), collapse=" "))
   
@@ -49,15 +47,12 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
 QReport <- function() {
   if (Version() != "Report") return(invisible())
   
-  CheckDups <- getglobal(CheckDups, TRUE)
-  
   DR <- getglobal(DR,c())
   ID <- getglobal(ID,c())
   PB <- getglobal(PB,c())
   AnswerCountMatrix <- CreateIndex()
-  GradedTests <- getglobal(GradedTests,c())
-  student <- GradedTests$Answers
-  correct <- GradedTests$Correct
+  student <- GradedTests()$Answers
+  correct <- GradedTests()$Correct
   DR <- DR[QuestionCounter()]
   ID <- ID[QuestionCounter()]
   PB <- PB[QuestionCounter()]
@@ -74,8 +69,8 @@ QReport <- function() {
     AnswerCounts <- AnswerCounts[-drop]
   }
   Options <- paste(" ", c(1:length(AnswerCounts)), sep="")
-  Resp <- 100*AnswerCounts/nrow(GradedTests)
-  Dis <- DistractorDiscrimination(GradedTests,QuestionCounter())
+  Resp <- 100*AnswerCounts/nrow(GradedTests())
+  Dis <- DistractorDiscrimination(GradedTests(),QuestionCounter())
   CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
   
   StatNames <- c("Difficulty Rating", "Item Discriminator", "Point Biserial")
@@ -110,7 +105,7 @@ QReport <- function() {
   filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
-  answerPlots(student,correct,GradedTests$ExamCode, QuestionCount = QuestionCounter())
+  answerPlots(student,correct,GradedTests()$ExamCode, QuestionCount = QuestionCounter())
   dev.off()
   cat("\\hspace{.05in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
@@ -120,7 +115,7 @@ QReport <- function() {
   filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
-  EmpiricalProbabilityPlot(GradedTests, QuestionCounter())
+  EmpiricalProbabilityPlot(GradedTests(), QuestionCounter())
   dev.off()
   cat("\\hspace{.08in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))

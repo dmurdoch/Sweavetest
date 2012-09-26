@@ -1,13 +1,12 @@
 horiz <-
 function(..., Correct=1, KeepLast=0, report=TRUE) {
   
-  CheckDups <- getglobal(CheckDups, TRUE)
   QuestionCounter(QuestionCounter()+1)
   
   correct(c(correct(), Correct))
   
   x <- unlist(list(...))
-  if (CheckDups && any(duplicated(format(x))))  
+  if (CheckDups() && any(duplicated(format(x))))  
     stop("Duplicated answers in Q", length(Answers())+1, ": ", 
        paste(format(x), collapse=" ")) 
   n <- length(x)-KeepLast  

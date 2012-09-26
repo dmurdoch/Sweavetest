@@ -29,6 +29,7 @@ library(tables)
 randomize(TRUE)
 testversion(1)
 newCommands(thesection=FALSE)
+CheckDups(TRUE)
 @
 
 \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}

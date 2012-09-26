@@ -16,6 +16,7 @@ getglobal <- function(var, default) {
 #  Index -- a dataframe giving the randomization for the test
 #  fignum -- the figure number in reports
 #  randomize -- whether to randomize answers
+#  CheckDups -- whether to check for duplicate answers
 #  versioncode -- read-only access to the ExamNum vector:  just gives the testversion() entry
 #  itemlabels -- the labels to use for answer options
 #  GradedTests -- the dataframe of test results
@@ -99,6 +100,14 @@ randomize <- function(x = TRUE) {
     return(invisible(x))
   }
   .STEnv$randomize
+}
+
+CheckDups <- function(x = TRUE) {
+  if (!missing(x)) {
+    .STEnv$CheckDups <- x
+    return(invisible(x))
+  }
+  .STEnv$CheckDups
 }
 
 itemlabels <- function(x = TRUE) {

@@ -25,6 +25,7 @@ Initialization <- function(Initialize = TRUE){
     QuestionIndex(c())
     fignum(0)
     correct(c())
+    CheckDups(TRUE)
   
   ###Report Creation Variables###
   if(Version() == "Report") {

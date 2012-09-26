@@ -14,7 +14,6 @@ function(..., Correct=NA, KeepLast=0, randomize, Index, QuestionIndex) {
 #    x[Correct] <- paste("\\Correct", x[Correct])
     Answers(c(Answers(), which(indices == Correct)))
   }
-  .GlobalEnv$LastIndices <- indices
   
   x <- x[indices]
   

@@ -29,7 +29,6 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
     Answers(c(Answers(), which(indices == Correct)))
   }
   
-  .STEnv$LastIndices <- indices
   x <- x[indices]
   .STEnv$QuestionIndex <- c(QuestionIndex,QuestionCounter())
   

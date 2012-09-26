@@ -23,8 +23,6 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
     Answers(c(Answers(), which(indices == Correct)))
   }		 				  
 	 
-  .STEnv$LastIndices <- indices		 		 
-		 
   labels <- itemlabels[1:(n+KeepLast)]		 	 
   x <- x[indices]		 				  
 				  

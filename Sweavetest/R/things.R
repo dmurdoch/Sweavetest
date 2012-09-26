@@ -1,12 +1,10 @@
 things <-
-function(..., Correct=NA, KeepLast=0, randomize) {
+function(..., Correct=NA, KeepLast=0) {
   
-  randomize <- getglobal(randomize, FALSE)
-    
   x <- unlist(list(...))
   n <- length(x) - KeepLast
-  rand <- sample(n)
-  if (!randomize) rand <- 1:n  
+  rand <- sample(n)  # Leave this here in case randomization is only temporarily off
+  if (!randomize()) rand <- 1:n  
   indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
 #    x[Correct] <- paste("\\Correct", x[Correct])

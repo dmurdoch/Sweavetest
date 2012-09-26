@@ -1,7 +1,6 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, DR,ID,PB,AnswerCountMatrix, GradedTests) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, itemlabels, DR,ID,PB,AnswerCountMatrix, GradedTests) {
   
-  randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
   CheckDups <- getglobal(CheckDups, TRUE)
   QuestionCounter(QuestionCounter()+1)
@@ -13,8 +12,8 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
     stop("Duplicated answers in Q", length(Answers())+1, ": ", 
        paste(format(x), collapse=" ")) 
   n <- length(x)-KeepLast  
-  rand <- sample(n)  
-  if (!randomize) rand <- 1:n  
+  rand <- sample(n)  # Leave this here in case randomization is only temporarily off
+  if (!randomize()) rand <- 1:n  
   indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
     x[Correct] <- paste("\\Correct", x[Correct])

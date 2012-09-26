@@ -13,7 +13,7 @@ set.seed(17)
 library(Sweavetest)  # Should come after set.seed, to make reproducible.
 newCommands()
 testversion(4)
-randomize <- TRUE
+randomize(TRUE)
 @
 \pagestyle{myheadings}
 \markright{SS 2864b Exam   \hspace{0.5in} Name: \underline{\hspace{1.9in}} ID: \underline{\hspace{1in}}\hspace{0.5in}}

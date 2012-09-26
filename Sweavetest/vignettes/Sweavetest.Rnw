@@ -26,7 +26,7 @@ Sys.setenv(R_KEEP_PKG_SOURCE="yes")
 install.packages("..",type="source",repos=NULL)
 library(Sweavetest)
 library(tables)
-randomize <- TRUE
+randomize(TRUE)
 testversion(1)
 newCommands(thesection=FALSE)
 @

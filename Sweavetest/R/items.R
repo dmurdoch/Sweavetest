@@ -5,7 +5,6 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
     stop("items() cannot produce a report; you need to call QReport()")
     
   CheckDups <- getglobal(CheckDups, TRUE)
-  randomize <- getglobal(randomize, FALSE)
   
   QuestionCounter(QuestionCounter() + 1)
   
@@ -17,9 +16,9 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
          paste(format(x), collapse=" "))
   
   n <- length(x) - KeepLast
-  rand <- sample(n)
+  rand <- sample(n) # Leave this here in case randomization is only temporarily off
   
-  if (!randomize) rand <- 1:n  
+  if (!randomize()) rand <- 1:n  
   indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   
   if (!is.na(Correct)) {
@@ -51,7 +50,6 @@ QReport <- function() {
   if (Version() != "Report") return(invisible())
   
   CheckDups <- getglobal(CheckDups, TRUE)
-  randomize <- getglobal(randomize, FALSE)
   
   DR <- getglobal(DR,c())
   ID <- getglobal(ID,c())

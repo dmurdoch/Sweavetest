@@ -16,7 +16,7 @@ Initialization <- function(Initialize = TRUE){
   
   ###Test Creation Variables###
   with(.STEnv, {
-    randomize <- (Version() != "Teacher")
+    randomize(Version() != "Teacher")
     itemlabels <- paste("(", LETTERS, ")", sep="")
     Answers(c())
     Index(data.frame(Question=numeric(0), ExamCode=character(0), 
@@ -30,7 +30,7 @@ Initialization <- function(Initialize = TRUE){
   
   ###Report Creation Variables###
   if(Version() == "Report") with(.STEnv, {
-    randomize <- FALSE
+    randomize(FALSE)
     itemlabels <- paste("(", c(1:26), ")", sep="")
     Index(read.csv("TestIndex.csv"))
     CorrectIndex <- cbind(Index$ExamCode, Index$Correct)

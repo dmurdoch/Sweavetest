@@ -1,8 +1,8 @@
-ItemDiscriminator <- function(GradedTests){
+ItemDiscriminator <- function(GradedTests, Questions=qs){
 
 qs<-seq_len(max(nchar(GradedTests$Correct)))
-StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
-CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)
+StudentAnswers <- answerMatrix(GradedTests$Answers,qs)[,Questions,drop=FALSE]
+CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)[,Questions,drop=FALSE]
 QuestionScores <- StudentAnswers == CorrectAnswers
 StudentTotal <- rowSums(QuestionScores)
 

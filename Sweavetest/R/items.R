@@ -47,15 +47,12 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
 QReport <- function() {
   if (Version() != "Report") return(invisible())
   
-  DR <- getglobal(DR,c())
-  ID <- getglobal(ID,c())
-  PB <- getglobal(PB,c())
   AnswerCountMatrix <- CreateIndex()
   student <- GradedTests()$Answers
   correct <- GradedTests()$Correct
-  DR <- DR[QuestionCounter()]
-  ID <- ID[QuestionCounter()]
-  PB <- PB[QuestionCounter()]
+  DR <- DifficultyRating(GradedTests(), QuestionCounter())
+  ID <- ItemDiscriminator(GradedTests(), QuestionCounter())
+  PB <- PointBiserial(GradedTests(), QuestionCounter())
 
   if(testversion() > 4){
     testversion(1)

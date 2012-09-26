@@ -1,8 +1,8 @@
-PointBiserial <- function(graded.tests){
+PointBiserial <- function(graded.tests, Questions=qs){
 
 qs<-seq_len(max(nchar(graded.tests$Correct)))
-StudentAnswers <- answerMatrix(graded.tests$Answers,qs)
-CorrectAnswers <- answerMatrix(graded.tests$Correct,qs)
+StudentAnswers <- answerMatrix(graded.tests$Answers,qs)[,Questions,drop=FALSE]
+CorrectAnswers <- answerMatrix(graded.tests$Correct,qs)[,Questions,drop=FALSE]
 QuestionScores <- StudentAnswers == CorrectAnswers
 StudentTotal <- rowSums(QuestionScores)
 

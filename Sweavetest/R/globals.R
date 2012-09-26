@@ -1,11 +1,4 @@
 
-getglobal <- function(var, default) {
-  name <- deparse(substitute(var))
-  if (exists(name, .STEnv)) var <- get(name, .STEnv)
-  else var <- default
-  var
-}
-
 # The functions below give access to global variables
 #  Version -- which type of processing to do
 #  testversion -- which of the 4 test versions

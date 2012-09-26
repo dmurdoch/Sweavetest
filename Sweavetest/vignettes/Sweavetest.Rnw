@@ -1155,7 +1155,7 @@ Update this list as we cover things.
 Still need to document
 
  [1]          "answerMatrix"        "clean"             
- [6]          "getglobal"          "grades"                              
+ [6]          "grades"                              
 [16] "nominalRoll"        "perms"                "readScanex"           
 
 

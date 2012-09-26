@@ -54,7 +54,7 @@ QReport <- function() {
   DR <- getglobal(DR,c())
   ID <- getglobal(ID,c())
   PB <- getglobal(PB,c())
-  AnswerCountMatrix <- getglobal(AnswerCountMatrix,c())
+  AnswerCountMatrix <- CreateIndex()
   GradedTests <- getglobal(GradedTests,c())
   student <- GradedTests$Answers
   correct <- GradedTests$Correct

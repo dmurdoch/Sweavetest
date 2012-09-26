@@ -27,19 +27,13 @@ Initialization <- function(Initialize = TRUE){
     correct(c())
   
   ###Report Creation Variables###
-  if(Version() == "Report") with(.STEnv, {
+  if(Version() == "Report") {
     randomize(FALSE)
     itemlabels(paste0("(", c(1:26), ")"))
     Index(read.csv("TestIndex.csv"))
     GradedTests(grades(scanex))
-    KR <- KR20(GradedTests)
-    FD <- FergusonsDelta(GradedTests)
-    DR <- DifficultyRating(GradedTests)
-    ID <- ItemDiscriminator(GradedTests)
-    PB <- PointBiserial(GradedTests)
-    AnswerCountMatrix <- CreateIndex(GradedTests)
     testversion(6)
-  })
+  }
   
   if(Version() == "Student"){
     cat("\\newcommand{\\Correct}{}")

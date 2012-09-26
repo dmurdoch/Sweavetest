@@ -15,18 +15,17 @@ answerPlots <- function(Questions=qs,
                         
   # GradedTests$Answers is vector of student answers, e.g. c("DBDCBDACCBAABBCBCCABBDAACAAACC", ...
   # GradedTests$Correct is vector of correct answers, e.g. c("ABDCBDACCBAACACBACBDBAEACAAACE", ...
-  # Index is dataframe giving coding for tests, with columns Question, ExamCode, A, B, C, D, E
+  # Index is dataframe giving coding for tests, with columns Question, ExamCode, Correct, A, B, C, D, E
   # GradedTests is a dataframe with results in columns "Student ID", Section, ExamCode, Sheet, Scantron,
   #   Answers, Correct, Grade
 
-  Index <- getglobal(Index, c())
   GradedTests <- getglobal(GradedTests,c())
-  qs <- as.numeric(unique(Index$Question))
+  qs <- as.numeric(unique(Index()$Question))
   
-  versions <- as.character(unique(Index$ExamCode))
+  versions <- as.character(unique(Index()$ExamCode))
   NumV <- length(versions)
   
-  summary <- CreateIndex(Index, GradedTests)
+  summary <- CreateIndex(Index(), GradedTests)
   for (i in Questions) {
     Qsummary <- with(summary, summary[Question == i,])
     if (all(is.na(Qsummary$A5))) NumResp <- 4

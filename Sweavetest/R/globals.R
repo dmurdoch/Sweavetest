@@ -13,6 +13,7 @@ getglobal <- function(var, default) {
 #  correct -- a vector of correct responses (in the authored order)
 #  Answers -- a vector of correct responses (in the randomized order)
 #  QuestionIndex -- a vector of question numbers corresponding to the above
+#  Index -- a dataframe giving the randomization for the test
 
 Version <- function(x = "Student"){
   if (!missing(x)) {
@@ -69,6 +70,14 @@ QuestionIndex <- function(x = c()){
     return(invisible(x))
   }
   .STEnv$QuestionIndex
+}
+
+Index <- function(x = c()){
+  if (!missing(x)) {
+    .STEnv$Index <- x
+    return(invisible(x))
+  }
+  .STEnv$Index
 }
 
 versioncode <- function() {

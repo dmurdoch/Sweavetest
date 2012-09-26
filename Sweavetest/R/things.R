@@ -1,8 +1,7 @@
 things <-
-function(..., Correct=NA, KeepLast=0, randomize, Index) {
+function(..., Correct=NA, KeepLast=0, randomize) {
   
   randomize <- getglobal(randomize, FALSE)
-  Index <- getglobal(Index,c())
     
   x <- unlist(list(...))
   n <- length(x) - KeepLast
@@ -25,6 +24,13 @@ function(..., Correct=NA, KeepLast=0, randomize, Index) {
     indices <- c(indices,rep(NA,5-length(indices)))
   }
   
-  .STEnv$Index <- rbind(Index, indices)
+  Index(rbind(Index,data.frame(Question=QuestionCounter(), 
+  			       ExamCode=versioncode(),
+  			       Correct=Correct,
+  			       A=indices[1],
+  			       B=indices[2],
+  			       C=indices[3],
+  			       D=indices[4],
+  			       E=indices[5])))	
 }
 

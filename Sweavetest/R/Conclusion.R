@@ -12,14 +12,12 @@ Conclusion <- function(END = TRUE){
     if(Version() == "Student") {
       with(.STEnv, {
         Code <- as.integer(versioncode())
-        ExamCode <- rep(Code, QuestionCounter())
         Correct <- correct()
-        Index <- cbind(QuestionIndex(),ExamCode,Correct,Index)
-        if(testversion() == 1){
-          colnames(Index) <- c("Question", "ExamCode", "Correct", "A", "B", "C", "D", "E")
-          write.table(Index,"TestIndex.csv", append=TRUE, row.names = FALSE, col.names = TRUE)
-        }
-        else{write.table(Index,"TestIndex.csv", append=TRUE, row.names = FALSE, col.names = FALSE)}
+        if(testversion() == 1)
+          write.csv(Index(),"TestIndex.csv", row.names = FALSE)
+        else
+          write.table(Index(),"TestIndex.csv", append=TRUE, row.names = FALSE, 
+            col.names = FALSE, sep=",", dec=".", qmethod="double")
       })      
     }
   }

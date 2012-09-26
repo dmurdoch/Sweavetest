@@ -19,7 +19,9 @@ Initialization <- function(Initialize = TRUE){
     randomize <- (Version() != "Teacher")
     itemlabels <- paste("(", LETTERS, ")", sep="")
     Answers(c())
-    Index <- c()
+    Index(data.frame(Question=numeric(0), ExamCode=character(0), 
+                     Correct=numeric(0), A=numeric(0), B=numeric(0), 
+                     C=numeric(0), D=numeric(0), E=numeric(0)))
     QuestionCounter(0)
     QuestionIndex(c())
     fignum <- 0
@@ -30,16 +32,15 @@ Initialization <- function(Initialize = TRUE){
   if(Version() == "Report") with(.STEnv, {
     randomize <- FALSE
     itemlabels <- paste("(", c(1:26), ")", sep="")
-    Index <- read.table("TestIndex.csv", header = TRUE)
+    Index(read.csv("TestIndex.csv"))
     CorrectIndex <- cbind(Index$ExamCode, Index$Correct)
-    Index <- Index[,-3]
     GradedTests <- grades(scanex)
     KR <- KR20(GradedTests)
     FD <- FergusonsDelta(GradedTests)
     DR <- DifficultyRating(GradedTests)
     ID <- ItemDiscriminator(GradedTests)
     PB <- PointBiserial(GradedTests)
-    AnswerCountMatrix <- CreateIndex(Index, GradedTests)
+    AnswerCountMatrix <- CreateIndex(GradedTests)
     testversion(6)
   })
   

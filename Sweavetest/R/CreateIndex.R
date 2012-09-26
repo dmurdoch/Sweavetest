@@ -38,7 +38,7 @@ AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
   result
 }
 
-CreateIndex <- function(Index = getglobal(Index, c()), GradedTests){
+CreateIndex <- function(GradedTests, Index=Index()){
   qs <- seq_len(max(nchar(GradedTests$Correct)))
   Counts <- AnswerCounts(GradedTests, qs)
   

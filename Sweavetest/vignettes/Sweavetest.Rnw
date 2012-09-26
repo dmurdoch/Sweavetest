@@ -138,6 +138,7 @@ above will be processed and displayed as
 distribution of $X$ is
 <<>>=
 Version("Teacher")
+QuestionCounter(0)
 enumerate("$\\Binom(n=1, p=0.7)$", 
       "$\\Binom(n=1, p=0.3)$",
       "$\\Poisson(\\mu = 0.3)$",
@@ -734,10 +735,10 @@ produced for the first question of our sample test.
 \begin{center}
 <<>>=
 QuestionCounter(1)
-.STEnv$Index <- read.csv(TestIndex.csv, head=TRUE)
-Summary <- CreateIndex(.STEnv$Index, GradedTests)
+Index(read.csv(TestIndex.csv))
+Summary <- CreateIndex(GradedTests)
 
-Dis <- DistractorDiscrimination(GradedTests,.STEnv$Index) #$
+Dis <- DistractorDiscrimination(GradedTests) 
 AnswerCounts <- subset(Summary, Question==QuestionCounter(), 
                        select=paste0("A", 1:nrow(Dis)))
 Frequency <- apply(AnswerCounts, 2, sum)

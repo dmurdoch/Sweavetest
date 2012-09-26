@@ -1,10 +1,9 @@
 horiz <-
-function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, Index, DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
+function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabels, DR,ID,PB,AnswerCountMatrix, GradedTests, fignum) {
   
   randomize <- getglobal(randomize, FALSE)
   itemlabels <- getglobal(itemlabels, paste("(", letters, ")", sep=""))
   CheckDups <- getglobal(CheckDups, TRUE)
-  Index <- getglobal(Index, c())
   QuestionCounter(QuestionCounter()+1)
   
   correct(c(correct(), Correct))
@@ -33,7 +32,14 @@ function(..., Correct=1, KeepLast=0, report=TRUE, CheckDups, randomize, itemlabe
     indices <- c(indices,rep(NA,5-length(indices)))						 
   }		 				  
 		 
-  .STEnv$Index <- rbind(Index,indices)	
+  Index(rbind(Index,data.frame(Question=QuestionCounter(), 
+  			       ExamCode=versioncode(),
+  			       Correct=Correct,
+  			       A=indices[1],
+  			       B=indices[2],
+  			       C=indices[3],
+  			       D=indices[4],
+  			       E=indices[5])))	
   
   if (report)
     QReport()

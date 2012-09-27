@@ -11,3 +11,4 @@
 Sweavetest.Rcheck/*
 Sweavetest*.tar.gz
 /Sweavetest.Rcheck
+/Sweavetest/vignettes/Sweavetest.R

@@ -8,13 +8,13 @@ Compute the total score for each student, and correlate it with their answers on
 to detect errors in the answer key, or bad wording in questions.
 }
 \usage{
-answerCorrelations(student, correct, qs = seq_len(max(nchar(correct))))
+answerCorrelations(student, CorrectAnswers, qs)
 }
 \arguments{
   \item{student}{
 Student answers in strings.
 }
-  \item{correct}{
+  \item{CorrectAnswers}{
 Correct answers in strings, one per student.
 }
   \item{qs}{

@@ -7,11 +7,14 @@ Calculate the Point Biserial Correlation for Each Question
 This function calculates the point biserial values for each question in the multiple choice test.
 }
 \usage{
-PointBiserial(GradedTests)
+PointBiserial(GradedTests, Questions=qs)
 }
 \arguments{
   \item{GradedTests}{
     The result of running the function grades(), which can be found in the Sweavetest package
+}
+  \item{Questions}{
+    Which questions to process.
 }
 }
 \value{

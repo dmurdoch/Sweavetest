@@ -1,5 +1,5 @@
-\name{version}
-\alias{version}
+\name{Version}
+\alias{Version}
 \title{
 Set the Version Type for the Test Creation Process
 }
@@ -7,7 +7,7 @@ Set the Version Type for the Test Creation Process
 Allows the user to choose between one of three test versions: Student, Teacher, or Report.
 }
 \usage{
-version(x = "Student")
+Version(x = "Student")
 }
 
 \arguments{
@@ -16,7 +16,7 @@ version(x = "Student")
 }
 }
 \details{
-version() uses the function match.arg() to find the closes match from the available choices (Student, Teacher, or Report) to the input provided from the instructor
+\code{Version()} uses the function match.arg() to find the closes match from the available choices (Student, Teacher, or Report) to the input provided from the instructor
 }
 \value{
 Sets a global ``Version'' variable to either Student, Teacher, or Report for use in the test creation process.
@@ -27,6 +27,7 @@ Adam Rahman
 
 \examples{
 x <- ``Student''
-version(x)
+Version(x)
+Version()
 }
 

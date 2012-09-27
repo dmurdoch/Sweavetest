@@ -7,14 +7,11 @@ Create all closing variables and formatting for the test and report creation pro
 This is a pseudo-function to declare all needed closing variables and formatting options for the test and report creation process
 }
 \usage{
-Conclusion(END = TRUE, Version = getglobal(Version, "Student"))
+Conclusion(END = TRUE)
 }
 \arguments{
   \item{END}{
     A pseudo variable used only to initialize the Conclusion() function. It is set as TRUE by default so the user need not  change it.
-}
-  \item{Version}{
-    What version of run are we processing?
 }
 }
 \value{

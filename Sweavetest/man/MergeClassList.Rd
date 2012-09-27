@@ -59,6 +59,7 @@ Duncan Murdoch and Adam Rahman
 For this function to execute properly, a working directory must be specified by the user. The function will export the CSV files chosen by the user to the specified directory.
 }
 \examples{
+\donttest{
 #For a single class list
 library(Sweavetest)																						#This package contains the MergeClassList Function
 library(tables)																							#This package contains functions used with MergeClassList
@@ -82,4 +83,5 @@ weights <- rep(1,50)																					#50 Questions present in 'scanex' worth
 sections <- c(''1'')																					#One section present in class list
 
 MergeClassList(classlist,scanex,weights, sections, TestTitle=''Test1'', AcceptSectionCSV = TRUE, AcceptMasterCSV = TRUE)			#Execution of function
+}
 }

@@ -38,9 +38,9 @@ AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
   result
 }
 
-CreateIndex <- function(fromGradedTests=GradedTests(), mainIndex=Index()){
-  qs <- seq_len(max(nchar(fromGradedTests$Correct)))
-  Counts <- AnswerCounts(fromGradedTests, qs)
+CreateIndex <- function(gradedTests=GradedTests()){
+  qs <- seq_len(max(nchar(gradedTests$Correct)))
+  Counts <- AnswerCounts(gradedTests, qs)
   
   Versions <- dimnames(Counts)[[1]]
   result <- data.frame(ExamCode = character(0), Question=character(0), 
@@ -50,6 +50,7 @@ CreateIndex <- function(fromGradedTests=GradedTests(), mainIndex=Index()){
                        Blank=numeric(0), Bad=numeric(0),
                        R1=character(0), R2=character(0), R3=character(0),
                        R4=character(0), R5=character(0))
+  mainIndex <- Index()
   for (v in Versions) {
     counts <- Counts[v,,]
     index <- mainIndex[mainIndex$ExamCode == v,]

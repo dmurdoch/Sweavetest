@@ -199,7 +199,7 @@ LowLevelReport <- function(scanex){
   filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
   
   pdf(filename, width=8, height=4)
-  answerPlots(GradedTests$Answers,GradedTests$Correct,GradedTests$ExamCode,i)
+  answerPlots(i)
   dev.off()
   cat("\\hspace{.05in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))

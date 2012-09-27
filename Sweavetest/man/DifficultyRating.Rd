@@ -7,11 +7,14 @@ Determine the Difficulty Rating of Each Test Question
 The difficulty rating function determines how many students answered each question correctly, and then dividing by the total number of students to yield a value between 0 and 1, showing the user which questions were the most difficult.
 }
 \usage{
-DifficultyRating(GradedTests)
+DifficultyRating(GradedTests, Questions=qs)
 }
 \arguments{
   \item{GradedTests}{
     The result of running the function grades(), which can be found in the Sweavetest package
+}
+  \item{Questions}{
+    Which questions should be processed?  The default is all questions.
 }
 }
 \value{

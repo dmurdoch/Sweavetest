@@ -10,13 +10,9 @@ to the global \code{Answers} variable; this function displays the
 correct answers in a table.
 }
 \usage{
-answerkey(Answers, symbols = letters, group=5, perline=6)
+answerkey(symbols = letters, group=5, perline=6)
 }
 \arguments{
-  \item{Answers}{
-An integer vector of correct answers.  By default, the global 
-variable of the same name is used.
-}
   \item{symbols}{
 What symbols to use to display the answers.
 }

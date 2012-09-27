@@ -15,7 +15,7 @@ newCommands(Cov=TRUE, Var=TRUE, E=TRUE, Lik=TRUE, lik=TRUE,
                         F=TRUE, G=TRUE, vs=TRUE,
                         Marks=TRUE, thesection=TRUE,
                         lowtilde=TRUE)
-marklist(marks, names=1:length(marks), testversion)
+marklist(marks, names=1:length(marks))
 multiplechoice(names) 
 }
 \arguments{
@@ -28,10 +28,6 @@ Numerical values of the marks to be assigned to the questions.
 }
 \item{names}{
 The \dQuote{names} of the questions associated with the marks or answers.
-}
-\item{testversion}{
-Which version of the test to use?  Normally this is taken from the global
-variable of the same name.
 }
 }
 \details{

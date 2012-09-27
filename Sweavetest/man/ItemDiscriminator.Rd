@@ -7,11 +7,14 @@ Computes Item Discrimination values for each question in the test
 This function computes item discrimination values for the questions on the test.
 }
 \usage{
-ItemDiscriminator(GradedTests)
+ItemDiscriminator(GradedTests, Questions = qs)
 }
 \arguments{
   \item{GradedTests}{
     The result of running the function grades(), which can be found in the Sweavetest package.
+}
+  \item{Questions}{
+    Which questions to process?  The default is all questions.
 }
 }
 \value{

@@ -1,8 +1,8 @@
-PointBiserial <- function(graded.tests, Questions=qs){
+PointBiserial <- function(GradedTests, Questions=qs){
 
-qs<-seq_len(max(nchar(graded.tests$Correct)))
-StudentAnswers <- answerMatrix(graded.tests$Answers,qs)[,Questions,drop=FALSE]
-CorrectAnswers <- answerMatrix(graded.tests$Correct,qs)[,Questions,drop=FALSE]
+qs<-seq_len(max(nchar(GradedTests$Correct)))
+StudentAnswers <- answerMatrix(GradedTests$Answers,qs)[,Questions,drop=FALSE]
+CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)[,Questions,drop=FALSE]
 QuestionScores <- StudentAnswers == CorrectAnswers
 StudentTotal <- rowSums(QuestionScores)
 
@@ -27,7 +27,7 @@ Mq[i] <- mean(StudentsWrong)
 	
 P <- colSums(QuestionScores)/nrow(QuestionScores)
 Q <- 1 - P
-sd <- sqrt(var(graded.tests$Grade))
+sd <- sqrt(var(GradedTests$Grade))
 
 pointbiserial <- (Mp-Mq)*sqrt(P*Q)/sd
 

@@ -1,6 +1,7 @@
 things <-
-function(..., Correct=NA, KeepLast=0) {
-  
+function(..., Correct=NA, KeepLast=0, report=FALSE) {
+  if (report)
+    stop("things() cannot produce a report; you need to call QReport()")
   x <- unlist(list(...))
   n <- length(x) - KeepLast
   rand <- sample(n)  # Leave this here in case randomization is only temporarily off

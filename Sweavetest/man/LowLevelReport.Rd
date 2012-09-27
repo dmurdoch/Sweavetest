@@ -41,11 +41,3 @@ Adam Rahman
 \seealso{
 readScanex()
 }
-\examples{
-
-library(tables)
-setwd("C:/Users/Adam Rahman/Desktop/Summer Project")
-scanex <- readScanex("sample.dat")
-
-LowLevelReport(scanex)
-}

@@ -707,8 +707,8 @@ to \verb!R5! give the letter chosen by the randomization.
 Below are some of the rows of the output dataframe for our sample test:
 
 <<echo=true,results=verbatim>>=
-TestIndex <- read.csv(TestIndex.csv, head=TRUE)
-Counts <- CreateIndex(mainIndex = TestIndex)
+Index(read.csv(TestIndex.csv, head=TRUE))
+Counts <- CreateIndex()
 o <- with(Counts, order(Question, ExamCode))
 Counts[o[1:6],]
 @

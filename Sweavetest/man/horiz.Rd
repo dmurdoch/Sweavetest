@@ -17,18 +17,18 @@ Items in multiple choice.
 Output Latex for items in multiple choice.
 }
 \usage{
-horiz(..., Correct = 1, KeepLast = 0, CheckDups, testversion, randomize, itemlabels, Answers)
-enumerate(..., Correct = 1, KeepLast = 0)
-items(..., Correct = 1, KeepLast = 0, CheckDups, Answers)
+horiz(..., Correct = 1, KeepLast = 0, report = TRUE)
+enumerate(..., Correct = 1, KeepLast = 0, report = TRUE)
+items(..., Correct = 1, KeepLast = 0, report = FALSE)
 
-Rhoriz(..., Correct = 1, KeepLast = 0)
-Renumerate(..., Correct = 1, KeepLast = 0)
-Ritems(..., Correct = 1, KeepLast = 0)
+Rhoriz(..., Correct = 1, KeepLast = 0, report = TRUE)
+Renumerate(..., Correct = 1, KeepLast = 0, report = TRUE)
+Ritems(..., Correct = 1, KeepLast = 0, report = FALSE)
 
-resultenumerate(..., Correct = 1, KeepLast = 0, strip = TRUE)
-resultitems(..., Correct = 1, KeepLast = 0, strip = TRUE)
+resultenumerate(..., Correct = 1, KeepLast = 0, strip = TRUE, report=TRUE)
+resultitems(..., Correct = 1, KeepLast = 0, strip = TRUE, report=FALSE)
 
-things(..., Correct = NA,  KeepLast = 0, testversion, randomize, Answers)
+things(..., Correct = NA,  KeepLast = 0, report = FALSE)
 
 msg(string)
 \S3method{print}{msg}(x, ...)
@@ -43,29 +43,13 @@ Which item is correct?
   \item{KeepLast}{
 How many items (e.g. \dQuote{None of the above}) to keep in the final position?
 }
-  \item{CheckDups}{
-Check for duplicate items.  Defaults to \code{TRUE},
-or the value of the global variable \code{CheckDups}.
-}
-  \item{testversion}{
-Which of the four versions of the test should we print?  Defaults to \code{1},
-or the value of the global variable \code{testversion}.
-}
-
-\item{randomize}{
-Should the items be printed in a random order?  Defaults to \code{FALSE},
-or the value of the global variable \code{randomize}.
-}
-
-\item{itemlabels}{
-What to use to label items.  Default is \code{paste("(", letters, ")", sep="")}.
+  \item{report}{
+Whether to attempt to insert a report during report processing.  The functions
+with default set to \code{FALSE} do not support report production; call
+\code{\link{QReport}} directly.
 }
 \item{strip}{
 Strip extra white space from printed results?
-}
-\item{Answers}{
-The vector of previous correct answers; defaults to the global variable
-of the same name.
 }
 \item{string}{The message to print.}
 \item{x}{A \code{msg} object.}

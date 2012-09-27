@@ -7,21 +7,7 @@ Create a Single Page Statistical Overview of the Entire Test
 This function creates a single page statistical overview of the test, with formatting for use in Latex. Using statistics calculated by other functions in the Sweavetest package, this function creates the tables and appropriate formatting to include a single page overview of the test to the user when a report is desired.
 }
 \usage{
-StatisticalOverview(GradedTests, KR, FD, fignum)
-}
-\arguments{
-  \item{GradedTests}{
-    The result of running the grades() function.
-}
-  \item{KR}{
-    The Kuder-Richardson 20 statistic, which is produced using the KR20() function.
-}
-  \item{FD}{
-    The Ferguson's Delta statistic, which is produced using the FergusonsDelta() function.
-}
-  \item{fignum}{
-    A counter used throughout the report creation process to produce the graphs in Latex.
-}
+StatisticalOverview()
 }
 
 \value{
@@ -56,10 +42,7 @@ grades(), KR20(), FergusonsDelta()
 \examples{
 scanex <- readScanex("sample.dat")
 
-GradedTests <- grades(scanex)
-KR <- KR20(GradedTests)
-FD <- FergusonsDelta(GradedTests)
-fignum <- 0
+GradedTests(grades(scanex))
 
-StatisticalOverview(GradedTests, KR, FD, fignum)
+StatisticalOverview()
 }

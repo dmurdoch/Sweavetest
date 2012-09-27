@@ -832,34 +832,32 @@ Warnings are produced if any combination of the following occur:
 The \verb!Warnings()! function takes the calculated values of the item discrimination, difficulty
 rating, and point biserial correlation as inputs. The syntax is as follows:
 <<echo=true>>=
-DR <- DifficultyRating(GradedTests())
-ID <- ItemDiscriminator(GradedTests())
-PB <- PointBiserial(GradedTests())
+DR <- DifficultyRating(GradedTests(), 1)
+ID <- ItemDiscriminator(GradedTests(), 1)
+PB <- PointBiserial(GradedTests(), 1)
 
 Warnings(DR, ID, PB)
 @
-[No warnings are printed, as the example test had no obvious errors.]
+[No warnings are printed]
 
 A number of different outputs can be produced depending on which statistics are at unacceptable
 levels. Some examples with modified data are given below:
 
 If a single statistic is below acceptable standards:
 <<echo=true>>=
-DR <- 0
-ID <- ID[1]
-PB <- PB[1]
+DR <- 0.05
 
 Warnings(DR, ID, PB)
 @
 If there are two statistics that are below acceptable standards:
 <<echo=true>>=
-PB <- 0
+PB <- 0.01
 
 Warnings(DR, ID, PB)
 @
 If all three statistics are below acceptable standards:
 <<echo=true>>=
-ID <- -1
+ID <- -0.8
 
 Warnings(DR, ID, PB)
 @

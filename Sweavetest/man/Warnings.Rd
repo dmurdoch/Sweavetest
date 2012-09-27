@@ -35,10 +35,10 @@ DifficultyRating(), ItemDiscriminator(), PointBiserial()
 scanex <- readScanex("sample.dat")
 
 GradedTests <- grades(scanex)
-DR <- DifficultyRating(GradedTests)
-ID <- ItemDiscriminator(GradedTests)
-PB <- PointBiserial(GradedTests)
+DR <- DifficultyRating(GradedTests, 1)
+ID <- ItemDiscriminator(GradedTests, 1)
+PB <- PointBiserial(GradedTests, 1)
 
-Warning(DR,ID,PB)
+Warnings(DR,ID,PB)
 
 }

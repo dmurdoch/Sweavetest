@@ -1,15 +1,15 @@
 PointBiserial <- function(GradedTests, Questions=qs){
 
-qs<-seq_len(max(nchar(GradedTests$Correct)))
-StudentAnswers <- answerMatrix(GradedTests$Answers,qs)[,Questions,drop=FALSE]
-CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)[,Questions,drop=FALSE]
-QuestionScores <- StudentAnswers == CorrectAnswers
-StudentTotal <- rowSums(QuestionScores)
+  qs<-seq_len(max(nchar(GradedTests$Correct)))
+  StudentAnswers <- answerMatrix(GradedTests$Answers,qs)[,Questions,drop=FALSE]
+  CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)[,Questions,drop=FALSE]
+  QuestionScores <- StudentAnswers == CorrectAnswers
+  StudentTotal <- GradedTests$Grade
 
-Mp <- rep(0,ncol(QuestionScores))
-Mq <- rep(0,ncol(QuestionScores))
+  Mp <- rep(0,ncol(QuestionScores))
+  Mq <- rep(0,ncol(QuestionScores))
 
-for(i in 1:ncol(QuestionScores)){
+  for(i in 1:ncol(QuestionScores)){
 	StudentsRight <- 0
 	StudentsWrong <- 0
 	for (j in 1:nrow(QuestionScores)){
@@ -18,19 +18,19 @@ for(i in 1:ncol(QuestionScores)){
 			}
 		else StudentsWrong <- c(StudentsWrong, StudentTotal[j])
 	}
-StudentsRight <- StudentsRight[-1]
-StudentsWrong <- StudentsWrong[-1]
+    StudentsRight <- StudentsRight[-1]
+    StudentsWrong <- StudentsWrong[-1]
 
-Mp[i] <- mean(StudentsRight)
-Mq[i] <- mean(StudentsWrong)
-}
+    Mp[i] <- mean(StudentsRight)
+    Mq[i] <- mean(StudentsWrong)
+  }
 	
-P <- colSums(QuestionScores)/nrow(QuestionScores)
-Q <- 1 - P
-sd <- sqrt(var(GradedTests$Grade))
+  P <- colSums(QuestionScores)/nrow(QuestionScores)
+  Q <- 1 - P
+  sd <- sqrt(var(GradedTests$Grade))
 
-pointbiserial <- (Mp-Mq)*sqrt(P*Q)/sd
+  pointbiserial <- (Mp-Mq)*sqrt(P*Q)/sd
 
-return(pointbiserial)
+  return(pointbiserial)
 
 }

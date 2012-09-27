@@ -516,7 +516,7 @@ test provide information about the knowledge of the students on the tested mater
 
 It is calculated through the following formula:
 
-\[ \alpha = \frac{K}{K+1}(1- \frac{\sum_{i=1}^{K} p_{i}q_{i}}{\sigma^{2}_{X}}) \]
+\[ \alpha = \frac{K}{K+1}\left(1- \frac{\sum_{i=1}^{K} p_{i}q_{i}}{\sigma^{2}_{X}}\right) \]
 
 \noindent where K is the total number of items, $p_{i}$ is the probability of success on item i, $q_{i}$ is the probability of failure on item i, and $\sigma^{2}$ is the variance of the student scores.
 
@@ -552,10 +552,7 @@ As an overall trend, the questions should form a line from the upper left corner
 The function \verb!answerCorrelations()! is used to create the answer correlation plot. It takes as input the answers provided by the students and the corresponding correct answers, and is called using the following syntax:
 
 <<answerCorrelations, eval=false, echo=true>>=
-Student <- GradedTests()$Answers
-Correct <- GradedTests()$Correct
-
-answerCorrelations(Student,Correct)
+answerCorrelations()
 @
 The resulting plot is shown in Figure \ref{fig:answerCorrelations}.
 \begin{figure}
@@ -832,26 +829,28 @@ Warnings are produced if any combination of the following occur:
 The \verb!Warnings()! function takes the calculated values of the item discrimination, difficulty
 rating, and point biserial correlation as inputs. The syntax is as follows:
 <<echo=true>>=
-DR <- DifficultyRating(GradedTests(), 1)
-ID <- ItemDiscriminator(GradedTests(), 1)
-PB <- PointBiserial(GradedTests(), 1)
 
-Warnings(DR, ID, PB)
+  DR <- DifficultyRating(GradedTests(), 1)
+  ID <- ItemDiscriminator(GradedTests(),1)
+  PB <- PointBiserial(GradedTests(), 1)
+
+  Warnings(DR, ID, PB)
 @
 [No warnings are printed]
 
 A number of different outputs can be produced depending on which statistics are at unacceptable
-levels. Some examples with modified data are given below:
+levels.  For example:
 
-If a single statistic is below acceptable standards:
 <<echo=true>>=
-DR <- 0.05
+  DR <- DifficultyRating(GradedTests(), 12)
+  ID <- ItemDiscriminator(GradedTests(),12)
+  PB <- PointBiserial(GradedTests(), 12)
 
-Warnings(DR, ID, PB)
+  Warnings(DR, ID, PB)
 @
 If there are two statistics that are below acceptable standards:
 <<echo=true>>=
-PB <- 0.01
+DR <- 0.01
 
 Warnings(DR, ID, PB)
 @
@@ -861,12 +860,8 @@ ID <- -0.8
 
 Warnings(DR, ID, PB)
 @
-The report also provides warning messages if the Kuder-Richardson 20 statistic or Ferguson's Delta
-fall below acceptable standards. These messages are produced directly by the \verb!StatisticalOverview()!
-function.
 
-Warnings are produced if the KR20 statistic falls below 0.7 or Ferguson's Delta falls below 0.9 and are 
-given on the Statistical Overview page.
+Warnings are also given on the Statistical Overview page if the KR20 statistic falls below 0.7 or Ferguson's Delta falls below 0.9.
 
 \section{Report Creation}
 \label{sec:report}

@@ -1,8 +1,8 @@
-answerCorrelations <- function(student, CorrectAnswers, qs=seq_len(max(nchar(CorrectAnswers)))) {
-  student <- answerMatrix(student, qs)
-  answers <- answerMatrix(CorrectAnswers, qs)
+answerCorrelations <- function(gradedTests = GradedTests(), qs=seq_len(max(nchar(gradedTests$Correct)))) {
+  student <- answerMatrix(gradedTests$Answers, qs)
+  answers <- answerMatrix(gradedTests$Correct, qs)
   scores <- student == answers
-  studentTotal <- rowSums(scores)
+  studentTotal <- gradedTests$Grade
   questionRate <- colSums(scores)/nrow(scores)
   correlations <- apply(scores, 2, function(x) if (sd(x) > 0) cor(x, studentTotal) else 0)
   plot(questionRate, correlations, type="n", 

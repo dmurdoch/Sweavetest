@@ -8,17 +8,14 @@ Compute the total score for each student, and correlate it with their answers on
 to detect errors in the answer key, or bad wording in questions.
 }
 \usage{
-answerCorrelations(student, CorrectAnswers, qs)
+answerCorrelations(gradedTests = GradedTests(), qs)
 }
 \arguments{
-  \item{student}{
-Student answers in strings.
-}
-  \item{CorrectAnswers}{
-Correct answers in strings, one per student.
+  \item{gradedTests}{
+Student results.
 }
   \item{qs}{
-Which questions to include?
+Which questions to include?  Defaults to all questions.
 }
 }
 \value{
@@ -30,8 +27,4 @@ Duncan Murdoch
 \seealso{
 \code{\link{answerPlots}}
 }
-\examples{
-student <- c("ABCDE", "ABCDE", "ABDC", "BADCA")
-correct <- rep("ABCDE", 4)
-answerCorrelations(student, correct)
-}
+

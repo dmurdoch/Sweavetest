@@ -21,7 +21,7 @@ Warnings <- function(DR,ID,PB){
   
   if(PB <= 0.2 && DR > .2 && ID > 0){
     cat("\\\\")
-    cat(sprintf("The calculated point biserial index of %.2f is below acceptable standards. 
+    cat(sprintf("The calculated point biserial index of %.2f is below 0.2. 
     Please see the appendix for suggestions on how to improve this question.", 
         PB))
   }

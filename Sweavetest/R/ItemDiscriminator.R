@@ -4,7 +4,7 @@ qs<-seq_len(max(nchar(GradedTests$Correct)))
 StudentAnswers <- answerMatrix(GradedTests$Answers,qs)[,Questions,drop=FALSE]
 CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)[,Questions,drop=FALSE]
 QuestionScores <- StudentAnswers == CorrectAnswers
-StudentTotal <- rowSums(QuestionScores)
+StudentTotal <- GradedTests$Grade
 
 Upper25 <- which(StudentTotal >= quantile(StudentTotal, .75))
 Lower25 <- which(StudentTotal <= quantile(StudentTotal, .25))

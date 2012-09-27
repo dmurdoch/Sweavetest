@@ -4,7 +4,7 @@ EmpiricalProbabilityPlot <- function(GradedTests, QuestionCount){
   StudentAnswers <- answerMatrix(GradedTests$Answers,qs)
   CorrectAnswers <- answerMatrix(GradedTests$Correct,qs)
   QuestionScores <- StudentAnswers == CorrectAnswers
-  StudentTotal <- rowSums(QuestionScores)
+  StudentTotal <- GradedTests$Grade
   
   TestScores <- c(0:ncol(QuestionScores))
   
@@ -40,7 +40,7 @@ EmpiricalProbabilityPlot <- function(GradedTests, QuestionCount){
   
   ProbabilityCorrectTotal <- c(ProbabilityCorrect0, ProbabilityCorrect)
   
-  drop <- which(ProbabilityCorrectTotal == "NaN")
+  drop <- which(!is.finite(ProbabilityCorrectTotal))
   
   ScorePattern <- ScorePattern[-drop]
   ProbabilityCorrectTotal <- ProbabilityCorrectTotal[-drop]

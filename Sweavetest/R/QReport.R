@@ -25,7 +25,7 @@ QReport <- function() {
   
   StatNames <- c("Difficulty Rating", "Item Discriminator", "Point Biserial")
   Stats <- c(DR, ID, PB)
-  StatFrame <- data.frame(StatNames,Stats)
+  StatFrame <- data.frame(StatNames,Values=Stats)
   
   cat("\\begin{table}[h]")
   cat("\\begin{subtable}[h]{.5\\linewidth}")
@@ -36,7 +36,8 @@ QReport <- function() {
   cat("\\begin{subtable}[h]{.5\\linewidth}")
   cat("\\centering")
   cat("\\hfill")
-  latex(tabular(Heading("Item Analysis")*StatNames ~ Heading()*Format(digits=2)*Stats*Values, data=StatFrame))
+  latex(tabular(Factor(StatNames, name="Item Analysis")*Heading()*identity ~ Values, 
+        data=StatFrame), digits=2)
   cat("\\end{subtable}")
   cat("\\end{table}")
   
@@ -47,8 +48,9 @@ QReport <- function() {
   fignum(fignum() + 1)
   
   cat("\\begin{figure}[h]")
-  dir.create("Sweavetest", showWarnings=FALSE)
-  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
+  dirname <- paste0(TestName(),"Figs")
+  dir.create(dirname, showWarnings=FALSE)
+  filename <- file.path(dirname, paste0("fig", fignum(), ".pdf"))
   
   pdf(filename, width=8, height=4)
   answerPlots(QuestionCounter())

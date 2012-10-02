@@ -23,7 +23,8 @@ function(..., Correct=NA, KeepLast=0, report=FALSE) {
     indices <- c(indices,rep(NA,5-length(indices)))
   }
   
-  Index(rbind(Index(),data.frame(Question=QuestionCounter(), 
+  if (Version() != "Report")
+    Index(rbind(Index(),data.frame(Question=QuestionCounter(), 
   			       ExamCode=versioncode(),
   			       Correct=Correct,
   			       A=indices[1],

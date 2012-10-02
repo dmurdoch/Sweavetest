@@ -14,31 +14,24 @@ QReport <- function() {
     
   cat("\\ \\\\")
   
-  AnswerCounts <- AnswerCountMatrix[QuestionCounter(),paste0("A", 1:5)]
+  AnswerCounts <- as.numeric(AnswerCountMatrix[QuestionCounter(),paste0("A", 1:5)])
   drop <- which(is.na(AnswerCounts))
   if(length(drop) > 0){
     AnswerCounts <- AnswerCounts[-drop]
   }
-  Options <- paste(" ", c(1:length(AnswerCounts)), sep="")
   Resp <- 100*AnswerCounts/nrow(GradedTests())
   Dis <- DistractorDiscrimination(GradedTests(),QuestionCounter())
-  CountFrame <- data.frame(Options,AnswerCounts,Resp,Dis)
+  CountFrame <- data.frame(Dis, Frequency=AnswerCounts,Percentage=Resp)
   
   StatNames <- c("Difficulty Rating", "Item Discriminator", "Point Biserial")
   Stats <- c(DR, ID, PB)
   StatFrame <- data.frame(StatNames,Stats)
   
-  Values <- function(x){x}
-  Frequency <- function(x){x}
-  Percentage <- function(x){x}
-  Discrimination <- function(x){x}
-  
   cat("\\begin{table}[h]")
   cat("\\begin{subtable}[h]{.5\\linewidth}")
   cat("\\hspace{.2in}")
-  latex(tabular(Heading("Option")*Options ~ Heading()*Format(digits=2)*AnswerCounts*Frequency
-                                           +Heading()*Format(digits=2)*Resp*Percentage
-                                           +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
+  latex(tabular(Factor(Option)*Heading()*identity ~ Frequency + Percentage + Discrimination,
+                data = CountFrame), digits=2)
   cat("\\end{subtable}")
   cat("\\begin{subtable}[h]{.5\\linewidth}")
   cat("\\centering")

@@ -882,9 +882,7 @@ The template provides a number of variables that are under the user's control.  
 \begin{verbatim}
 set.seed(18)
 library(Sweavetest)
-library(tables)
-setwd("C:/Users/Sample")
-version("Student")
+Initialization("sample", "Student")
 testversion(4)
 
 if(Version() == "Report"){

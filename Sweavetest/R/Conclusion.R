@@ -1,7 +1,7 @@
-Conclusion <- function(END = TRUE){
+Conclusion <- function(){
   
-  if(END == TRUE){
     if(Version() == "Teacher"){
+      cat("\\newpage\n")
       cat("Answer key for version", versioncode(), ":")
       cat("\\\\")
       answerkey(symbols=LETTERS)
@@ -11,10 +11,9 @@ Conclusion <- function(END = TRUE){
     
     if(Version() == "Student") {
         if(testversion() == 1)
-          write.csv(Index(),"TestIndex.csv", row.names = FALSE)
+          write.csv(Index(),paste0(TestName(), "Index.csv"), row.names = FALSE)
         else
-          write.table(Index(),"TestIndex.csv", append=TRUE, row.names = FALSE, 
+          write.table(Index(),paste0(TestName(), "Index.csv"), append=TRUE, row.names = FALSE, 
             col.names = FALSE, sep=",", dec=".", qmethod="double")
     }
-  }
 }

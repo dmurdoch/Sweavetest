@@ -1,10 +1,11 @@
-Initialization <- function(Initialize = TRUE){
-  if(Initialize == TRUE){
+Initialization <- function(name, version = Version()){
+
+  Version(version)
   
-  if(Version() != "Report"){
+  if(version != "Report"){
     cat("\\renewcommand{\\labelenumii}{(\\Alph{enumii})}")
   }
-  if(Version() == "Report"){
+  if(version == "Report"){
     cat("\\renewcommand{\\labelenumii}{\\arabic{enumii})}")
   }
   cat("\\renewcommand{\\labelenumi}{{\\bf\\arabic{enumi})}}")
@@ -15,7 +16,7 @@ Initialization <- function(Initialize = TRUE){
   newCommands()
   
   ###Test Creation Variables###
-    randomize(Version() != "Teacher")
+    randomize(TRUE)
     itemlabels(paste0("(", LETTERS, ")"))
     Answers(c())
     Index(data.frame(Question=numeric(0), ExamCode=character(0), 
@@ -26,24 +27,24 @@ Initialization <- function(Initialize = TRUE){
     fignum(0)
     correct(c())
     CheckDups(TRUE)
+    TestName(name)
   
   ###Report Creation Variables###
-  if(Version() == "Report") {
+  if(version == "Report") {
     randomize(FALSE)
     itemlabels(paste0("(", c(1:26), ")"))
-    Index(read.csv("TestIndex.csv"))
+    Index(read.csv(paste0(TestName(), "Index.csv")))
     GradedTests(grades(scanex))
     testversion(6)
   }
   
-  if(Version() == "Student"){
+  if(version == "Student"){
     cat("\\newcommand{\\Correct}{}")
   }
-  if(Version() == "Report" | Version() == "Teacher"){
+  if(version == "Report" | version == "Teacher"){
     cat("\\newcommand{\\Correct}{*}")
   }
   
   cat("\\newcommand{\\B}{\\underline{\\LARGE\\hspace{1em}\\vspace{0.4in}\\ }}")
   
-  }
 }

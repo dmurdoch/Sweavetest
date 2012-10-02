@@ -119,6 +119,14 @@ GradedTests <- function(x = NULL) {
   .STEnv$GradedTests
 }
 
+TestName <- function(x = "TestData") {
+  if (!missing(x)) {
+    .STEnv$TestName <- x
+    return(invisible(x))
+  }
+  .STEnv$TestName
+}
+
 
 versioncode <- function() {
   .STEnv$ExamNum[testversion()]

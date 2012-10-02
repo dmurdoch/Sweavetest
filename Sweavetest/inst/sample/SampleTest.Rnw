@@ -1,0 +1,598 @@
+\documentclass[12pt]{article}
+\usepackage{Sweave}
+\SweaveOpts{keep.source=TRUE,width=5,height=4,echo=FALSE,results=tex,concordance=TRUE,prefix.string=figs/}
+\usepackage{graphicx}
+\setkeys{Gin}{width=4in}
+%\usepackage{fullpage}
+\renewcommand{\labelenumii}{(\Alph{enumii})}
+\renewcommand{\labelenumi}{{\bf\arabic{enumi})}}
+\newcommand{\R}{$^\mbox{\scriptsize\textregistered}$}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+<<>>=
+set.seed(18)
+library(Sweavetest)  # Should come after set.seed, to make reproducible.
+Initialization("SampleTest", "Student")
+testversion(2)
+@
+
+\pagestyle{myheadings}
+\thispagestyle{plain}
+
+\markright{SS 1024A Exam Code \Sexpr{versioncode()}}
+
+
+\newcounter{myitem}
+
+\hyphenation{Scantron}
+
+\begin{document}
+
+\begin{center}
+THE UNIVERSITY OF WESTERN ONTARIO \\
+DEPARTMENT OF STATISTICAL AND ACTUARIAL SCIENCES \\
+KING'S UNIVERSITY COLLEGE \\
+STATISTICS 1024A TEST 1  \\
+\ \\
+Saturday, October 15, 2011, 10:00 AM - noon \\
+\ \\
+\fbox{\bf EXAM CODE \Sexpr{versioncode()}}
+\end{center}
+\vspace{0.5in}
+
+INSTRUCTIONS:
+
+\begin{itemize}
+
+\item This is a closed book test. 
+
+\item Use only an HB pencil for the Scantron sheet.
+
+\item { Fill in NAME, INSTRUCTOR, SIGNATURE and COURSE  on the {Scantron} sheet.}
+
+\item { Fill in and {\bf code} your STUDENT NUMBER, SECTION and EXAM CODE on the Scantron sheet.  Your EXAM CODE is  \Sexpr{versioncode()}.  }
+
+\item { Leave the ANSWER SHEET NUMBER blank on the Scantron sheet.}
+
+\item There are 30 multiple choice questions on pages 2 to \pageref{lastpage}.  
+
+\item
+{\bf Code} your answers on the Scantron sheet and submit it.  You may keep
+the question sheet.
+
+\item Only non-programmable calculators are permitted.
+
+
+\item {\bf NO EXTRA TIME WILL BE GIVEN TO CODE YOUR ANSWERS!!}
+
+\end{itemize}
+
+\vspace{0.5in}
+
+\begin{center}
+{\large\bf GOOD LUCK!}
+\end{center}
+
+\newpage
+
+\begin{enumerate}
+\addtolength{\itemsep}{4\baselineskip}
+
+\item A large university is divided into six colleges, with most students
+graduating from four of these colleges.  The following bar chart gives
+the distribution of the percent graduating from the four most popular
+colleges in 2010. \\
+\begin{center}
+\includegraphics{SampleTestFig1.png}
+\end{center}
+Which of the following is a correct statement?
+<<>>=
+enumerate(
+"A timeplot of the 2010 distribution would be more informative.",
+" The bar graph is skewed to the right.",
+"The percent of students graduating from either Engineering or Business is 60 \\%.",
+"It would be correct to make a pie chart if the category ``Other'' was added.", Correct=4)
+@
+
+\item A national achievement test is administered annually to 3rd graders. The test scores follow
+a Normal distribution with a mean score of 100 and a standard deviation of 15.
+If a student has a z-score of 1.20, what was his score on the test?\\
+<<>>=
+horiz( 82,  88, 100, 118, Correct=4)
+@
+
+\item The heights of 5th grade boys in the United States follow the Normal distribution with 
+a mean of 143.6 cm, and a standard deviation of 7.2 cm.
+Using the 68-95-99.7 rule, what percent of 5th grade boys are taller than 158 cm?\\
+<<>>=
+horiz("5\\%", "2.5\\%", "16\\%", "32\\%", Correct=2)
+@
+
+\item 
+The distribution of annual income per person is typically right-skewed.  With such a distribution, we would expect that
+<<>>=
+enumerate(
+"The average and the median income should be roughly the same, given that mean and median are both measures of spread.",
+"The average annual income is lower than the median annual income.",
+"The average annual income is greater than the median annual income.",
+"The spread around the center of the distribution should be very narrow.", Correct=3)
+@
+
+\item The following histogram shows the distribution of final grades in a statistics class of 101 students.\\
+\begin{center}
+\includegraphics{SampleTestFig2.png}
+\end{center}
+Which of the following is a correct statement?
+<<>>=
+enumerate(
+"Both the first quartile and the median are at least 70\\% but less than 80\\%.",
+"The third quartile belongs to the class interval [90, 100).",
+"The distribution of final grades is right-skewed.",
+"It is impossible to tell whether the observation falling into the class interval [10,20) is an outlier.", Correct=1)
+@
+
+
+\item The monthly income of trainees at a local mill is normally distributed with a mean of \$3300 and a standard deviation of \$450.
+What percentage of trainees earns less than \$2700 a month?\\
+<<>>=
+horiz("9.18\\%", "40.82\\%", "35.31\\%", "90.82\\%", Correct=1)
+@
+
+\item A survey was conducted in an undergraduate science course.  The students were asked their:
+\begin{enumerate}
+\renewcommand{\labelenumii}{\Roman{enumii}. }
+\item age (in years) 
+\item height (in feet) 
+\item intended major (Math, Physics, Chemistry, Sociology, Psychology, Art, Business, or Other) 
+\item amount of student loans outstanding (in dollars) 
+\item plans after graduating (proceed to: Graduate Studies, Work, or Undecided) 
+\item satisfaction with their undergraduate experience (Satisfied, Unsatisfied, Unsure). 
+\end{enumerate}
+Which of the above are all of the categorical variables?
+<<>>=
+enumerate(
+"Age, intended major, plans after graduating.",
+"Intended major, amount of student loans outstanding, plans after graduating, satisfaction with undergraduate experience.",
+"Plans after graduating and satisfaction with undergraduate experience.",
+"All variables other than age, height, and amount of student loans outstanding.", Correct=4)
+@
+
+
+\item The lengths of human pregnancies are approximately normally distributed with a mean of 268 days and a standard deviation of 16 days.
+What is the probability that a pregnancy lasts between 240 and 280 days?
+\\
+<<>>=
+horiz("0.7734", "0.7333", "0.9234", "0.8537", Correct=2)
+@
+
+\newpage
+
+\item In a study of heart disease in male federal employees,
+researchers classified 356 volunteers according to their
+socioeconomic status (SES) and their smoking habits.  The three
+categories of SES were High, Middle and Low.  Smokers were
+Current, Former, or Never.  The table below summarizes the data:
+\begin{center}
+\begin{tabular}{|c|ccc|c|}
+\hline
+ & \multicolumn{3}{c|}{SES} & \\
+Smoking &
+High &
+Middle &
+Low &
+Total \\
+\hline
+Current &
+51 &
+22 &
+43 &
+116 \\
+Former &
+92 &
+21 &
+28 &
+141 \\
+Never &
+68 &
+9 &
+22 &
+99 \\
+\hline
+Total &
+211 &
+52 &
+93 &
+356 \\
+\hline
+\end{tabular}
+\end{center}
+Among Current smokers, approximately what percentage have High status?\\
+<<>>=
+horiz("44\\%", "14\\%", "22\\%", "24\\%", "33\\%")
+@
+
+
+\item Stratified random sampling produces more accurate information than simple random sampling by: 
+<<>>=
+enumerate(Correct=1, KeepLast=1,
+"keeping similar individuals together in the same stratum.",
+"separating similar individuals into different strata.",
+"placing individuals underground into different layers of rock.",
+"none of the above.")
+@
+
+
+\item We wish to determine the correlation between the height (in inches) and weight (in pounds)
+of 21-year-old males. To do this we measure the height and weight of one hundred 21-year-old
+men.  The correlation $r$ would have units in
+<<>>=
+enumerate("inches.", "pounds.", "inches-pounds.", "no units. Correlation is a unitless quantity.", Correct=4)
+@
+
+\item
+There are three children in a room, ages 3, 4, and 5.  If a four-year-old
+child enters the room and joins the other children, which is a true
+statement?
+<<>>=
+enumerate(
+"The median age will change.",
+"The mean age will not change.",
+"The mean age and the standard deviation will increase.",
+"The five-number summary would indicate that the age of the new child is a suspected outlier.",
+Correct=2)
+@
+
+
+\item Which of the following is a true statement about the correlation coefficient $r$?\\
+<<>>=
+enumerate("It is a resistant measure of association.",
+"The correlation coefficient and the slope of a regression line have the same sign.",
+"If $r$ is the correlation between $x$ and $y$, then -$r$ is also the correlation between $y$ and $x$.",
+"All of the above.", Correct=2, KeepLast=1)
+@
+
+\item Which of the following statements about simple random sampling is correct?
+<<>>=
+enumerate(Correct=1, KeepLast=1,
+"Each member of the population has an equal chance of being chosen.",
+"The decision to include a subject in the sample depends only on the subject's own characteristics.",
+"Each possible sample of the given size has a different chance of being chosen.",
+"All of the above are correct statements.")
+@
+
+\newpage
+
+\item 
+Calculate the standard deviation of the following four observations: 
+\begin{center}
+12, 13, 15, 20
+\end{center}
+<<>>=
+x <- c(12,13,15,20)
+horiz( round( c( sd(x), var(x), sd(x)*sqrt(3/4), var(x)*3/4, 2.05), 2), Correct=1)
+@
+
+\item You want to purchase a suitcase for your upcoming Spring Break trip.
+Based on prices at five different stores, the average price reported for
+the suitcase that you want was \$100.  You went to three out of the five
+stores and observed that the prices for the suitcase were \$90, \$110,
+and \$150.  You are hoping to pay as little as possible for the suitcase.
+Should you check prices in the other two stores?
+<<>>=
+enumerate(
+"No, \\$90 is the lowest price among the five stores.",
+"No, each of the other two stores sells the suitcase for \\$150.",
+"Yes, the average price of the suitcase in the other two stores is \\$75.",
+"Yes, the price of the suitcase in one of the other two stores must be \\$50.", Correct=3)
+@
+
+\item The scores on a university examination are Normally distributed with a mean of 65 and a standard
+deviation of 10.9. How high must a student score to place in the top 5\% of all students taking that exam? \\
+<<>>=
+horiz( 87, 78, 83, 90, Correct=3 )
+@
+
+
+<<>>=
+set.seed(588)
+Weight <- rnorm(100, 3, 0.75)
+MPG <- 60 - 10*Weight + rnorm(100, 0, 3)
+r <- cor(Weight, MPG)
+@
+
+\newpage
+
+\item Consider the following scatter plot. The value of $r^2$ is \Sexpr{round(100*r^2)}\%.
+\begin{center}
+<<fig=true>>=
+plot(Weight, MPG)
+@
+\end{center}
+Which of the following is a plausible value for $r$?\\
+<<>>=
+horiz(round(c(r, -r, -sqrt(-r)), 2), "84\\%", Correct=1)
+@
+
+
+\item Much information about health care comes from patient records,
+but that source doesn't allow us to compare people who use health
+services with those who don't.  The Ministry of Health in Ontario
+wants to know whether the provincial health care system is achieving its
+goals in the province.  They conducted the Ontario Health Survey,
+which interviewed a random sample of 61,239 people who live in
+Ontario.  The population for this study is
+<<>>=
+enumerate(Correct=1,KeepLast=1,
+"Ontario residents.",
+"the 61,239 people interviewed.",
+"people who don't use health services.",
+"none of the above.")
+@
+
+\newpage
+
+\item In a chemistry course containing 10 students, the lowest point total was 
+50.  The point totals for the 10 students are given
+in the following stemplot:
+<<results=verbatim>>=
+cat(sep="\n", capture.output(stem(c(5.0, 5.3,6.4, 6.5, 6.8, 6.9,7.1, 7.2,8.7,9.6)*10))[-(1:3)])
+@
+Which of the following is a correct statement?
+<<>>=
+enumerate(
+"The distribution of point totals is right-skewed.",
+"The five-number summary corresponding to this stemplot is 50, 64, 68.5, 72, 96.",
+"The second-lowest point total for the term was 53.",
+"All of the above.", KeepLast=1, Correct=4)
+@
+
+\item Which of the following is a correct statement about histograms?
+<<>>=
+enumerate(
+"Vertical bars should be drawn separately from one another.",
+"The different class intervals may overlap.",
+"Histograms summarize distributions of quantitative variables.",
+"Histograms summarize distributions of categorical variables.", Correct=3)
+@
+
+
+\item If $X$ and $Y$ are categorical variables, the best way to determine
+if there is an association between them is to
+<<>>=
+enumerate(Correct=3, KeepLast=1,
+"draw a scatterplot of the $X$ and $Y$ values.",
+"calculate the correlation between $X$ and $Y$.",
+"compare their marginal and conditional distributions.",
+"none of the above.")
+@
+
+
+\item A researcher wishes to take a simple random sample of four students from a class of 8.  
+The names of all the students are:
+\begin{center}
+\begin{tabular}{rl}
+1. & Franklin \\ 
+2. & James \\
+3. & Wright \\
+4. & Edwards \\
+5. & Rust \\
+6. & Walsh \\
+7. & Gofberg \\
+8. & Williams \\
+\end{tabular}
+\end{center}
+Using the list of random digits: 
+\begin{center}
+41842 81868 71035 09001 43367 49497
+\end{center}
+start at the beginning and use single-digit labels to select
+the sample of students.
+<<>>=
+enumerate(Correct=2,
+"Franklin, James, Wright, and Edwards.",
+"Edwards, Franklin, Williams, and James.",
+"Rust, Walsh, Gofberg, and Williams.",
+"Wright, Rust, Walsh, and Gofberg.",
+"Edwards, Franklin, Williams and Edwards.")
+@
+
+\newpage
+
+\setcounter{myitem}{\theenumi}
+
+\end{enumerate}
+
+\vspace{4\baselineskip}
+
+{\bf Questions \ref{CarFirst} to \ref{CarLast} refer to the following information:  }
+
+A professor has two cars, Car A and Car B.  He fills each of them with gasoline once a week, always both cars on the same day.  Each time he fills the
+tanks, he calculates the fuel economy in L/100km for the tank of gas.  Results for 6 weeks are shown in the table below, with $x_i$ giving
+values for Car A, and $y_i$ giving values for Car B.  Various other values have been computed in the other columns of the table.
+
+\begin{center}
+\begin{tabular}{|c|rr|cc|rr|c|}
+\hline
+$i$ & $x_i$ & $y_i$ & $(x_i - \bar x)^2$ & $(y_i - \bar y)^2$ & $\frac{x_i - \bar x}{s_x}$ & $\frac{y_i - \bar y}{s_y}$ &  $\left(\frac{x_i - \bar x}{s_x}\right)\left(\frac{y_i - \bar y}{s_y}\right)$ \\
+\hline
+<<>>=
+set.seed(389)
+n <- 6
+i <- 1:n
+ x <- round(rnorm(n, 5), 1)
+ y <- round(rnorm(n, 8), 1)
+ sx <- round( (x - mean(x))^2, 2)
+ sy <- round( (y - mean(y))^2, 2)
+ sdx <- sqrt(sum(sx)/(n-1))
+ sdy <- sqrt(sum(sy)/(n-1))
+ stdx <- round( (x - mean(x))/sdx, 2)
+ stdy <- round( (y - mean(y))/sdy, 2)
+ prod <- round(stdx*stdy, 4)
+ table <- cbind(i, sprintf("%.1f", x), sprintf("%.1f", y), sprintf("%.2f", sx), 
+                            sprintf("%.2f", sy), sprintf("%.2f", stdx), sprintf("%.2f", stdy), sprintf("%.4f", prod))
+ 
+ lines <- apply(table, 1, function(x) paste(x, collapse=" & "))
+ cat(lines, sep=" \\\\\n")
+@
+\\
+\hline
+<<>>=
+totals <- paste("Total", sprintf("%.1f", sum(x)), sprintf("%.1f", sum(y)), sprintf("%.2f", sum(sx)), 
+                            sprintf("%.2f", sum(sy)), sprintf("%.2f", sum(stdx)), sprintf("%.2f", sum(stdy)), sprintf("%.4f", sum(prod)), sep="&")
+cat(totals, " \\\\\n")
+@
+\hline
+\end{tabular}
+\end{center}
+We are planning to use linear regression to predict $y$ from $x$.
+\begin{enumerate}
+\setcounter{enumi}{\themyitem}
+\addtolength{\itemsep}{4\baselineskip}
+
+\item \label{CarFirst}
+The correlation between $x$ and $y$ is\\
+<<>>=
+horiz( round( c( cor(x,y), cor(x,y)^2, sqrt(cor(x,y)), -cor(x,y), 0), 3), Correct=1)
+xnew <- round(mean(x), 1)
+@
+
+\item
+The fraction of variation in the $y$ values that is explained by the regression is\\
+<<>>=
+horiz( round( c( cor(x,y), cor(x,y)^2, sqrt(cor(x,y)), -cor(x,y), 0), 3), Correct=2)
+xnew <- round(mean(x), 1)
+@
+
+\item \label{CarLast}
+Using linear regression in the car data, what would we predict would be the fuel economy of Car B
+in a week when Car A had fuel economy of \Sexpr{xnew} L/100km?\\
+<<>>=
+b <- cor(x,y)*sum(sy)/sum(sx)
+a <- mean(y) - b*mean(x)
+ynew <- a + b*xnew
+horiz( round( c(ynew, b + a*xnew, mean(x) + (xnew - mean(y))*cor(x,y)*sd(x)/sd(y), xnew), 1), "Need more information", Correct=1)
+@
+
+\setcounter{myitem}{\theenumi}
+
+\end{enumerate}
+
+\newpage
+
+\vspace{4\baselineskip}
+
+{\bf Questions \ref{LizFirstA} and \ref{LizLastA} refer to the following information:  }
+
+Babies typically learn to crawl approximately six months after birth.
+It may take longer for babies to learn to crawl in the winter when
+they are often bundled in clothes that restrict their movement.  Thus,
+there may be an association between a baby's crawling age and the
+average temperature during the month they first try to crawl.
+
+In a study, for each month of the year, researchers sampled babies
+born during that month and measured the average age (in weeks) of
+first crawl. They also recorded the average temperature 6 months later
+(when babies usually start crawling).  For example, the babies born in
+January (on average) had their first crawl at age 29.84 weeks, and the
+average temperature 6 months after January (that's July) was 19 C.
+We would record this data point as (19 C, 29.84 weeks).
+This was done for all 12 months, so there are 12 data points.
+
+We want to investigate if the average age $y$ at which infants begin to
+crawl can be predicted from the average outdoor temperature $x$
+six months after birth when they are likely to begin crawling.  We
+decide to fit a least-squares regression line to the data with $x$ as
+the explanatory variable and $y$ as the response variable. We compute
+the following quantities:
+\begin{eqnarray*}
+r & = & -0.70   \\
+\bar x & = & 10.1  \\ 
+\bar y  & = & 31.77 \\ 
+s_x & = & 8.80  \\
+s_y  & = & 1.76 \\
+\end{eqnarray*}
+
+\begin{enumerate}
+\setcounter{enumi}{\themyitem}
+\addtolength{\itemsep}{4\baselineskip}
+
+\item \label{LizFirstA} The slope of the least-squares regression line is\\
+<<>>=
+horiz(Correct=1, KeepLast=1, -0.14, 0.88, -3.5, 2.20, "None of these.")
+@
+
+
+\item \label{LizLastA} The intercept of the least-squares regression line is \\
+<<>>=
+horiz(Correct=2, KeepLast=1,
+"0.", "33.18", "14.55", "30.36", "None of these.")
+@
+
+
+
+\setcounter{myitem}{\theenumi}
+
+\end{enumerate}
+
+\newpage
+
+\vspace{4\baselineskip}
+
+{\bf Questions \ref{PenaltyFirst} and \ref{PenaltyLast} refer to the following information:  }
+
+The data below categorize a sample of murder trials in the USA.  The counts
+are subdivided according to the 
+race of the convicted murderer (the defendant), the race of the
+victim, and whether the death penalty was the sentence.
+\begin{center}
+\begin{tabular}{|cc|cc|c|}
+ \hline
+Defendant  &	Death Penalty & Black Victim & White Victim	& Total \\
+\hline
+Black  & Yes & 6 & 11	& 17 \\   
+	    & No	& 97 & 52 & 149 \\
+	    & Total & 103 & 63 & 166 \\
+	    &         &       &      &   \\
+White  & Yes & 0 & 19    & 19\\
+            & No  & 9 & 132  & 141  \\
+            & Total & 9 & 151 & 160 \\
+ \hline
+\end{tabular}	
+\end{center}
+
+
+\begin{enumerate}
+\setcounter{enumi}{\themyitem}
+\addtolength{\itemsep}{4\baselineskip}
+
+\item \label{PenaltyFirst} In what proportion of these trials was the victim of the same race as the defendant?
+<<>>=
+total <- 6+11+97+52+19+9+132
+horiz( round( c((6+97+19+132)/total, (6+97)/(6+97+9), (6+19)/(6+11+19), 0), 2), "None of these", Correct=1, KeepLast=1)
+@
+
+\item \label{PenaltyLast} Which of the following statements is correct?
+<<>>=
+enumerate(
+"A lower percentage of white defendants than black defendants were sentenced to death overall.",
+"The percentage sentenced to death among white defendants with black victims was higher
+than the percentage sentenced to death among black defendants with black victims.",
+"The percentage sentenced to death among white defendants with white victims was
+higher than the percentage sentenced to death among black defendants with white victims.", 
+"All of the above.",
+"None of the above.", KeepLast=2, Correct=5)
+@
+
+\end{enumerate}
+
+\label{lastpage}
+
+<<>>=
+Conclusion()
+@
+
+\end{document}

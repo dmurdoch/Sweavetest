@@ -2,6 +2,8 @@
 \usepackage{Sweave}
 \SweaveOpts{keep.source=TRUE,width=5,height=4,echo=FALSE,results=tex,concordance=TRUE,prefix.string=figs/}
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 \setkeys{Gin}{width=4in}
 %\usepackage{fullpage}
 \renewcommand{\labelenumii}{(\Alph{enumii})}

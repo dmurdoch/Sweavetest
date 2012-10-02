@@ -47,7 +47,6 @@ QReport <- function() {
   
   fignum(fignum() + 1)
   
-  cat("\\begin{figure}[h]")
   dirname <- paste0(TestName(),"Figs")
   dir.create(dirname, showWarnings=FALSE)
   filename <- file.path(dirname, paste0("fig", fignum(), ".pdf"))
@@ -67,7 +66,6 @@ QReport <- function() {
   dev.off()
   cat("\\hspace{.08in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
-  cat("\\end{figure}")
   cat("\\newpage")    
   invisible()
 }

@@ -59,7 +59,7 @@ QReport <- function() {
   
   fignum(fignum() + 1)
   
-  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
+  filename <- file.path(dirname, paste0("fig", fignum(), ".pdf"))
   
   pdf(filename, width=8, height=4)
   EmpiricalProbabilityPlot(GradedTests(), QuestionCounter())

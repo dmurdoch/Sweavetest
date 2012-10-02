@@ -1,4 +1,4 @@
-Initialization <- function(name, version = Version()){
+Initialization <- function(name, version = Version(), scanex){
 
   Version(version)
   
@@ -34,6 +34,8 @@ Initialization <- function(name, version = Version()){
     randomize(FALSE)
     itemlabels(paste0("(", c(1:26), ")"))
     Index(read.csv(paste0(TestName(), "Index.csv")))
+    if (is.character(scanex))
+      scanex <- readScanex(scanex)
     GradedTests(grades(scanex))
     testversion(6)
   }

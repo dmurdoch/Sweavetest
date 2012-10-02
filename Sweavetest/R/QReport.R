@@ -14,7 +14,7 @@ QReport <- function() {
     
   cat("\\ \\\\")
   
-  AnswerCounts <- AnswerCountMatrix[QuestionCounter(),]
+  AnswerCounts <- AnswerCountMatrix[QuestionCounter(),paste0("A", 1:5)]
   drop <- which(is.na(AnswerCounts))
   if(length(drop) > 0){
     AnswerCounts <- AnswerCounts[-drop]
@@ -36,7 +36,9 @@ QReport <- function() {
   cat("\\begin{table}[h]")
   cat("\\begin{subtable}[h]{.5\\linewidth}")
   cat("\\hspace{.2in}")
-  latex(tabular(Heading("Option")*Options~Heading()*Format(digits=2)*AnswerCounts*Frequency+Heading()*Format(digits=2)*Resp*Percentage+Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
+  latex(tabular(Heading("Option")*Options ~ Heading()*Format(digits=2)*AnswerCounts*Frequency
+                                           +Heading()*Format(digits=2)*Resp*Percentage
+                                           +Heading()*Format(digits=2)*Dis*Discrimination, data=CountFrame))
   cat("\\end{subtable}")
   cat("\\begin{subtable}[h]{.5\\linewidth}")
   cat("\\centering")

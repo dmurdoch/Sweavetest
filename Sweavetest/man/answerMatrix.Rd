@@ -28,5 +28,5 @@ Used by \code{\link{answerCorrelations}} and \code{\link{answerPlots}}.
 }
 \examples{
 student <- c("ABCDE", "ABCDE", "ABDC", "BADCA")
-answerMatrix(student)  
+answerMatrix(student, 1:5)  
 }

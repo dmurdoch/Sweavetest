@@ -32,12 +32,16 @@ Adam Rahman
 DifficultyRating(), ItemDiscriminator(), PointBiserial()
 }
 \examples{
-scanex <- readScanex("sample.dat")
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
 GradedTests <- grades(scanex)
 DR <- DifficultyRating(GradedTests, 1)
 ID <- ItemDiscriminator(GradedTests, 1)
 PB <- PointBiserial(GradedTests, 1)
+
+Warnings(DR,ID,PB)
+
+DR <- 0.1
 
 Warnings(DR,ID,PB)
 

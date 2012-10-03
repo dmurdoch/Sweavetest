@@ -7,14 +7,12 @@ QReport <- function() {
   DR <- DifficultyRating(GradedTests(), QuestionCounter())
   ID <- ItemDiscriminator(GradedTests(), QuestionCounter())
   PB <- PointBiserial(GradedTests(), QuestionCounter())
-
-  if(testversion() > 4){
-    testversion(1)
-  }
     
   cat("\\ \\\\")
   
-  AnswerCounts <- as.numeric(AnswerCountMatrix[QuestionCounter(),paste0("A", 1:5)])
+  AnswerCounts <- AnswerCountMatrix[AnswerCountMatrix$Question==QuestionCounter(),
+                                    paste0("A", 1:5)]
+  AnswerCounts <- as.numeric(apply(AnswerCounts, 2, sum))
   drop <- which(is.na(AnswerCounts))
   if(length(drop) > 0){
     AnswerCounts <- AnswerCounts[-drop]

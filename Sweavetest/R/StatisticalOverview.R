@@ -11,16 +11,16 @@ if(Version() == "Report"){
   
   numQ <- max(nchar(gradedTests$Correct))
   
-  cat("\\begin{center}")
-  cat("\\Huge\\bf EXAM REPORT")
-  cat("\\end{center}")
-  cat("\\newpage")
+  cat("\\begin{center}\n")
+  cat("\\Huge\\bf EXAM REPORT\n")
+  cat("\\end{center}\n")
+  cat("\\newpage\n")
   
-  cat("\\begin{center}")
-  cat("{\\LARGE\\bf Statistical Overview}")
-  cat("\\end{center}")
-  cat("\\ \\\\")
-  cat("\\vspace{.2 in}")
+  cat("\\begin{center}\n")
+  cat("{\\LARGE\\bf Statistical Overview}\n")
+  cat("\\end{center}\n")
+  cat("\\ \\\\\n")
+  cat("\\vspace{.2 in}\n")
 
   ###Produce Descriptive Statistics Table###
   grades <- gradedTests$Grade
@@ -38,35 +38,35 @@ if(Version() == "Report"){
 
   ###Produce Student Count Table and Test Means Tab;e###
 
-  cat("\\begin{table}[h]")
-  cat("\\centering")
-  cat("\\caption{Descriptive Statistics}")
+  cat("\\begin{table}[h]\n")
+  cat("\\centering\n")
+  cat("\\caption{Descriptive Statistics}\n")
   latex(tabular((Factor(Section)+1)*Heading()*Percentage ~ Mean + StdDev + Max + Quantile75
                                                        + Median + Quantile25 + Min, 
                  data=gradedTests), digits=2)
-  cat("\\end{table}")
+  cat("\\end{table}\n")
 
-  cat("\\ \\\\")
+  cat("\\ \\\\\n")
 
-  cat("\\begin{table}[h]")
-  cat("\\caption{Student Counts and Test Means}")
-  cat("\\begin{subtable}[h]{.5\\linewidth}")
-  cat("\\centering")
-  cat("\\caption{Student Counts}")
+  cat("\\begin{table}[h]\n")
+  cat("\\caption{Student Counts and Test Means}\n")
+  cat("\\begin{subtable}[h]{.5\\linewidth}\n")
+  cat("\\centering\n")
+  cat("\\caption{Student Counts}\n")
   latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
               ~ (Heading(Section)*factor(Section)+1), data=gradedTests))
-  cat("\\end{subtable}")
-  cat("\\begin{subtable}[h]{.5\\linewidth}")
-  cat("\\centering")
-  cat("\\caption{Test Means}")
+  cat("\\end{subtable}\n")
+  cat("\\begin{subtable}[h]{.5\\linewidth}\n")
+  cat("\\centering\n")
+  cat("\\caption{Test Means}\n")
   latex(tabular((Factor(ExamCode, name="Exam Code")+1) 
               ~ (Factor(Section)+1)*Heading()*Heading()*Grade
               *pct*Format(digits=3), data=gradedTests))
-  cat("\\end{subtable}")
-  cat("\\end{table}")
+  cat("\\end{subtable}\n")
+  cat("\\end{table}\n")
 
-  cat("\\ \\\\")
-  cat("\\ \\\\")
+  cat("\\ \\\\\n")
+  cat("\\ \\\\\n")
 
   ###Produce Reliability Statistics###
   Values <- function(x){x}
@@ -75,24 +75,24 @@ if(Version() == "Report"){
   Stats <- c(KR,FD)
   StatFrame <- data.frame(Names,Stats)
 
-  cat("\\begin{table}[h]")
-  cat("\\centering")
-  cat("\\caption{Test Reliability}")
+  cat("\\begin{table}[h]\n")
+  cat("\\centering\n")
+  cat("\\caption{Test Reliability}\n")
   latex(tabular(Factor(Names, name="Reliability Statistics")
                 ~Heading()*Format(digits=2)*Stats*Values, data=StatFrame))
-  cat("\\end{table}")
+  cat("\\end{table}\n")
 
-  cat("\\ \\\\")
-  cat("\\ \\\\")
+  cat("\\ \\\\\n")
+  cat("\\ \\\\\n")
 
   if(KR < .7 | FD < .9){
-    cat("\\ \\\\")
-    cat("{\\bf Warning:}")
-    cat("\\ \\\\")
-    cat("\\ \\\\")
-    cat("The reliability of this test is poor. Please see the appendix for suggestions on improving test reliability.")
-    cat("\\ \\\\")
-    cat("\\ \\\\")
+    cat("\\ \\\\\n")
+    cat("{\\bf Warning:}\n")
+    cat("\\ \\\\\n")
+    cat("\\ \\\\\n")
+    cat("The reliability of this test is poor. Please see the appendix for suggestions on improving test reliability.\n")
+    cat("\\ \\\\\n")
+    cat("\\ \\\\\n")
   }
 
   ###Produce Histogram of Percentages Achieved by Student & Answer Correlation Plot###
@@ -118,13 +118,13 @@ if(Version() == "Report"){
   dev.off()            
   cat(paste("\\includegraphics[width=3.25in]{", filename, "}\n", sep=""))
 
-  cat("\\newpage")
-  cat("\\begin{center}")
-  cat("{\\large\\bf Additional Exam Information and Instructions}")
-  cat("\\ \\\\")
-  cat("{\\small As Provided by the Instructor}")
-  cat("\\end{center}")
-  cat("\\ \\\\")
-  cat("\\vspace{.5in}")
+  cat("\\newpage\n")
+  cat("\\begin{center}\n")
+  cat("{\\large\\bf Additional Exam Information and Instructions}\n")
+  cat("\\ \\\\\n")
+  cat("{\\small As Provided by the Instructor}\n")
+  cat("\\end{center}\n")
+  cat("\\ \\\\\n")
+  cat("\\vspace{.5in}\n")
   }
 }

@@ -5,13 +5,16 @@ Generate an answer key for a test.
 }
 \description{
 Each of the multiple choice functions appends the correct answer
-to the global \code{Answers} variable; this function displays the
+to the global \code{\link{Answers}} variable; this function displays the
 correct answers in a table.
 }
 \usage{
-answerkey(symbols = letters, group=5, perline=6)
+answerkey(answers = Answers(), symbols = letters, group=5, perline=6)
 }
 \arguments{
+  \item{answers}{
+The answers for the current exam code in a numeric vector.
+}
   \item{symbols}{
 What symbols to use to display the answers.
 }

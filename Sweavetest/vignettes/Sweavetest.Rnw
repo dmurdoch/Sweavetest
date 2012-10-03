@@ -944,24 +944,23 @@ Master <- c(1:30)
 Order1 <- c(15:30, 1:14)
 Order2 <- c(20:30,1:10, 15:19,11:14)
 Order3 <- c(30:1)
-Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
+Orders <- data.frame("170"=Master,"738"=Order1,"840"=Order2,"967"=Order3, check.names=FALSE)
 
-NewScanex <- Unscramble(scanex,ExamCodes,Orders)
+NewScanex <- Unscramble(scanex,Orders)
 
 \end{verbatim}
 
 we can see below what the function does by comparing the original Scantron file to the new scantron file:
 
 <<>>=
-scanex <- readScanex(Sample)
 ExamCodes <- c(170,738,840,967)
-Master <- c(30, 1:29)
-Order1 <- c(30, 1:29)
-Order2 <- c(30, 1:29)
-Order3 <- c(30, 1:29)
-Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
+Master <- c(1:30)
+Order1 <- c(15:30, 1:14)
+Order2 <- c(20:30,1:10, 15:19,11:14)
+Order3 <- c(30:1)
+Orders <- data.frame("170"=Master,"738"=Order1,"840"=Order2,"967"=Order3, check.names=FALSE)
 
-NewScanex <- Unscramble(scanex,ExamCodes,Orders)
+NewScanex <- Unscramble(scanex,Orders)
 @
 
 First 6 student answers of old scanex

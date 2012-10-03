@@ -30,8 +30,8 @@ grades()
 
 scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
-GradedTests <- grades(scanex, correct=weights) 
+GradedTests(grades(scanex))
 
-PointBiserial(GradedTests)
+PointBiserial(GradedTests())
 }
 

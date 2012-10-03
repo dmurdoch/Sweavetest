@@ -26,10 +26,10 @@ Adam Rahman
 grades()
 }
 \examples{
-setwd("C:/Users/Adam Rahman/Desktop/Summer Project")
-scanex <- readScanex("sample.dat")
 
-GradedTests <- grades(scanex, correct=weights) 
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
-KR20(GradedTests)
+GradedTests(grades(scanex)) 
+
+KR20(GradedTests())
 }

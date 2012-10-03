@@ -40,9 +40,10 @@ Adam Rahman
 grades(), KR20(), FergusonsDelta()
 }
 \examples{
-scanex <- readScanex("sample.dat")
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
 GradedTests(grades(scanex))
+Version("Report")
 
 StatisticalOverview()
 }

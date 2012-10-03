@@ -25,13 +25,14 @@ Adam Rahman
 }
 
 \seealso{
-\code{\link{grades}}, \code{\link{ItemDiscrimination}}
+\code{\link{grades}}, \code{\link{ItemDiscriminator}}
 }
 \examples{
 
 scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
 GradedTests(grades(scanex))
+Index(read.csv(system.file("sample/TestIndex.csv", package="Sweavetest")))
 
 #Analyse the first question
 

@@ -26,10 +26,9 @@ grades()
 }
 \examples{
 
-setwd("C:/Users/SS1024")
-scanex <- readScanex("sample.dat")
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
-GradedTests <- grades(scanex) 
+GradedTests(grades(scanex))
 
-FergusonsDelta(GradedTests)
+FergusonsDelta(GradedTests())
 }

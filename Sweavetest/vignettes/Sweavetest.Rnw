@@ -946,7 +946,7 @@ Order2 <- c(20:30,1:10, 15:19,11:14)
 Order3 <- c(30:1)
 Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
 
-NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
+NewScanex <- Unscramble(scanex,ExamCodes,Orders)
 
 \end{verbatim}
 
@@ -961,7 +961,7 @@ Order2 <- c(30, 1:29)
 Order3 <- c(30, 1:29)
 Orders <- matrix(c(Master,Order1,Order2,Order3), nrow=4, ncol=30, byrow=TRUE)
 
-NewScanex <- Unscramble(scanex,ExamCodes,Orders,Scrambled = TRUE)
+NewScanex <- Unscramble(scanex,ExamCodes,Orders)
 @
 
 First 6 student answers of old scanex
@@ -990,7 +990,6 @@ library(Sweavetest)
 library(tables)
 setwd("C:/Users/Sample")
 scanex <- readScanex("sample.dat")
-Scantron <- Unscramble(scanex,Scrambled = FALSE)
 \end{verbatim}
 
 Most of these variables can be left untouched. The user must only make three modifications

@@ -1,15 +1,15 @@
 StatisticalOverview <- function(){
 
 if(Version() == "Report"){
-  GradedTests <- GradedTests()
+  gradedTests <- GradedTests()
   
-  KR <- KR20(GradedTests)
-  FD <- FergusonsDelta(GradedTests)
-  DR <- DifficultyRating(GradedTests)
-  ID <- ItemDiscriminator(GradedTests)
-  PB <- PointBiserial(GradedTests)
+  KR <- KR20(gradedTests)
+  FD <- FergusonsDelta(gradedTests)
+  DR <- DifficultyRating(gradedTests)
+  ID <- ItemDiscriminator(gradedTests)
+  PB <- PointBiserial(gradedTests)
   
-  weight <- max(seq_len(max(nchar(GradedTests$Correct))))
+  numQ <- max(nchar(gradedTests$Correct))
   
   cat("\\begin{center}")
   cat("\\Huge\\bf EXAM REPORT")
@@ -23,8 +23,8 @@ if(Version() == "Report"){
   cat("\\vspace{.2 in}")
 
   ###Produce Descriptive Statistics Table###
-  grades <- GradedTests$Grade
-  Percentage <- grades/weight
+  grades <- gradedTests$Grade
+  Percentage <- grades/numQ
 
   Mean <- function(x) mean(x)
   Quantile25 <- function(x) quantile(x, .25)
@@ -34,16 +34,16 @@ if(Version() == "Report"){
   Min <- function(x) min(x)
   StdDev <- function(x) sqrt(var(x)) 
 
-  pct <- function(x) 100*mean(x)/weight
+  pct <- function(x) 100*mean(x)/numQ
 
   ###Produce Student Count Table and Test Means Tab;e###
 
   cat("\\begin{table}[h]")
   cat("\\centering")
   cat("\\caption{Descriptive Statistics}")
-  latex(tabular((Heading(Section)*factor(Section)+1) ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())*Percentage*StdDev
-              +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75+(Heading())*Percentage*Median
-              +(Heading())*Percentage*Quantile25+(Heading())*Percentage*Min), data=GradedTests))
+  latex(tabular((Factor(Section)+1)*Heading()*Percentage ~ Mean + StdDev + Max + Quantile75
+                                                       + Median + Quantile25 + Min, 
+                 data=gradedTests), digits=2)
   cat("\\end{table}")
 
   cat("\\ \\\\")
@@ -54,14 +54,14 @@ if(Version() == "Report"){
   cat("\\centering")
   cat("\\caption{Student Counts}")
   latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1), data=GradedTests))
+              ~ (Heading(Section)*factor(Section)+1), data=gradedTests))
   cat("\\end{subtable}")
   cat("\\begin{subtable}[h]{.5\\linewidth}")
   cat("\\centering")
   cat("\\caption{Test Means}")
-  latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
-              *pct*Format(digits=3), data=GradedTests))
+  latex(tabular((Factor(ExamCode, name="Exam Code")+1) 
+              ~ (Factor(Section)+1)*Heading()*Heading()*Grade
+              *pct*Format(digits=3), data=gradedTests))
   cat("\\end{subtable}")
   cat("\\end{table}")
 
@@ -78,7 +78,8 @@ if(Version() == "Report"){
   cat("\\begin{table}[h]")
   cat("\\centering")
   cat("\\caption{Test Reliability}")
-  latex(tabular(Heading("Reliability Statistics")*Names~Heading()*Format(digits=2)*Stats*Values, data=StatFrame))
+  latex(tabular(Factor(Names, name="Reliability Statistics")
+                ~Heading()*Format(digits=2)*Stats*Values, data=StatFrame))
   cat("\\end{table}")
 
   cat("\\ \\\\")
@@ -95,12 +96,13 @@ if(Version() == "Report"){
   }
 
   ###Produce Histogram of Percentages Achieved by Student & Answer Correlation Plot###
-  Percentage <- 100*GradedTests$Grade/weight
+  Percentage <- 100*gradedTests$Grade/numQ
 
   fignum(fignum() + 1)
 
-  dir.create("Sweavetest", showWarnings=FALSE)
-  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
+  dirname <- paste0(TestName(), "Figs")
+  dir.create(dirname, showWarnings=FALSE)
+  filename <- file.path(dirname, paste("fig", fignum(), ".pdf", sep=""))
 
   pdf(filename, width=8, height=4)
   GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", breaks = c(0,10,20,30,40,50,60,70,80,90,100))
@@ -109,10 +111,10 @@ if(Version() == "Report"){
 
   fignum(fignum() + 1)
 
-  filename <- file.path( "Sweavetest", paste("fig", fignum(), ".pdf", sep=""))
+  filename <- file.path( dirname, paste("fig", fignum(), ".pdf", sep=""))
 
   pdf(filename, width=8, height=4)
-  answerCorrelations(GradedTests$Answers, GradedTests$Correct)
+  answerCorrelations(gradedTests)
   dev.off()            
   cat(paste("\\includegraphics[width=3.25in]{", filename, "}\n", sep=""))
 
@@ -124,8 +126,5 @@ if(Version() == "Report"){
   cat("\\end{center}")
   cat("\\ \\\\")
   cat("\\vspace{.5in}")
-
-  testversion(5)
-  
   }
 }

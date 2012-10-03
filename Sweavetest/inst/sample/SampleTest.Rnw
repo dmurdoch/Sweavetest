@@ -44,6 +44,11 @@ Saturday, October 15, 2011, 10:00 AM - noon \\
 \ \\
 \fbox{\bf EXAM CODE \Sexpr{versioncode()}}
 \end{center}
+
+<<>>=
+StatisticalOverview()
+@
+
 \vspace{0.5in}
 
 INSTRUCTIONS:

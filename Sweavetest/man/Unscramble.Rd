@@ -9,36 +9,39 @@ questions from 1 to the last question, and will export a new updated scanex vari
 for use in further analysis.
 }
 \usage{
-Unscramble(scanex, ExamCodes, Orders, Scrambled = FALSE)
+Unscramble(scanex, Orders)
 }
 
 \arguments{
   \item{scanex}{
 The original Scantron file in an unmodified format
 }
-  \item{ExamCodes}{
-A vector containing the Exam Codes of the test.
-}
   \item{Orders}{
-A matrix containing the order of the questions. These must be in correspondence with the Exam Codes answered above.
+A matrix or dataframe recording the order of the questions for each exam code.  See Details.
 }
-  \item{Scrambled}{
-Scrambled is a indicator variable that will tell the function to execute the unscrambling process based on the specification of the user, or to simply return the unmodified scanex.
 }
+\details{
+The \code{Orders} matrix contains one column per exam code, giving the question numbers used
+in this exam from the \dQuote{master} exam.  (Often the first exam code is taken to be the
+master, in which case the first column will contain \code{1:n} for \code{n} questions; the
+\code{i}th row of another column will contain the corresponding question on the master.)
 }
 \value{
-This function returns the Scantron file back to the user, but with answers in the order specified by the instructor.
+This function returns the Scantron file back to the user, but with answers in the order specified.
 }
 \author{
-Adam Rahman
+Adam Rahman and Duncan Murdoch
 }
 
 \examples{
 
-scanex <- readScanex(system.file("samples/sample.dat", package="Sweavetest"))
-ExamCodes <- c(170,640,880, 990)
-Orders <- matrix(c(1,2,3,4,2,3,4,1,3,4,1,2,4,1,2,3), nrow=4,ncol=4, byrow=TRUE)
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
+scanex <- scanex[1:8,]
+scanex
 
-Unscramble(scanex, ExamCodes, Orders, Scrambled = TRUE)
+Orders <- data.frame("170"=c(1,2,3,4), "738"=c(2,3,4,1), "840"=c(3,4,1,2), "967"=c(4,1,2,3),
+                     check.names = FALSE)
+
+Unscramble(scanex, Orders)
 
 }

@@ -1,48 +1,18 @@
-Unscramble <- function(scanex, ExamCodes = unique(scanex$ExamCode), Orders){
+Unscramble <- function(scanex, Orders){
   
-  OrderMatrix <- cbind(ExamCodes, Orders)
-  GradedTests <- grades(scanex)
-  qs <- seq_len(max(nchar(GradedTests$Correct[1])))
-  Keys <- which(scanex$"Student ID" == "999999999")
-  StudentScanex <- scanex[-Keys,]
-  CorrectScanex <- scanex[Keys,]
-  StudentAnswers <- answerMatrix(StudentScanex$Answers, qs)
-  CorrectAnswers <- answerMatrix(CorrectScanex$Answers, qs)
-  RightAnswerOrder <- rep(0,max(qs))
-  RightCorrectOrder <- rep(0, max(qs))
-  CorrectedScanex <- c()
+  ExamCodes <- colnames(Orders)
   
-  for(i in ExamCodes){
-    RightStudentAnswers <- StudentAnswers[which(StudentScanex$ExamCode == i),]
-    RightCorrectAnswers <- CorrectAnswers[which(CorrectScanex$ExamCode == i),]
-    WhichExam <- which(OrderMatrix[,1] == i)
-    RightExamOrder <- OrderMatrix[WhichExam,]
-    RightExamOrder <- RightExamOrder[-1]
-    RightAnswerOrder <- matrix(rep(0, max(qs)*nrow(RightStudentAnswers)), ncol=max(qs), nrow=nrow(RightStudentAnswers))
-    
-  for(j in 1:length(RightExamOrder)){
-      RightAnswerOrder[,j] <- RightStudentAnswers[,which(RightExamOrder == j)]
-      RightCorrectOrder[j] <- RightCorrectAnswers[which(RightExamOrder == j)]
-    }
-    
-    CorrectedScanex <- c()
-    
-    for(k in 1:nrow(RightAnswerOrder)){
-      ProperAnswers <- paste(RightAnswerOrder[k,], collapse="")
-      CorrectedScanex <- rbind(CorrectedScanex,ProperAnswers)
-    }
-    RightCorrectedOrder <- paste(RightCorrectOrder, collapse="")
-    row.names(CorrectedScanex) <- NULL
-    WhichStudentScanex <- which(StudentScanex$ExamCode == i)
-    WhichCorrectScanex <- which(CorrectScanex$ExamCode == i)
-    StudentScanex$Answers[WhichStudentScanex] <- CorrectedScanex
-    CorrectScanex$Answers[WhichCorrectScanex] <- RightCorrectedOrder
-    
-  }
+  qs <- seq_along(Orders[,1])
+  Answers <- answerMatrix(scanex$Answers, qs)
   
-  NewAnswers <- rbind(CorrectScanex,StudentScanex)
-  NewAnswers <- NewAnswers[,-c(1:5)]
-  scanex$Answers <- NewAnswers
+  for(i in seq_along(ExamCodes)){
+    ThisCode <- which(scanex$ExamCode == ExamCodes[i])
+    subset <- Answers[ThisCode,,drop=FALSE]
+    ThisOrder <- Orders[,i]
+    Answers[ThisCode,] <- subset[,ThisOrder]
+  }  
   
-  return(scanex)
+  scanex$Answers <- apply(Answers, 1, function(row) paste(row, collapse=""))
+  
+  scanex
 }

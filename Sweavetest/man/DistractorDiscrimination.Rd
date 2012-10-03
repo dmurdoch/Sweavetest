@@ -25,18 +25,17 @@ Adam Rahman
 }
 
 \seealso{
-grades(), ItemDiscrimination()
+\code{\link{grades}}, \code{\link{ItemDiscrimination}}
 }
 \examples{
 
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
-scanex <- readScanex("sample.dat")
-GradedTests <- grades(scanex, correct=weights)
+GradedTests(grades(scanex))
 
 #Analyse the first question
-QuestionCounter <- 1
 
-DistractorDiscrimination(GradedTests,QuestionCounter)
+DistractorDiscrimination(GradedTests(),1)
 
 
 }

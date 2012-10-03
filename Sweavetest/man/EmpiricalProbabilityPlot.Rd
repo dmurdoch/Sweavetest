@@ -28,11 +28,11 @@ Adam Rahman
 grades()
 }
 \examples{
-setwd("C:/Users/Fake Test")
-scanex <- readScanex("fakescans2.dat")
 
-GradedTests <- grades(scanex) 
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
-EmpiricalProbabilityPlot(GradedTests)
+GradedTests(grades(scanex)) 
+
+EmpiricalProbabilityPlot(GradedTests(), 2)
 
 }

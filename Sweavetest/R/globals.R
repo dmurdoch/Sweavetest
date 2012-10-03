@@ -15,7 +15,7 @@
 #  GradedTests -- the dataframe of test results
 
 Version <- function(x = "Student"){
-  if (!missing(x)) {
+  if (!missing(x) || !exists("Version", .STEnv)) {
     x <- match.arg(x, c("Teacher",  "Student", "Report", "Low Level"))
     .STEnv$Version <- x
     return(invisible(x))
@@ -24,15 +24,7 @@ Version <- function(x = "Student"){
 }
 
 testversion <- function(x = 1){
-  if (!missing(x)) {
-    .STEnv$testversion <- x
-    return(invisible(x))
-  }
-  .STEnv$testversion
-}
-
-testversion <- function(x = 1){
-  if (!missing(x)) {
+  if (!missing(x) || !exists("testversion", .STEnv)) {
     .STEnv$testversion <- x
     return(invisible(x))
   }
@@ -40,39 +32,39 @@ testversion <- function(x = 1){
 }
 
 QuestionCounter <- function(x = 0){
-  if (!missing(x)) {
+  if (!missing(x) || !exists("QuestionCounter", .STEnv)) {
     .STEnv$QuestionCounter <- x
     return(invisible(x))
   }
   .STEnv$QuestionCounter
 }
 
-correct <- function(x = c()){
-  if (!missing(x)) {
+correct <- function(x = NULL){
+  if (!missing(x) || !exists("correct", .STEnv)) {
     .STEnv$correct <- x
     return(invisible(x))
   }
   .STEnv$correct
 }
 
-Answers <- function(x = c()){
-  if (!missing(x)) {
+Answers <- function(x = NULL){
+  if (!missing(x) || !exists("Answers", .STEnv)) {
     .STEnv$Answers <- x
     return(invisible(x))
   }
   .STEnv$Answers
 }
 
-QuestionIndex <- function(x = c()){
-  if (!missing(x)) {
+QuestionIndex <- function(x = NULL){
+  if (!missing(x) || !exists("QuestionIndex", .STEnv)) {
     .STEnv$QuestionIndex <- x
     return(invisible(x))
   }
   .STEnv$QuestionIndex
 }
 
-Index <- function(x = c()){
-  if (!missing(x)) {
+Index <- function(x = NULL){
+  if (!missing(x) || !exists("Index", .STEnv)) {
     .STEnv$Index <- x
     return(invisible(x))
   }
@@ -80,7 +72,7 @@ Index <- function(x = c()){
 }
 
 fignum <- function(x = 0){
-  if (!missing(x)) {
+  if (!missing(x) || !exists("fignum", .STEnv)) {
     .STEnv$fignum <- x
     return(invisible(x))
   }
@@ -88,7 +80,7 @@ fignum <- function(x = 0){
 }
 
 randomize <- function(x = TRUE) {
-  if (!missing(x)) {
+  if (!missing(x) || !exists("randomize", .STEnv)) {
     .STEnv$randomize <- x
     return(invisible(x))
   }
@@ -96,15 +88,15 @@ randomize <- function(x = TRUE) {
 }
 
 CheckDups <- function(x = TRUE) {
-  if (!missing(x)) {
+  if (!missing(x) || !exists("CheckDups", .STEnv)) {
     .STEnv$CheckDups <- x
     return(invisible(x))
   }
   .STEnv$CheckDups
 }
 
-itemlabels <- function(x = TRUE) {
-  if (!missing(x)) {
+itemlabels <- function(x = paste0("(", LETTERS[1:5], ")")) {
+  if (!missing(x) || !exists("itemlabels", .STEnv)) {
     .STEnv$itemlabels <- x
     return(invisible(x))
   }
@@ -112,7 +104,7 @@ itemlabels <- function(x = TRUE) {
 }
 
 GradedTests <- function(x = NULL) {
-  if (!missing(x)) {
+  if (!missing(x) || !exists("GradedTests", .STEnv)) {
     .STEnv$GradedTests <- x
     return(invisible(x))
   }
@@ -120,7 +112,7 @@ GradedTests <- function(x = NULL) {
 }
 
 TestName <- function(x = "TestData") {
-  if (!missing(x)) {
+  if (!missing(x) || !exists("TestName", .STEnv)) {
     .STEnv$TestName <- x
     return(invisible(x))
   }

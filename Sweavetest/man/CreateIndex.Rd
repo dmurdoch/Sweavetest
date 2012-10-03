@@ -23,7 +23,3 @@ Adam Rahman
 \note{
 This function works only if a .dat file has been created during the test creation process from the .Rnw file. The default name for this file will be IndexTable.dat. Everything else is handled internally by this function.
 }
-
-\examples{
-CreateIndex()
-}

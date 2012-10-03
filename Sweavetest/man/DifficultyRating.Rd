@@ -29,8 +29,7 @@ The function grades() is used as input to this function. It can be found in the 
 }
 \examples{
 
-setwd("C:/Users/SS1024")
-scanex <- readScanex("sample.dat")
+scanex <- readScanex(system.file("sample/sample.dat", package="Sweavetest"))
 
 GradedTests <- grades(scanex) 
 

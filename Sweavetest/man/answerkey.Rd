@@ -1,6 +1,5 @@
 \name{answerkey}
 \alias{answerkey}
-\alias{Answers}
 \title{
 Generate an answer key for a test.
 }

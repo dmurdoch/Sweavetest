@@ -89,15 +89,19 @@ This paper finishes with a short discussion of plans for changes to \pkg{Sweavet
 \section{Preparing a Test}
 \label{sec:preparing}
 
-\pkg{Sweavetest} was originally designed to support writing multiple choice tests in Sweave
-and \LaTeX.  There are functions that output introductory material at the start of the
-test, as well as functions that format and randomize the answers.  These functions also
-record the results of the randomization so that an answer key can be produced automatically
-at the end.
+\pkg{Sweavetest} was originally designed to support writing multiple
+choice tests in Sweave and \LaTeX, and that is still its main purpose.
+There are functions that output introductory material at the start of
+the test, as well as functions that format and randomize the answers.
+These functions also record the results of the randomization so that
+an answer key can be produced automatically at the end.
 
 Using the test preparation functions requires knowledge of Sweave and \LaTeX.  Instructors
 who want to use other document preparation systems to produce the test can skip this section,
 but some of the work done here automatically will have to be done manually later.
+
+A complete test prepared using \pkg{Sweavetest} is included in the 
+\texttt{sample} directory in the \texttt{SampleTest.Rnw} file.
 
 \subsection{Writing questions}
 \label{sec:questions}
@@ -126,12 +130,13 @@ The supplied functions do the work of formatting the answers.   For example,
 The \verb!enumerate()! function produces
 an enumeration environment in \LaTeX.  The answers are displayed in a random order.  Earlier in the text, we've used
 \begin{verbatim}
- \newcommand{\Correct}{*}
  \renewcommand{\labelenumii}{(\Alph{enumii})}
 \end{verbatim}
-so that the correct answer is marked with an asterisk, and the answers are labelled with 
-capital letters.  (We wouldn't label the correct answer on the version of the test we give to 
-students!)  We also used \verb!\SweaveOpts{echo=FALSE,results=tex}! earlier to set the defaults
+so that the the answers are labelled with 
+capital letters.  (We have also initialized the test to mark the correct answer
+with an asterisk. We wouldn't do this on the version of the test we give to 
+students!  See section \ref{sec:initialization} for details.) 
+We also used \verb!\SweaveOpts{echo=FALSE,results=tex}! earlier to set the defaults
 to output \LaTeX\ code without echoing the input.   With this preparation, the Sweave code listed
 above will be processed and displayed as
 \begin{enumerate}
@@ -221,15 +226,38 @@ msg("None of the above"))
 \end{enumerate}
 
 If some question numbers are not used for multiple choice questions, then the test author can
-manipulate the internal variables as follows.
-
-[Adam, I need to have the current format of the internals before I can write this.]
+manipulate the internal question counter using the \texttt{QuestionCounter()} global.  See
+section \ref{sec:globals}.
 
 \subsection{Introductory material at start of test}
+\label{sec:initialization}
 
-Several functions and variables are included that are intended to be run or set 
-at the start of a test.  These customize the behaviour of \pkg{Sweavetest}, and 
-provide some common definitions that may be helpful in producing a test.
+Normally the first R code to appear in a test is
+\begin{verbatim}
+ <<>>=
+ set.seed(SEED)
+ library(Sweavetest) 
+ @
+\end{verbatim}
+where \texttt{SEED} is replaced by a fixed number.  This initializes the package
+and fixes the randomization
+of the test questions so that Sweavetest will produce the same results on future runs.
+
+Next, one calls the \texttt{Initialization()} function, for example
+\begin{verbatim}
+ <<>>=
+ Initialization(name="Test1", version="Teacher")
+ @
+\end{verbatim}
+This names the test
+so that when Sweavetest saves files associated with the test, it will use that name, and 
+sets the \texttt{Version()} global variable.  Normally the \texttt{Version()} is set
+to ``Teacher'' during preparation of the test; this will display correct answers,
+and an answer key at the end.  Use ``Student'' to produce a randomized version for the
+students, and ``Report'' after the test is complete to produce a report and
+analyze responses.  (More details on ``Report'' are given in section \ref{sec:report}.)
+It also sets up the 
+internal Sweavetest variables.  
 
 \begin{table}
 \caption{Current math mode definitions provided by \texttt{newCommands()}.\label{tab:commands}}
@@ -249,7 +277,8 @@ for(i in n) {
 \end{tabular}
 \end{center}
 \end{table}
-The \verb!newCommands()! function defines a number of \LaTeX\ macros that may be
+The \verb!Initialization()! call also calls
+the \verb!newCommands()! function to define a number of \LaTeX\ macros that may be
 convenient to use in the test.  Current definitions of simple macros
 to use in mathematical expressions are shown in Table \ref{tab:commands}.  The function
 also optionally defines \verb!\Marks!, which displays marks for a question in the right
@@ -261,6 +290,7 @@ may be suppressed by passing \verb!FALSE! to the corresponding argument to
 this document uses \verb!newCommands(thesection = FALSE)!, because section headings
 should not be overridden.
 
+Some other functions are provided for the convenience of test production.
 The \verb!marklist()! function outputs a box, suitable for recording marks on the
 first page of a test.  For example,
 <<marklist, echo=TRUE, eval=FALSE>>=
@@ -356,8 +386,9 @@ functions in \pkg{Sweavetest} make use of the \texttt{"Sheet"} field, as our tes
 \section{Analysis of a Test}
 \label{sec:analysis}
 
-The report creation process uses the \pkg{tables} package \citep{pkg:tables} to format all the tables created by the \pkg{Sweavetest} package. This section will discuss the individual analysis tools used
-during the report creation process. The actual report creation process is discussed in the next section.
+This section will discuss the individual analysis tools used
+during the report creation process. The actual report creation process
+is discussed in the next section.
 
 This package utilizes a sample data set to illustrate the statistics that can be calculated:
 
@@ -462,7 +493,7 @@ This produces the output shown in Table \ref{tab:StatisticalOverview}.
 
 The student count table provides a count of the number of students who wrote each different version of the exam, separated into class section.
 Aggregated totals including a total count for each exam code, and a grand total are also provided. This is produced automatically when the \verb!StatisticalOverview()!
-function is called, with \LaTeX\ formatting using the \pkg{tables} package.
+function is called, with \LaTeX\ formatting using the \pkg{tables} package \citep{pkg:tables}.
 
 The test means table calculates the overall test mean for each unique exam code and class section, as well as aggregate totals and a grand total.
 This tool is in place to help the instructor ensure that all test versions and class sections scored approximately the same. Any large discrepancies
@@ -884,12 +915,6 @@ set.seed(18)
 library(Sweavetest)
 Initialization("sample", "Student")
 testversion(4)
-
-if(Version() == "Report"){
-  scanex <- readScanex("sample.dat")
-}
-
-Initialization()
 
 \end{verbatim}
 

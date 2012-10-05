@@ -25,7 +25,7 @@ if(Version() == "Report"){
   cat("\\begin{table}[h]\n")
   cat("\\centering\n")
   cat("\\caption{Descriptive Statistics}\n")
-  DescriptiveStatistics(100*gradedTests$Grade/numQ)
+  DescriptiveStatistics(100*gradedTests$Grade/numQ, gradedTests$Section)
   cat("\\end{table}\n")
  
   cat("\\ \\\\\n")
@@ -41,6 +41,9 @@ if(Version() == "Report"){
   cat("\\begin{subtable}[h]{.5\\linewidth}\n")
   cat("\\centering\n")
   cat("\\caption{Test Means}\n")
+
+  pct <- function(x) 100*mean(x)/numQ
+  
   latex(tabular((Factor(ExamCode, name="Exam Code")+1) 
               ~ (Factor(Section)+1)*Heading()*Heading()*Grade
               *pct*Format(digits=3), data=gradedTests))

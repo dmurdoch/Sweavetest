@@ -9,10 +9,8 @@ DescriptiveStatistics <- function(Percentage, Section) {
   Min <- function(x) min(x)
   StdDev <- function(x) sqrt(var(x)) 
 
-  pct <- function(x) 100*mean(x)/numQ
-
   ###Produce Student Count Table and Test Means Tab;e###
 
-  latex(tabular((Factor(Section)+1)*Heading()*Percentage ~ Mean + StdDev + Max + Quantile75
+  latex(tabular((Factor(Section)+1)*Heading()*Percentage ~ (n=1) + Mean + StdDev + Max + Quantile75
                         + Median + Quantile25 + Min), digits=2)
 }

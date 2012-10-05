@@ -458,7 +458,7 @@ based on the results of the test:
 The table presents these statistics separately by class section and also for the class as a whole.
 This produces the output shown in Table \ref{tab:StatisticalOverview}.
 \begin{table}
-\caption{Output of the \texttt{StatisticalOverview} function. \label{tab:StatisticalOverview}}
+\caption{Summary statistics from the \texttt{StatisticalOverview} function. \label{tab:StatisticalOverview}}
 \begin{center}
 <<>>=
 numQ <- max(nchar(GradedTests()$Correct))

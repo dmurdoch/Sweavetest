@@ -388,7 +388,7 @@ functions in \pkg{Sweavetest} make use of the \texttt{"Sheet"} field, as our tes
 
 This section will discuss the individual analysis tools used
 during the report creation process. The actual report creation process
-is discussed in the next section.
+is discussed in section \ref{sec:report}.
 
 This package utilizes a sample data set to illustrate the statistics that can be calculated:
 
@@ -472,34 +472,20 @@ DescriptiveStatistics(100*GradedTests()$Grade/numQ, GradedTests()$Section)
 
 The student count table provides a count of the number of students who wrote each different version of the exam, separated into class section.
 Aggregated totals including a total count for each exam code, and a grand total are also provided. This is produced automatically when the \verb!StatisticalOverview()!
-function is called, with \LaTeX\ formatting using the \pkg{tables} package \citep{pkg:tables}.
+function is called.
 
 The test means table calculates the overall test mean for each unique exam code and class section, as well as aggregate totals and a grand total.
 This tool is in place to help the instructor ensure that all test versions and class sections scored approximately the same. Any large discrepancies
 should be investigated.
 
-Using the \pkg{tables} package, the two tables are produced using the following syntax:
-
-The Student Count table is produced by:
-<<StudentCount, echo=true, eval=false>>=
-latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1), data=GradedTests()))
-@
-and the Test Means table is produced by:
-<<TestMeans, echo=true, eval=false>>=
-pct <- function(x) 100*mean(x)/numQ
-
-latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
-              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
-              *pct*Format(digits=3), data=GradedTests()))
-@
 The resulting tables are displayed as Tables \ref{tab:StudentCount} and \ref{tab:TestMeans}
 respectively.
 \begin{table}
 \caption{Student count table. \label{tab:StudentCount}}
 \begin{center}
 <<>>=
-<<StudentCount>>
+latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1), data=GradedTests()))
 @
 \end{center}
 \end{table}
@@ -507,7 +493,11 @@ respectively.
 \caption{Test means table. \label{tab:TestMeans}}
 \begin{center}
 <<>>=
-<<TestMeans>>
+pct <- function(x) 100*mean(x)/numQ
+
+latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
+              ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
+              *pct*Format(digits=3), data=GradedTests()))
 @
 \end{center}
 \end{table}
@@ -521,7 +511,7 @@ It uses the result of \verb!grades()! as input and can be called as follows:
 KR20(GradedTests())
 @
 
-The Kuder-Richardson 20  is a well known statistic that measures the internal reliability of the test. It measures how consistently the items on the 
+The Kuder-Richardson 20 measures the internal reliability of the test. It measures how consistently the items on the 
 test provide information about the knowledge of the students on the tested material.
 
 It is calculated through the following formula:
@@ -532,7 +522,7 @@ It is calculated through the following formula:
 
 \subsection{Ferguson's Delta}
 
-The Ferguson's Delta statistic is produced by calling the \verb!FergusonsDelta()! function.
+Ferguson's Delta statistic is produced by calling the \verb!FergusonsDelta()! function.
 It takes the results of \verb!grades()! as input, and can be called by the instructor as follows:
 
 <<echo=true, results=verbatim>>=
@@ -540,7 +530,7 @@ FergusonsDelta(GradedTests())
 @
 
 Similar to the KR20 statistic, Ferguson's Delta also measures the consistency of the test. However, instead of measuring internal
-reliability, it measures test reliability as "the ratio between the number of discriminations made by the test to the greatest number
+reliability, it measures test reliability as ``the ratio between the number of discriminations made by the test to the greatest number
 of discriminations that the test can generate, given the size of the sample and the number of items" (Kline, 1986). 
 
 It is calculated using the following formula:
@@ -548,8 +538,6 @@ It is calculated using the following formula:
 \[ \delta = \frac{(m+1)(n^{2}-\sum(f^{2}_{s}))}{mn^{2}}\]
 
 \noindent where n is the number of test takers, m is the number of items on the test, and $f_{s}$ is the number of test takers obtaining each possible test score.
-
-Both Ferguson's Delta and the Kuder-Richardson 20 statistic are formatted into a table using the \pkg{tables} package.
 
 \subsection{Answer Correlation Plot}
 
@@ -580,25 +568,22 @@ The \verb!StatisticalOverview()! function also produces a histogram of the score
 The purpose of this plot is to show the instructor the distribution of the test scores, and to help identify possible
 problems with the test as a whole (when used in conjunction with the other statistics provided).
 
-It is created as follows in the \verb!StatisticalOverview()! function:
-
-<<ScoreDistribution,echo=true,eval=false>>=
-Percentage <- 100*GradedTests()$Grade/numQ
-GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", 
-                        breaks = c(0,10,20,30,40,50,60,70,80,90,100))
-@
 The resulting plot is shown in Figure \ref{fig:ScoreDistribution}.
 \begin{figure}
 \begin{center}
 <<fig=true>>=
-<<ScoreDistribution>>
+Percentage <- 100*GradedTests()$Grade/numQ
+GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", 
+                        breaks = c(0,10,20,30,40,50,60,70,80,90,100))
+
 @
+%$
 \end{center}
 \caption{The score distribution produced by the \texttt{StatisticalOverview} function.
 \label{fig:ScoreDistribution}}
 \end{figure}
 
-\subsection{Individual Question Analysis}
+\section{Individual Question Analysis}
 
 The \pkg{Sweavetest} package also analyzes each question individually, providing a number of useful statistics to aid in the 
 recognition of potential problem questions. This includes questions that have been keyed incorrectly, questions that have
@@ -623,7 +608,7 @@ Each of these items will be discussed in detail.
 Difficulty rating measures the number of respondents who answered the question correctly,
 as a percentage of all respondents. The formula for difficulty rating is given as:
 
-\[ Difficulty Rating = \frac{C}{W + C} \]
+\[ \textit{Difficulty Rating} = \frac{C}{W + C} \]
 
 \noindent where C is the number of respondents answering correctly, and W is the number of respondents answering incorrectly.
 
@@ -645,7 +630,8 @@ Item discrimination is used to determine if the question adequately distinguishe
 students who have the required knowledge to answer the question and those who don't. It is calculated
 using the following formula:
 
-\[ Item Discriminator = \frac{(Upper 25\% Correct) - (Lower 25\% Correct)}{Total Number of Respondents} \]
+\[ \textit{Item Discriminator} = \frac{(\textit{Upper 25\% Correct}) 
+                  - (\textit{Lower 25\% Correct})}{\textit{Total Number of Respondents}} \]
 
 \noindent where the upper 25\% of the students are defined to be those students who scored in the top 25\% on the test and got the question correct.
 The lower 25\% of students are defined similarly.
@@ -665,7 +651,7 @@ the correct answer may be misspecified.
 Point biserial correlation is also a measure of item discrimination. It is calculated through
 the following formula:
 
-\[ Point Biserial = \frac{M_{p} - M_{q}}{\sigma\sqrt{pq}} \]
+\[ \textit{Point Biserial} = \frac{M_{p} - M_{q}}{\sigma\sqrt{pq}} \]
 
 \noindent where:
 
@@ -761,20 +747,16 @@ latex(tabular(Factor(Option)*Heading()*identity
 
 \subsection{Option Frequency Plot}
 
-The option frequency plot provides a way for the instructor to visualise which questions were most popular
+The option frequency plot provides a way for the instructor to visualise which answer choices were most popular
 amongst the test takers. Frequencies are provided as boxes, and are separated by exam code (if more than one
 is given). The boxes of the correct answers are white, while the boxes of incorrect answers are shaded red.
 
-The plot is created by calling the function \verb!answerPlots()!. This function takes as input a matrix of the
-students' answers, a matrix of the corresponding correct answers, a vector of exam codes, and the question number
-of the plot to be produced. For example, the following will produce an option frequency plot for the first question
+The plot is created by calling the function \verb!answerPlots()!. This function takes as input 
+a vector of question numbers (and optionally colour choices).
+For example, the following will produce an option frequency plot for the first question
 of our sample data:
 <<OptionFrequency,eval=false,echo=true>>=
-StudentAnswers <- GradedTests()$Answers
-CorrectAnswers <- GradedTests()$Correct
-ExamVersion <- GradedTests()$ExamCode
-QuestionCounter(1)
-answerPlots(QuestionCounter())
+answerPlots(1)
 @%$
 The resulting plot for the first question is shown in Figure \ref{fig:OptionFrequency}.
 \begin{figure}
@@ -788,9 +770,8 @@ The resulting plot for the first question is shown in Figure \ref{fig:OptionFreq
 
 \subsection{Empirical Probability Plot}
 
-The empirical probability plot represents the cumulative distribution function for the probability of
-answering the question correctly. It plots the test scores along the x-axis and the probability that
-the test taker will answer the question correctly along the y-axis.
+The empirical probability plot displays the estimated probability of
+answering the question correctly versus the test scores.
 
 From this graph, we can deduce the empirical probability of a student answering the question correctly
 given his or her score on the test.
@@ -802,8 +783,7 @@ The plot can be created using the \verb!EmpiricalProbabilityPlot()! function. It
 from the \verb!grades()! function, as well as the question number for which the plot will created. A plot
 for the first question can be created as follows:
 <<Empirical,eval=false,echo=true>>=
-QuestionCounter(1)
-EmpiricalProbabilityPlot(GradedTests(), QuestionCounter())
+EmpiricalProbabilityPlot(GradedTests(), 1)
 @
 The result is shown in Figure \ref{fig:Empirical}.
 \begin{figure}
@@ -822,8 +802,8 @@ be reviewed by the instructor.
 
 Part of the analysis of the multiple choice test is providing the instructor with information on the
 appropriateness of the calculated values of the statistics. If the values of the item discrimination, 
-difficulty rating, or point biserial statistics fall below industry standards, 
-the built in function \verb!Warnings{}! will automatically produce a message informing the instructor,
+difficulty rating, or point biserial statistics fall below standards, 
+the built in function \verb!Warnings()! will produce a message informing the instructor,
 as well as pointing the instructor to resources with suggestions on improving (or possibly eliminating) 
 said question.
 
@@ -898,9 +878,8 @@ testversion(4)
 
 To create the report, the user needs to change the following:
 \begin{itemize}
-\item Set the \verb!Version()! to "Report" 
-\item The default "sample.dat" input for the \verb!readScanex()! function to the Scantron file they wish to use.
-\item The working directory must be changed to that containing the Scantron file
+\item Set the \verb!Version()! to ``Report" rather than ``Student''
+\item Specify the Scantron file they wish to use.
 \end{itemize}
 
 The variables not mentioned above should not be changed or modified in any way, unless the instructor is familiar with \LaTeX\ and wishes to modify the preset formatting done by the templates.

@@ -329,7 +329,7 @@ above is requested via
 \noindent\verb!Answer key for version \Sexpr!\verb!{versioncode()}:\\!
 \begin{verbatim}
  <<>>=
- answerkey(symbols=LETTERS)
+ answerkey()
  @
 \end{verbatim}
 and displayed as \\
@@ -423,10 +423,12 @@ This function is called by taking the result of the \verb!grades()! function as 
 StatisticalOverview()
 \end{verbatim}
 
-This function is used primarily for formatting in \LaTeX, utilizing the \pkg{tables} package to format the created tables
+This function is used primarily for formatting in \LaTeX, utilizing the \pkg{tables} package \citep{pkg:tables} to format the created tables
 and called functions. 
 
-When called, this package calls several functions that create the statistics which analyze the overall quality of the test. The function produces the following:
+When called, \verb!StaticalOverview()! calls several functions that
+create the statistics which analyze the overall quality of the test. It produces the following 
+statistics, described in the following sections.
 
 \begin{itemize}
 \item Descriptive Statistics Table
@@ -453,38 +455,15 @@ based on the results of the test:
 \item $75^{th}$ Quantile
 \end{itemize}
 
-The table presents these statistics seperated by class section (if there is more than one section) and also for the class as a whole.
-\LaTeX\ formatting is done using the \pkg{tables} package.
-
-The table is created within the \verb!StatisticalOverview()! function using the following syntax:
-
-<<StatisticalOverview,eval=FALSE,echo=TRUE>>=
-grades <- GradedTests()$Grade
-weight <- max(seq_len(max(nchar(GradedTests()$Correct))))
-
-Mean <- function(x) mean(x)
-Quantile25 <- function(x) quantile(x, .25)
-Quantile75 <- function(x) quantile(x, .75)
-Median <- function(x) quantile(x, .50)
-Max <- function(x) max(x)
-Min <- function(x) min(x)
-StdDev <- function(x) sqrt(var(x))
-Percentage <- grades/weight
-
-latex(tabular((Heading(Section)*factor(Section)+1) 
-          ~ Format(digits=2)*((Heading())*Percentage*Mean+(Heading())
-            *Percentage*StdDev
-          +(Heading())*Percentage*Max+(Heading())*Percentage*Quantile75
-          +(Heading())*Percentage*Median
-          +(Heading())*Percentage*Quantile25
-          +(Heading())*Percentage*Min), data=GradedTests()))
-@
+The table presents these statistics separately by class section and also for the class as a whole.
 This produces the output shown in Table \ref{tab:StatisticalOverview}.
 \begin{table}
 \caption{Output of the \texttt{StatisticalOverview} function. \label{tab:StatisticalOverview}}
 \begin{center}
 <<>>=
-<<StatisticalOverview>>
+numQ <- max(nchar(GradedTests()$Correct))
+grades <- GradedTests()$Grade
+DescriptiveStatistics(100*GradedTests()$Grade/numQ, GradedTests()$Section)
 @
 \end{center}
 \end{table}
@@ -508,7 +487,7 @@ latex(tabular((Heading("Exam Code")*factor(ExamCode)+1)
 @
 and the Test Means table is produced by:
 <<TestMeans, echo=true, eval=false>>=
-pct <- function(x) 100*mean(x)/weight
+pct <- function(x) 100*mean(x)/numQ
 
 latex(tabular((Heading("Exam Code")*factor(ExamCode)+1) 
               ~ (Heading(Section)*factor(Section)+1)*Heading()*Heading()*Grade
@@ -604,8 +583,7 @@ problems with the test as a whole (when used in conjunction with the other stati
 It is created as follows in the \verb!StatisticalOverview()! function:
 
 <<ScoreDistribution,echo=true,eval=false>>=
-weight <- max(seq_len(max(nchar(GradedTests()$Correct))))
-Percentage <- 100*GradedTests()$Grade/weight
+Percentage <- 100*GradedTests()$Grade/numQ
 GradeHistogram <- hist(Percentage, main="Histogram of Student Scores", 
                         breaks = c(0,10,20,30,40,50,60,70,80,90,100))
 @

@@ -39,7 +39,9 @@ AnswerCounts <- function(StudentAnswers, qs=seq_len(max(nchar(Answers)))) {
 }
 
 CreateIndex <- function(gradedTests=GradedTests()){
-  qs <- seq_len(max(nchar(gradedTests$Correct)))
+  numQ <- max(nchar(gradedTests$Correct))
+  qs <- seq_len(numQ)
+  
   Counts <- AnswerCounts(gradedTests, qs)
   
   Versions <- dimnames(Counts)[[1]]
@@ -51,6 +53,30 @@ CreateIndex <- function(gradedTests=GradedTests()){
                        R1=character(0), R2=character(0), R3=character(0),
                        R4=character(0), R5=character(0))
   mainIndex <- Index()
+  if (is.null(mainIndex)) {
+    message("No Index() found, creating dummy one.")
+    keep <- integer(length(Versions))
+    for (i in seq_along(Versions))
+      keep[i] <- which(gradedTests$ExamCode == Versions[i])[1]
+      
+    correctMatrix <- answerMatrix(gradedTests$Correct[keep], qs)
+    
+    letterToNumber <- c(A=1, B=2, C=3, D=4, E=5)
+    
+    num <- numQ*length(Versions)
+    
+    mainIndex <- data.frame(Question=rep(qs,length(Versions)),
+      ExamCode=rep(Versions, each=numQ),
+      Correct=letterToNumber[t(correctMatrix)],
+      A=rep(1, num),
+      B=rep(2, num),
+      C=rep(3, num),
+      D=rep(4, num),
+      E=rep(5, num))
+      
+    Index(mainIndex)
+  }
+
   for (v in Versions) {
     counts <- Counts[v,,]
     index <- mainIndex[mainIndex$ExamCode == v,]

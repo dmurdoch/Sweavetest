@@ -29,16 +29,16 @@ dir.create("figs", showWarn=FALSE)
 
 set.seed(18)
 library(Sweavetest)
-library(tables)
-setwd("C:/Users/Sample")
 scanex <- readScanex("sample.dat")
-Scantron <- Unscramble(scanex,Scrambled = FALSE)
+order <- data.frame("170" = 1:30, "738" = 1:30, "840" = 1:30, "967" = 1:30, 
+check.names=FALSE)
+Scantron <- Unscramble(scanex, Order=order)
 @
 
 <<>>=
-Version("Report")
-LowLevelReport(Scantron)
-Appendix(Version())
+GradedTests(grades(Scantron))
+LowLevelReport("SampleLowLevel")
+Appendix()
 @
 
 \end{document}

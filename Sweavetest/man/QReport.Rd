@@ -7,8 +7,15 @@ Generate a report on one question.
 This function generates a report on the current question, based on the graded tests.
 }
 \usage{
-QReport()
+QReport(newpage = TRUE)
 }
+
+\arguments{
+  \item{newpage}{
+Whether to output a \verb{\newpage} command after the report.
+}
+}
+
 \details{
 The report contains the following components:
 \itemize{

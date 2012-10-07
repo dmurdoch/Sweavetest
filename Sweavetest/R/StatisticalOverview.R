@@ -1,4 +1,4 @@
-StatisticalOverview <- function(){
+StatisticalOverview <- function( extraIntro = TRUE ){
 
 if(Version() == "Report"){
   gradedTests <- GradedTests()
@@ -103,13 +103,15 @@ if(Version() == "Report"){
   dev.off()            
   cat(paste("\\includegraphics[width=3.25in]{", filename, "}\n", sep=""))
 
-  cat("\\newpage\n")
-  cat("\\begin{center}\n")
-  cat("{\\large\\bf Additional Exam Information and Instructions}\n")
-  cat("\\ \\\\\n")
-  cat("{\\small As Provided by the Instructor}\n")
-  cat("\\end{center}\n")
-  cat("\\ \\\\\n")
-  cat("\\vspace{.5in}\n")
+  if (extraIntro) {
+    cat("\\newpage\n")
+    cat("\\begin{center}\n")
+    cat("{\\large\\bf Additional Exam Information and Instructions}\n")
+    cat("\\ \\\\\n")
+    cat("{\\small As Provided by the Instructor}\n")
+    cat("\\end{center}\n")
+    cat("\\ \\\\\n")
+    cat("\\vspace{.5in}\n")
   }
+}
 }

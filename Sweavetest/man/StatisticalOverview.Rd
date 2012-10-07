@@ -7,8 +7,16 @@ Create a Single Page Statistical Overview of the Entire Test
 This function creates a single page statistical overview of the test, with formatting for use in Latex. Using statistics calculated by other functions in the Sweavetest package, this function creates the tables and appropriate formatting to include a single page overview of the test to the user when a report is desired.
 }
 \usage{
-StatisticalOverview()
+StatisticalOverview(extraIntro = TRUE)
 }
+
+\arguments{
+  \item{extraIntro}{
+    If \code{TRUE}, text about \dQuote{extra exam information}
+    will be inserted to introduce test writing instructions.
+}
+}
+
 
 \value{
 Several tables and graphs are produced by this function:

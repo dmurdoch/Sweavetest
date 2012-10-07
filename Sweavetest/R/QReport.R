@@ -1,4 +1,4 @@
-QReport <- function() {
+QReport <- function(newpage = TRUE) {
   if (Version() != "Report") return(invisible())
   
   AnswerCountMatrix <- CreateIndex()
@@ -64,7 +64,8 @@ QReport <- function() {
   dev.off()
   cat("\\hspace{.08in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
-  cat("\\newpage")    
+  if (newpage)
+    cat("\\newpage")    
   invisible()
 }
 

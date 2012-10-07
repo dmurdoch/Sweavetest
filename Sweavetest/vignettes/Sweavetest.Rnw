@@ -932,7 +932,7 @@ NewScanex <- Unscramble(scanex,Orders)
 
 \end{verbatim}
 
-we can see below what the function does by comparing the original Scantron file to the new scantron file:
+We can see below what the function does by comparing the original Scantron file to the new scantron file:
 
 <<>>=
 ExamCodes <- c(170,738,840,967)
@@ -961,7 +961,7 @@ We can see that the answers have been re-ordered in the new Scantron file as spe
 instructor. This will allow the \verb!LowLevelReport()! function to create a report with the proper
 correspondences.
 
-Note: This function is unnecessary when running a full report, as question randomization is not done.
+Note: The \verb!Unscramble()! function is not used when running a full report, as question randomization is not done.
 
 The provided Sweave template provides several variables that are under the users control:
 

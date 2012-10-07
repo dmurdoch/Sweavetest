@@ -997,13 +997,15 @@ the functions.
 The instructor can create a .dat file with columns matching those produced by the \texttt{readScanex()} function;
 see Table \ref{tab:scantron}.
 
-An example file is given below. For best results, the users file should mirror the contents of this file as closely as possible, including column titles.
+An example file is given below. The file should mirror the column titles of this file.
 
 <<results=verbatim>>=
 scanex[5:10,]
 @
 
-One important aspect of the Scantron file is the answer keys. They are denoted by Student ID 999999999, and have the same columns as the students. The answer keys for our sample test are provided below:
+By convention, the answer keys are included in the Scantron file with
+Student ID 999999999, and have the same columns as the students.
+The answer keys for our sample test are provided below:
 
 <<results=verbatim>>=
 scanex[1:4,]
@@ -1016,9 +1018,17 @@ Once this file has been created, the instructor can carry on with the report pro
 \section{Merging Class Lists}
 \label{sec:Merge}
 
-The final tool provided by the \pkg{Sweavetest} package allows the instructor to export the results of the \verb!grades()! function and appends it to a pre-existing class list. This is done by calling the \verb!MergeClassList()! function.
+The \pkg{Sweavetest} package allows the instructor to export the
+results of the \verb!grades()! function and merge it with a pre-existing
+class list. This is done by calling the \verb!MergeClassList()! function.
 
-This function takes as input the class list read in using the \verb!read.csv! function, to which we are appending the results of \verb!grades()!. A sample class list has been provided with this package, and the class list used should mirror its format. A small snapshot is provided below:
+This function takes as input the class list read in using the
+\verb!read.csv! function, into which we are merging the results of
+\verb!grades()!. A sample class list has been provided with this
+package, and the class list used should mirror its format\footnote{Our class list
+uses R function names in place of student names.  We expect few real classes
+would have students named Dbinom Acf!}. A small
+snapshot is provided below:
 
 <<>>=
 Classlist <- system.file("sample/ClassListTemplate.csv", package = "Sweavetest")
@@ -1029,7 +1039,8 @@ SampleClassList <- read.csv(Classlist)
 head(SampleClassList)
 @
 
-Note that the column titles have been slightly modified by R. In the CSV file, the first column is entitled \verb!"Student #"!. All other periods in the title names correspond to blank spaces.
+Note that the column titles have been slightly modified by \verb!read.csv!:
+blanks in title names have been converted to periods.
 
 A vector of class sections as characters, as well as a title for the test are also required as input. The original Scantron file must also be passed as input
 
@@ -1051,9 +1062,15 @@ MergeClassList(classlist, scanex, weights, Sections, TestTitle,
 
 This will append the results of the \verb!grades()! function to the classlist that was specified.
 
-This function uses another function, the \verb!MergeLists()! function, to actually append  the two files. The main purpose of the \verb!MergeClassList()! function is to format the file so that it is clean when it is exported back to the user.
+This function uses another function, the \verb!MergeLists()! function, to
+actually append  the two files. The main purpose of the
+\verb!MergeClassList()! function is to format the file so that it is clean
+when it is exported back to the user.
 
-Note that the \verb!MergeClassList()! function is not called automatically at any point during the report creation process. This function must be called separately by instructor if they wish to merge the results into a pre-existing class list.
+Note that the \verb!MergeClassList()! function is not called
+automatically at any point during the report creation process. This
+function must be called separately by instructor if they wish to merge the
+results into a pre-existing class list.
 
 \section{Cheating Detection}
 \label{sec:cheating}

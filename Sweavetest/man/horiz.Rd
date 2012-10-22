@@ -38,7 +38,7 @@ msg(string)
 Strings to be used as the individual items.
 }
   \item{Correct}{
-Which item is correct?
+Which item is correct?  If set to \code{NA}, none is correct.
 }
   \item{KeepLast}{
 How many items (e.g. \dQuote{None of the above}) to keep in the final position?
@@ -53,6 +53,11 @@ Strip extra white space from printed results?
 }
 \item{string}{The message to print.}
 \item{x}{A \code{msg} object.}
+}
+\details{
+If \code{Correct} is \code{NA}, this question 
+will not be recorded in \code{\link{Answers}}, \code{\link{correct}} or \code{\link{Index}}.
+The randomization will always be recorded in \code{\link{LastIndices}}.
 }
 \value{
 Run for the side effect of producing Latex output.  As a second side effect,

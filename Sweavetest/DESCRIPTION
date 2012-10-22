@@ -2,7 +2,7 @@ Package: Sweavetest
 Type: Package
 Title: Support for tests in Sweave
 Version: 2.0
-Date: 2012-10-07
+Date: 2012-10-22
 Author: Duncan Murdoch
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Description: Support for multiple choice tests

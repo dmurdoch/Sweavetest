@@ -3,7 +3,6 @@ function(..., Correct=1, KeepLast=0, report=TRUE) {
   
   QuestionCounter(QuestionCounter()+1)
   
-  correct(c(correct(), Correct))
   
   x <- unlist(list(...))
   if (CheckDups() && any(duplicated(format(x))))  
@@ -14,6 +13,7 @@ function(..., Correct=1, KeepLast=0, report=TRUE) {
   if (!randomize()) rand <- 1:n  
   indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
   if (!is.na(Correct)) {
+    correct(c(correct(), Correct))
     x[Correct] <- paste("\\Correct", x[Correct])
     Answers(c(Answers(), which(indices == Correct)))
   }		 				  
@@ -29,7 +29,9 @@ function(..., Correct=1, KeepLast=0, report=TRUE) {
     indices <- c(indices,rep(NA,5-length(indices)))						 
   }		 				  
 
-  if (Version() != "Report")
+  LastIndices(indices)
+  
+  if (Version() != "Report" && !is.na(Correct))
     Index(rbind(Index(),data.frame(Question=QuestionCounter(), 
   			       ExamCode=versioncode(),
   			       Correct=Correct,

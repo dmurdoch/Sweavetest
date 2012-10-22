@@ -4,6 +4,7 @@
 \alias{CheckDups}
 \alias{GradedTests}
 \alias{Index}
+\alias{LastIndices}
 \alias{QuestionCounter}
 \alias{QuestionIndex}
 \alias{TestName}
@@ -26,6 +27,7 @@ Answers(x = NULL)
 CheckDups(x = TRUE)
 GradedTests(x = NULL)
 Index(x = NULL)
+LastIndices(x = NULL)
 QuestionCounter(x = 0)
 QuestionIndex(x = NULL)
 TestName(x = "TestData")
@@ -51,6 +53,7 @@ check for duplicate answers?}
 \item{GradedTests}{A dataframe of test results produced by \code{\link{grades}}.}
 \item{Index}{A dataframe of test result encodings, produced by reading the 
 index output when producing the student versions of the tests.}
+\item{LastIndices}{The last randomization result, as a vector.}
 \item{QuestionCounter}{The current question number.}
 \item{QuestionIndex}{The complete list of question numbers.}
 \item{TestName}{A name to use for the test and as part of created filenames.}

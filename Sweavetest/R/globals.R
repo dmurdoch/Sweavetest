@@ -123,3 +123,12 @@ TestName <- function(x = "TestData") {
 versioncode <- function() {
   .STEnv$ExamNum[testversion()]
 }
+
+LastIndices <- function(x = NULL) {
+  if (!missing(x) || !exists("LastIndices", .STEnv)) {
+    .STEnv$LastIndices <- x
+    return(invisible(x))
+  }
+  .STEnv$LastIndices
+}
+

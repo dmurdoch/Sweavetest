@@ -1141,11 +1141,8 @@ NSERC Undergraduate Summer Research Award to the second author.
 Update this list as we cover things.
 
 Still need to document
-
- [1]          "answerMatrix"        "clean"             
- [6]          "grades"                              
-[16] "nominalRoll"        "perms"                "readScanex"           
-
+       "clean"                                       
+[16] "nominalRoll"        "perms"  
 
 \bibliography{Sweavetest}
 

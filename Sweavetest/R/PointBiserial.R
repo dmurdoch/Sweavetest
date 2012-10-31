@@ -21,8 +21,14 @@ PointBiserial <- function(GradedTests, Questions=qs){
     StudentsRight <- StudentsRight[-1]
     StudentsWrong <- StudentsWrong[-1]
 
-    Mp[i] <- mean(StudentsRight)
-    Mq[i] <- mean(StudentsWrong)
+    if (length(StudentsRight))
+      Mp[i] <- mean(StudentsRight)
+    else 
+      Mp[i] <- mean(StudentTotal)
+    if (length(StudentsWrong))
+      Mq[i] <- mean(StudentsWrong)
+    else
+      Mq[i] <- mean(StudentTotal)
   }
 	
   P <- colSums(QuestionScores)/nrow(QuestionScores)

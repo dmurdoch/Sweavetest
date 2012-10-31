@@ -56,7 +56,8 @@ index output when producing the student versions of the tests.}
 \item{LastIndices}{The last randomization result, as a vector.}
 \item{QuestionCounter}{The current question number.}
 \item{QuestionIndex}{The complete list of question numbers.}
-\item{TestName}{A name to use for the test and as part of created filenames.}
+\item{TestName}{A name to use for the test and as part of created filenames.  (The \code{\link{make.names}} function
+is used to sanitize the name.)}
 \item{Version}{The version or mode of this run through the test: one of \code{c("Student", "Teacher", "Report")}}
 \item{correct}{A vector of correct responses (in the authored order).}
 \item{fignum}{The current figure number when producing a report.}

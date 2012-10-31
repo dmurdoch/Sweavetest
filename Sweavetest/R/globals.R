@@ -113,7 +113,7 @@ GradedTests <- function(x = NULL) {
 
 TestName <- function(x = "TestData") {
   if (!missing(x) || !exists("TestName", .STEnv)) {
-    .STEnv$TestName <- x
+    .STEnv$TestName <- make.names(x)
     return(invisible(x))
   }
   .STEnv$TestName

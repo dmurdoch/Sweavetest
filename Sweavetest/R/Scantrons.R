@@ -92,4 +92,21 @@ mergeLists <- function(master, update, key="Student ID", full=TRUE) {
     result
 }
 
+writeScanex <- function(name) {
+    index <- read.csv(paste0(name, "Index.csv"))
+    examcodes <- unique(index$ExamCode)
+    qs <- as.numeric(unique(index$Question))
+    out <- file(paste0(name, "Correct.dat"), "w")
+    on.exit(close(out))
     
+    for (examcode in examcodes) {
+      correct <- rep(" ", max(qs))
+      qs <-  index$Question[ index$ExamCode == examcode ]
+      cor <- index$Correct[ index$ExamCode == examcode ]
+      perm <- index[ index$ExamCode == examcode, LETTERS[1:5], drop=FALSE ]
+      for (j in seq_along(qs))
+        correct[ qs[j] ] <- LETTERS[ which(perm[j,] == cor[j]) ]
+      cat(file=out, paste0("999999999|   :", examcode, "* [0000]", paste(correct, collapse=""), "\n"))
+    }
+}      
+      

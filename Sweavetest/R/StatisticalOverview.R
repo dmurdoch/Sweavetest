@@ -70,12 +70,32 @@ if(Version() == "Report"){
   cat("\\ \\\\\n")
   cat("\\ \\\\\n")
 
-  if(KR < .7 | FD < .9){
+  if(KR < .7 & FD < .9){
     cat("\\ \\\\\n")
     cat("{\\bf Warning:}\n")
     cat("\\ \\\\\n")
     cat("\\ \\\\\n")
-    cat("The reliability of this test is poor. Please see the appendix for suggestions on improving test reliability.\n")
+    cat("The calculated values for the Kuder-Richardson 20 and Ferguson's Delta statistics are both below the acceptable standards of .7 and .9 respectively. This indicates a lack of correlation between student ability and performance on the test. Please see the sections of the appendix relating to the Kuder-Richardson 20 statistic and Ferguson's Delta for suggestions on improving test reliability.\n")
+    cat("\\ \\\\\n")
+    cat("\\ \\\\\n")
+  }
+  
+  if(KR < .7 & FD >= .9){
+    cat("\\ \\\\\n")
+    cat("{\\bf Warning:}\n")
+    cat("\\ \\\\\n")
+    cat("\\ \\\\\n")
+    cat("The calculated value for the Kuder-Richardson 20 statistic is below the acceptable standard of .7, indicating a lack of correlation between student ability and performance on the test. Please see the section in the appendix regarding the Kuder-Richardson 20 statistic for suggestions on improving test reliability.\n")
+    cat("\\ \\\\\n")
+    cat("\\ \\\\\n")
+  }
+  
+  if(KR >= .7 & FD < .9){
+    cat("\\ \\\\\n")
+    cat("{\\bf Warning:}\n")
+    cat("\\ \\\\\n")
+    cat("\\ \\\\\n")
+    cat("The calculated value for Ferguson's Delta is below the acceptable standard of .9, indicating a lack of correlation between student ability and performance on the test. Please see the section in the appendix regarding Ferguson's Delta for suggestions on improving test reliability.\n")
     cat("\\ \\\\\n")
     cat("\\ \\\\\n")
   }

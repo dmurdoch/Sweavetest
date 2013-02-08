@@ -45,13 +45,13 @@ CreateIndex <- function(gradedTests=GradedTests()){
   Counts <- AnswerCounts(gradedTests, qs)
   
   Versions <- dimnames(Counts)[[1]]
-  result <- data.frame(ExamCode = character(0), Question=character(0), 
-  		       Correct=numeric(0), Score=numeric(0),
-                       A1=numeric(0), A2=numeric(0), A3=numeric(0), 
-                       A4=numeric(0), A5=numeric(0),
-                       Blank=numeric(0), Bad=numeric(0),
-                       R1=character(0), R2=character(0), R3=character(0),
-                       R4=character(0), R5=character(0))
+  Aname <- paste0("A", 1:5)
+  Rname <- paste0("R", 1:5)
+  
+  cresult <- matrix(NA_character_, nrow=1, ncol=7)
+  colnames(cresult) <- c("ExamCode", "Question", Rname)
+  nresult <- matrix(NA_real_, nrow=1, ncol=9)
+  colnames(nresult) <- c("Correct", "Score", Aname, "Blank", "Bad")
   mainIndex <- Index()
   if (is.null(mainIndex)) {
     message("No Index() found, creating dummy one.")
@@ -81,40 +81,44 @@ CreateIndex <- function(gradedTests=GradedTests()){
     counts <- Counts[v,,]
     index <- mainIndex[mainIndex$ExamCode == v,]
     if (nrow(index)) {
+      thisrow <- nrow(cresult)
+      newrows <- length(qs)
+      cresult <- cresult[c(seq_len(thisrow), rep(1, newrows)),]
+      cresult[thisrow + 1:newrows, "ExamCode"] <- v
+      cresult[thisrow + 1:newrows, "Question"] <- qs
+      nresult <- nresult[c(seq_len(thisrow), rep(1, newrows)),]
       for (q in qs) {
+        thisrow <- thisrow + 1
+        
         A <- rep(NA, 5)
         R <- rep(NA, 5)
         thisq <- index[index$Question == q,,drop=FALSE]
         if (!is.na(thisq$A)) {
-          A[thisq$A] <- counts[q, "A"]
-          R[thisq$A] <- "A"
+          nresult[thisrow, Aname[thisq$A]] <- counts[q, "A"]
+          cresult[thisrow, Rname[thisq$A]] <- "A"
         }
         if (!is.na(thisq$B)) {
-          A[thisq$B] <- counts[q, "B"]
-          R[thisq$B] <- "B"
+          nresult[thisrow, Aname[thisq$B]] <- counts[q, "B"]
+          cresult[thisrow, Rname[thisq$B]] <- "B"
         }
         if (!is.na(thisq$C)) {
-          A[thisq$C] <- counts[q, "C"]
-          R[thisq$C] <- "C"
+          nresult[thisrow, Aname[thisq$C]] <- counts[q, "C"]
+          cresult[thisrow, Rname[thisq$C]] <- "C"
         }
         if (!is.na(thisq$D)) {
-          A[thisq$D] <- counts[q, "D"]
-          R[thisq$D] <- "D"
+          nresult[thisrow, Aname[thisq$D]] <- counts[q, "D"]
+          cresult[thisrow, Rname[thisq$D]] <- "D"
         }
         if (!is.na(thisq$E)) {
-          A[thisq$E] <- counts[q, "E"]
-          R[thisq$E] <- "E"
+          nresult[thisrow, Aname[thisq$E]] <- counts[q, "E"]
+          cresult[thisrow, Rname[thisq$E]] <- "E"
         }
-        Correct <- thisq$Correct
-        result <- rbind(result, data.frame(ExamCode=v, 
-                      Question=q, 
-                      Correct=Correct, Score=A[Correct],
-                      A1=A[1], A2=A[2], A3=A[3], A4=A[4], A5=A[5], 
-                      Blank=counts[q,"Blank"],
-                      Bad=counts[q,"Bad"], 
-                      R1=R[1], R2=R[2], R3=R[3], R4=R[4], R5=R[5]))
+        nresult[thisrow, "Correct"] <- thisq$Correct
+        nresult[thisrow, "Score"] <- nresult[thisrow, Aname[thisq$Correct]]
+        nresult[thisrow, "Blank"] <- counts[q, "Blank"]
+        nresult[thisrow, "Bad"] <- counts[q, "Bad"]
       }
     }
   }
-  result
+  data.frame(cresult[-1,1:2,drop=FALSE], nresult[-1,,drop=FALSE], cresult[-1,3:7,drop=FALSE])
 }

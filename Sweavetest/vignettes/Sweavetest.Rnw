@@ -18,7 +18,7 @@
 
 % The next line is needed for inverse search...
 \SweaveOpts{echo=TRUE,results=verbatim} % to show R code and results
-\SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex}
+\SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex,prefix.string=figs/}
 <<>>=
 options(width=70)
 set.seed(18)
@@ -30,6 +30,7 @@ randomize(TRUE)
 testversion(1)
 newCommands(thesection=FALSE)
 CheckDups(TRUE)
+dir.create("figs", showWarnings=FALSE)
 @
 
 \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}

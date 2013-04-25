@@ -8,8 +8,20 @@ DistractorDiscrimination <- function(GradedTests, Question = QuestionCounter()){
   NumTop25 <- length(Top25)
   
   Qlength <- 5
-  if (is.na(Index()[Question, "E"]))
+  if (is.na(Index()[Question, "E"])) {
     Qlength <- 4
+    if (is.na(Index()[Question, "D"])) {
+      Qlength <- 3
+      if (is.na(Index()[Question, "C"])) {
+        Qlength <- 2
+        if (is.na(Index()[Question, "B"])) {
+          Qlength <- 1
+          if (is.na(Index()[Question, "A"])) stop("No answers!")
+        }
+      }
+    }
+  }
+  
   columns <- paste0("A", 1:Qlength)
   
   topSummary <- CreateIndex(GradedTests[Top25,])

@@ -27,8 +27,20 @@ answerPlots <- function(Questions=qs,
   summary <- CreateIndex()
   for (i in Questions) {
     Qsummary <- with(summary, summary[Question == i,])
-    if (all(is.na(Qsummary$A5))) NumResp <- 4
-    else NumResp <- 5
+    NumResp <- 5
+    if (all(is.na(Qsummary$A5))) {
+      NumResp <- 4
+      if (all(is.na(Qsummary$A4))) {
+        NumResp <- 3
+        if (all(is.na(Qsummary$A3))) {
+          NumResp <- 2
+          if (all(is.na(Qsummary$A2))) {
+            NumResp <- 1
+            if (all(is.na(Qsummary$A1))) stop("No answers!")
+          }
+        }
+      }
+    }
     names <- paste0("A", 1:NumResp)
     if (any(Qsummary$Blank > 0))
     	names <- c(names, "Blank")

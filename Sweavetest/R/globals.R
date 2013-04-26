@@ -121,7 +121,10 @@ TestName <- function(x = "TestData") {
 
 
 versioncode <- function() {
-  .STEnv$ExamNum[testversion()]
+  if (randomize())
+    .STEnv$ExamNum[testversion()]
+  else
+    "MASTER"
 }
 
 LastIndices <- function(x = NULL) {

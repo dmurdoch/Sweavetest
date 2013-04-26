@@ -4,9 +4,13 @@ function(..., Correct=NA, KeepLast=0, report=FALSE) {
     stop("things() cannot produce a report; you need to call QReport()")
   x <- unlist(list(...))
   n <- length(x) - KeepLast
+
   rand <- sample(n)  # Leave this here in case randomization is only temporarily off
-  if (!randomize()) rand <- 1:n  
-  indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
+  if (randomize()) 
+    indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
+  else
+    indices <- seq_along(x)
+
   if (!is.na(Correct)) {
     correct(c(correct(), Correct))
 

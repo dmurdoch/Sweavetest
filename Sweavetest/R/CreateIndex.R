@@ -90,8 +90,6 @@ CreateIndex <- function(gradedTests=GradedTests()){
       for (q in qs) {
         thisrow <- thisrow + 1
         
-        A <- rep(NA, 5)
-        R <- rep(NA, 5)
         thisq <- index[index$Question == q,,drop=FALSE]
         if (!is.na(thisq$A)) {
           nresult[thisrow, Aname[thisq$A]] <- counts[q, "A"]

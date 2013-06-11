@@ -86,6 +86,29 @@ this aspect of \pkg{Sweavetest}.  It may also be possible to use the aggregate r
 to detect cheating by individual students; section \ref{sec:cheating} describes how this is done.
 This paper finishes with a short discussion of plans for changes to \pkg{Sweavetest}.
 
+\subsection{Comparison with Other Packages}
+
+\pkg{Sweavetest} is not the only R package designed to produce tests
+or exams.  The \pkg{exams} package \citep{Grun09,Zeileis12}  version
+1.9-6 is designed to produce exams in multiple formats (PDF, HTML,
+etc.).  It also manages a database of questions in Sweave format,
+allowing random selection of questions for each version of the test, and
+randomization of the details of each question.  To achieve these aims,
+it produces an R object containing the text of the question (using
+\LaTeX\ markup), and then processes that object into various forms.
+The \pkg{Sweavetest} package maintains this information in the main
+\texttt{.Rnw} file, so it is more flexible in formatting, but less flexible in
+output formats.  Currently \pkg{Sweavetest} has no support for random
+selection of questions, but this is a feature that is being considered for
+a future version.
+
+The \pkg{ProfessR} package \citep{Lees13} also maintains a
+database of questions, and produces an exam based on them.  It
+produces a \LaTeX\ file directly from questions stored in an R object.
+
+\citet{Macleod03} describes a system using Perl scripts to randomize
+question order and answer order in automatically produced tests using
+rich text format.
 
 \section{Preparing a Test}
 \label{sec:preparing}
@@ -107,8 +130,10 @@ A complete test prepared using \pkg{Sweavetest} is included in the
 \subsection{Writing questions}
 \label{sec:questions}
 
-The functions to randomize answers all work on the responses to questions; the question text
-itself is not important, but it is assumed that all questions have multiple choice responses.  See below for how to handle tests where some questions are in other formats.
+The functions to randomize answers all work on the responses to
+questions; the question text itself is not important, but it is assumed that
+all questions have multiple choice responses.  See below for how to
+handle tests where some questions are in other formats.
 
 \pkg{Sweavetest} supports four separate versions of each test; questions
 may contain from 2 to 5 answers.  The preamble to the test randomizes the test version

@@ -1,0 +1,252 @@
+\documentclass[12pt]{article}
+\usepackage{Sweave}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\usepackage[authoryear,round,comma]{natbib}
+\bibliographystyle{apa}
+
+\setlength{\oddsidemargin} {0.0in} 
+\setlength{\textwidth} {6.5in}
+
+%\VignetteIndexEntry{Quick Start Instructions for Sweavetest}
+
+% The next line is needed for inverse search...
+\SweaveOpts{echo=TRUE,results=verbatim} % to show R code and results
+\SweaveOpts{concordance=TRUE, keep.source=TRUE,echo=FALSE,results=tex,prefix.string=qfigs/}
+<<>>=
+options(width=70)
+set.seed(19)
+library(Sweavetest)
+dir.create("qfigs", showWarnings=FALSE)
+Initialization(name = "QuickTest", version = "Teacher")
+newCommands(thesection=FALSE)
+randomize(FALSE)
+testversion(1)
+@
+
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+\newcommand{\code}[1]{{\texttt{#1}}}
+
+\title{How to Get Started with the  \pkg{Sweavetest} Package\footnote{This 
+vignette  was built using \pkg{Sweavetest} version \Sexpr{packageDescription("Sweavetest")$Version}}.}%$
+
+\author{Duncan Murdoch \and Adam Rahman}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+This document is a quick start guide for the \pkg{Sweavetest} package, intended 
+for users who are trying it out for the first time (or after a long absence).
+
+We briefly describe how to produce an exam and a report about exam results.  For more
+detail, see the main vignette ``About the Sweavetest package''.
+
+\section{Producing the first draft}
+
+In \pkg{Sweavetest}, exams are Sweave documents.  We will assume the reader has a basic
+knowledge of Sweave
+and \LaTeX, and is able to produce an exam in one of those.   We provide a sample exam
+in the \texttt{samples/SampleTest.Rnw} file; examples in this document are based
+on that exam.
+
+From the \pkg{Sweavetest} point of view, exams contain some initialization code at the beginning,
+explanatory material (usually at
+the start, sometimes also mixed in with questions or at the end of the exam), 
+multiple choice questions, and finalization code.  The explanatory material is entered in Sweave or \LaTeX;
+\pkg{Sweavetest} mainly helps in writing the multiple choice questions.
+
+\subsection{Initialization}
+
+The initialization code does the usual Sweave initialization, setting default sizes
+for figures, etc.  We also recommend that it sets the default output from code chunks
+to be \code{tex}, with echoing set to \code{FALSE}, so that these options don't
+need to be repeated in every question.  For example,
+\begin{verbatim}
+ \SweaveOpts{width=5, height=4, results=tex, echo=FALSE, 
+                    concordance=TRUE, prefix.string=figs/}
+\end{verbatim}
+We also need a code chunk to initialize \pkg{Sweavetest} internal structures.  For example,
+\begin{verbatim}
+ <<>>=
+ set.seed(19)
+ library(Sweavetest)  # Should come after set.seed, to make reproducible.
+ Initialization(name = "QuickTest", version = "Teacher")
+ testversion(1)
+ @
+\end{verbatim}
+The name of the test will be used for various data files produced during the runs;
+it should be unique for the test within the current directory.  The ``version'' of the test
+describes the mode of running.  During initial exam development, \code{"Teacher"} is
+appropriate, as it allows proofreading.  The \code{testversion()} call is not used at
+this point, but we find it convenient to enter it now.
+
+\subsection{Multiple choice questions}
+
+A multiple choice question will have some introductory text, followed by a list of choices.
+\pkg{Sweavetest} supports up to 5 choices, one of which is correct, the others incorrect.
+The introductory text would be entered as in any other document, for example:
+\begin{verbatim}
+\item The distribution of annual income per person is typically right-skewed.  
+With such a distribution, we would expect that
+\end{verbatim}
+The list of choices must be entered in an Sweave ``code chunk''.  For example,
+\begin{verbatim}
+ <<>>=
+ enumerate(
+ "The average and the median income should be roughly the same, given 
+   that mean and median are both measures of spread.",
+ "The average annual income is lower than the median annual income.",
+ "The average annual income is greater than the median annual income.",
+ "The spread around the center of the distribution should be very narrow.", 
+ "None of the above.",
+  Correct=3, KeepLast=1)
+ @
+\end{verbatim}
+The code chunk calls the \code{enumerate()} function, which 
+will randomly permute the answers, and
+output the \LaTeX\ code necessary to display them.  For example, the chunk above
+would produce
+\begin{verbatim}
+<<example1>>=
+ enumerate(
+ "The average and the median income should be roughly the same, given 
+   that mean and median are both measures of spread.",
+ "The average annual income is lower than the median annual income.",
+ "The average annual income is greater than the median annual income.",
+ "The spread around the center of the distribution should be very narrow.", 
+ "None of the above.",
+  Correct=3, KeepLast=1)
+@
+\end{verbatim}
+and this could be rendered in the final exam as
+\renewcommand{\labelenumi}{(\Alph{enumi})}
+<<>>=
+<<example1>>
+@
+As we are producing the \code{"Teacher"} version
+of the test for proofreading,  the correct answer is indicated by the asterisk, and no 
+randomization takes place.  In the student version of the test the first 4 responses would
+be displayed in a random order; \code{KeepLast = 1} keeps the last item (\code{"None of the above."})
+in the last place.
+
+Besides \code{enumerate()}, there are several other functions to produce
+answers in a different format.  The \code{horiz()} function is designed
+for very short answers, all displayed horizontally on one line, e.g.
+\begin{verbatim}
+ <<>>=
+ horiz("5\\%", "2.5\\%", "16\\%", "32\\%", Correct=2)
+ @
+\end{verbatim}
+which would be displayed as\\
+<<>>=
+horiz("5\\%", "2.5\\%", "16\\%", "32\\%", Correct=2)
+@
+\\
+The \code{items()} function generates the \verb!\items! entries similar to \code{enumerate()},
+but doesn't wrap them in \verb!\begin{enumerate} ... \end{enumerate}!.  The \code{Renumerate()}, 
+\code{Rhoriz()}, and \code{Ritems()} functions treat input strings as R code
+and display it verbatim, for example
+\begin{verbatim}
+ <<>>=
+ Renumerate("x <- 1", "x <- 2", "x <- 3", "x <- 4")
+ @
+\end{verbatim}
+which would be displayed as\\
+<<>>=
+ Renumerate("x <- 1", "x <- 2", "x <- 3", "x <- 4")
+@
+and the \code{resultenumerate()} and \code{resultitems()} functions display results of
+evaluating R expressions, e.g.
+\begin{verbatim}
+ <<>>=
+  resultenumerate(1:2,2:5,3:7,msg("The fourth item"))
+  @
+\end{verbatim}
+displayed as
+<<>>=
+  resultenumerate(1:2,2:5,3:7,msg("The fourth item"))
+@
+
+\subsection{Finalization}
+
+As the exam is processed, \pkg{Sweavetest} builds up a data structure containing the permutations used 
+in each question and the list of correct answers.  At the end of the exam, call the \code{Conclusion()} function
+handle this data appropriately:  when proofreading, it will display the answer key; when producing a 
+student version it displays nothing, but records the data structure to a file; when producing a report, it
+outputs the appendices for the report.
+
+For example, for the questions entered so far,
+\begin{verbatim}
+ <<>>=
+  Conclusion()
+  @
+\end{verbatim}
+would produce
+<<>>=
+Conclusion()
+@
+\\
+(We see the first question twice because it was executed for the display
+of the \LaTeX\ code and again for the final display.)
+
+\section{Producing the Student Version}
+
+Once the exam has been produced and proofread in the teacher version,
+it will be ready to print in the student version, with randomized answers, and 
+no indication of the correct response.  To do this, the initialization code chunk
+should be changed to
+\begin{verbatim}
+ <<>>=
+ set.seed(19)
+ library(Sweavetest)  # Should come after set.seed, to make reproducible.
+ Initialization(name = "SampleTest", version = "Student")
+ testversion(1)
+ @
+\end{verbatim}
+At this point the \code{testversion(1)} code comes into play:  it indicates
+that this should be the first version of the test.  (\pkg{Sweavetest} 
+can produce 4 separately randomized versions of each test.)  With this
+change, our first example could be displayed as
+\renewcommand{\Correct}{}
+<<>>=
+randomize(TRUE)
+<<example1>>
+@
+
+\pkg{Sweavetest} assigns a random three-digit code to each test version.  To
+display that code (e.g. for students to record with their answers), use
+\verb!\!\verb!Sexpr{versioncode()}!. 
+
+As well as producing the printable exam, the student version records the
+correct answers, and the \code{Conclusion()} function will write them out
+to a file.  
+
+\section{Producing the Report}
+
+\pkg{Sweavetest} can produce analysis of student answers and display it
+in a report after the exam is done.  This requires that student responses 
+are available, either in a Scantron format file, or in some other form.
+We use a Scantron file by giving its name in the \code{scanex} argument
+to the \code{Initialization()} function, e.g.
+\begin{verbatim}
+ <<>>=
+ set.seed(19)
+ library(Sweavetest)  # Should come after set.seed, to make reproducible.
+ Initialization(name = "QuickTest", version = "Report", 
+                    scanex = "QuickResults.dat")
+ testversion(1)
+ @
+\end{verbatim}
+This will cause the \code{enumerate()}, \code{horiz()}, etc. functions
+to produce a report on their corresponding questions. 
+See the full manual for sample output and a description of the required format for the
+\code{scanex} object if it is read from another source of data.
+
+
+\end{document}

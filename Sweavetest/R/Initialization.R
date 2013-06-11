@@ -12,8 +12,6 @@ Initialization <- function(name, version = Version(), scanex){
   
   ###Initialization Variables###
   options(width=60)
-  dir.create("figs", showWarnings=FALSE)
-  newCommands()
   
   ###Test Creation Variables###
     randomize(TRUE)

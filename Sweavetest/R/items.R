@@ -8,42 +8,16 @@ function(..., Correct=1, KeepLast=0, report=FALSE) {
   
   x <- unlist(list(...))
   if (CheckDups() && any(duplicated(format(x))))  
-    stop("Duplicated answers in Q", length(Answers())+1, ": ", 
+    stop("Duplicated answers in Q", QuestionCounter(), ": ", 
          paste(format(x), collapse=" "))
   
-  n <- length(x) - KeepLast
+  PermuteResponses(length(x), Correct, KeepLast)
   
-  rand <- sample(n)  # Leave this here in case randomization is only temporarily off
-  if (randomize()) 
-    indices <- c(if (n) perms[[n]][[testversion()]][rand], n+seq_len(KeepLast))
-  else
-    indices <- seq_along(x)
-  
-  if (!is.na(Correct)) {
-    correct(c(correct(), Correct))
+  if (!is.na(Correct)) 
     x[Correct] <- paste("\\Correct", x[Correct])
-    Answers(c(Answers(), which(indices == Correct)))
-  }
   
-  x <- x[indices]
-  QuestionIndex(c(QuestionIndex(),QuestionCounter()))
+  x <- x[getPerm()]		 				  
   
   y <- paste("\\item",x,"\n", sep=" ")
   cat(y)
-  
-  if(length(indices)<5){
-    indices <- c(indices,rep(NA,5-length(indices)))
-  }
-  
-  LastIndices(indices)
-
-  if (Version() != "Report" && !is.na(Correct))
-    Index(rbind(Index(),data.frame(Question=QuestionCounter(), 
-  			       ExamCode=versioncode(),
-  			       Correct=Correct,
-  			       A=indices[1],
-  			       B=indices[2],
-  			       C=indices[3],
-  			       D=indices[4],
-  			       E=indices[5])))	
 }

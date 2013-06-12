@@ -56,15 +56,10 @@ Strip extra white space from printed results?
 }
 \details{
 If \code{Correct} is \code{NA}, this question 
-will not be recorded in \code{\link{Answers}}, \code{\link{correct}} or \code{\link{Index}}.
-The randomization will always be recorded in \code{\link{LastIndices}}.
+will not be recorded in \code{\link{Index}}.
 }
 \value{
-Run for the side effect of producing Latex output.  As a second side effect,
-the global variable LastIndices will be created, holding the answers
-in the order as displayed (i.e. the items will be collected from \code{...}
-into a vector \code{items}, and they will be displayed in the order
-\code{items[LastIndices]}.
+Run for the side effect of producing Latex output.  
 
 \code{horiz} puts the items
 horizontally. 

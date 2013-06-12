@@ -1,7 +1,8 @@
 \name{readScanex}
 \alias{readScanex}
+\alias{writeScanex}
 \title{
-Read a Scanex file of scanned Scantron pages.
+Read or write a Scanex file of scanned Scantron pages.
 }
 \description{
 UWO uses a standard Scantron form for recording multiple choice tests.  The ITS department

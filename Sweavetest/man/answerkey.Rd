@@ -5,16 +5,13 @@ Generate an answer key for a test.
 }
 \description{
 Each of the multiple choice functions appends the correct answer
-to the global \code{\link{Answers}} variable; this function displays the
+to the global \code{\link{Index}} dataframe; this function displays the
 correct answers in a table.
 }
 \usage{
-answerkey(answers = Answers(), symbols = letters, group=5, perline=6)
+answerkey(symbols = letters, group=5, perline=6)
 }
 \arguments{
-  \item{answers}{
-The answers for the current exam code in a numeric vector.
-}
   \item{symbols}{
 What symbols to use to display the answers.
 }
@@ -30,9 +27,11 @@ This function is called for the side effect of writing Latex code
 to display the table of correct answers.
 }
 \seealso{
-\code{\link{things}} and \code{\link{horiz}} update the \code{Answers} global.
+\code{\link{things}} and \code{\link{horiz}} update the \code{Index} global.
 }
 \examples{
-answerkey(c(1,2,3,4,5,1,2,3,4), symbols=LETTERS)
+\dontrun{
+answerkey(symbols=LETTERS)
+}
 }
 \keyword{ utils }

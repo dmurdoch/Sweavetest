@@ -1,16 +1,16 @@
 
 # The functions below give access to global variables
 #  Version -- which type of processing to do
-#  testversion -- which of the 4 test versions
+#  NumVersions -- how many randomized versions to produce?
+#  testversion -- which of the NumVersions test versions, or 0 for the Master
 #  QuestionCounter -- which is the current question number
-#  correct -- a vector of correct responses (in the authored order)
-#  Answers -- a vector of correct responses (in the randomized order)
 #  QuestionIndex -- a vector of question numbers corresponding to the above
 #  Index -- a dataframe giving the randomization for the test
 #  fignum -- the figure number in reports
 #  randomize -- whether to randomize answers
 #  CheckDups -- whether to check for duplicate answers
-#  versioncode -- read-only access to the ExamNum vector:  just gives the testversion() entry
+#  VersionCodes -- vector of all exam codes
+#  versioncode -- read-only access to the VersionCodes vector:  just gives the testversion() entry
 #  itemlabels -- the labels to use for answer options
 #  GradedTests -- the dataframe of test results
 
@@ -21,6 +21,14 @@ Version <- function(x = "Student"){
     return(invisible(x))
   } 
   .STEnv$Version
+}
+
+NumVersions <- function(x = 4){
+  if (!missing(x) || !exists("NumVersions", .STEnv)) {
+    .STEnv$NumVersions <- x
+    return(invisible(x))
+  }
+  .STEnv$NumVersions
 }
 
 testversion <- function(x = 1){
@@ -37,22 +45,6 @@ QuestionCounter <- function(x = 0){
     return(invisible(x))
   }
   .STEnv$QuestionCounter
-}
-
-correct <- function(x = NULL){
-  if (!missing(x) || !exists("correct", .STEnv)) {
-    .STEnv$correct <- x
-    return(invisible(x))
-  }
-  .STEnv$correct
-}
-
-Answers <- function(x = NULL){
-  if (!missing(x) || !exists("Answers", .STEnv)) {
-    .STEnv$Answers <- x
-    return(invisible(x))
-  }
-  .STEnv$Answers
 }
 
 QuestionIndex <- function(x = NULL){
@@ -119,19 +111,17 @@ TestName <- function(x = "TestData") {
   .STEnv$TestName
 }
 
+VersionCodes <- function(x = seq_len(NumVersions())) {
+  if (!missing(x) || !exists("VersionCodes", .STEnv)) {
+    .STEnv$VersionCodes <- x
+    return(invisible(x))
+  }
+  .STEnv$VersionCodes
+}
 
 versioncode <- function() {
-  if (randomize())
-    .STEnv$ExamNum[testversion()]
+  if (testversion())
+    VersionCodes()[testversion()]
   else
     "MASTER"
 }
-
-LastIndices <- function(x = NULL) {
-  if (!missing(x) || !exists("LastIndices", .STEnv)) {
-    .STEnv$LastIndices <- x
-    return(invisible(x))
-  }
-  .STEnv$LastIndices
-}
-

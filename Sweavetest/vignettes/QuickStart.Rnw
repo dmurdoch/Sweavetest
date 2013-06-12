@@ -21,8 +21,6 @@ library(Sweavetest)
 dir.create("qfigs", showWarnings=FALSE)
 Initialization(name = "QuickTest", version = "Teacher")
 newCommands(thesection=FALSE)
-randomize(FALSE)
-testversion(1)
 @
 
 \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
@@ -77,14 +75,12 @@ We also need a code chunk to initialize \pkg{Sweavetest} internal structures.  F
  set.seed(19)
  library(Sweavetest)  # Should come after set.seed, to make reproducible.
  Initialization(name = "QuickTest", version = "Teacher")
- testversion(1)
  @
 \end{verbatim}
 The name of the test will be used for various data files produced during the runs;
 it should be unique for the test within the current directory.  The ``version'' of the test
 describes the mode of running.  During initial exam development, \code{"Teacher"} is
-appropriate, as it allows proofreading.  The \code{testversion()} call is not used at
-this point, but we find it convenient to enter it now.
+appropriate, as it allows proofreading.  
 
 \subsection{Multiple choice questions}
 
@@ -211,7 +207,7 @@ should be changed to
 \end{verbatim}
 At this point the \code{testversion(1)} code comes into play:  it indicates
 that this should be the first version of the test.  (\pkg{Sweavetest} 
-can produce 4 separately randomized versions of each test.)  With this
+can produce 4 or more separately randomized versions of each test.)  With this
 change, our first example could be displayed as
 \renewcommand{\Correct}{}
 <<>>=

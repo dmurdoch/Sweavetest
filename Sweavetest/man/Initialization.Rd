@@ -7,13 +7,14 @@ Create all formatting and variable initialization for the test and report creati
 This function declares all variables and pastes all formatting options for the test/report creation process to the main document.
 }
 \usage{
-Initialization(name, version = Version(), scanex)
+Initialization(name, version = Version(), scanex, numversions = 4)
 }
 \arguments{
   \item{name}{The value of \code{\link{TestName}} to use for this test.}
   \item{version}{The value of \code{\link{Version}} to use for this test.}
   \item{scanex}{If \code{version == "Report"}, a filename from which
   to read Scantron results, or the results themselves.}
+  \item{numversions}{How many different versions of the test will we produce?}
 }
 
 \value{

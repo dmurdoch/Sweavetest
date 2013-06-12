@@ -1,5 +1,19 @@
-answerkey <- function(answers=Answers(), symbols=letters, group=5, perline=6) {
-  line <- 0:(length(answers) - 1) %/% (group*perline) + 1
+answerkey <- function(symbols=letters, group=5, perline=6) {
+  code <- versioncode()
+  master <- code == "MASTER"
+  if (master)
+    code <- Index()[1,"ExamCode"]
+  index <- Index()
+  index <- index[index$ExamCode == code,]
+  n <- nrow(index)
+  answers <- numeric(n)
+  for (i in seq_len(n))
+    if (master)
+      answers[i] <- index[i, "Correct"]
+    else
+      answers[i] <- which( index[i, LETTERS[1:5]] == index[i, "Correct"] )
+    
+  line <- 0:(n - 1) %/% (group*perline) + 1
   gp <- 0:(length(line) - 1) %/% group + 1
   pos <- 0:(length(line) - 1) %% group + 1
 

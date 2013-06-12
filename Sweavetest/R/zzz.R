@@ -6,7 +6,3 @@ perms[[5]] <- list(c(1,2,3,4,5), c(2,3,4,5,1), c(3,4,5,1,2),  c(5,2,1,3,4))
   
 .STEnv <- new.env(parent=emptyenv())
 
-.onLoad <- function(lib, pkg)
-{
-  .STEnv$ExamNum <- sort(sample(100:999, 4))
-}

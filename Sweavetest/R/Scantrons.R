@@ -1,8 +1,12 @@
 readScanex <- function(filename) {
-    read.fwf(filename,
+    result <- read.fwf(filename,
              widths=c(9,-1,3,-1,3,2,-1,4,-1,180),
     	     col.names=c("Student ID", "Section", "ExamCode", "Sheet", "Scantron", "Answers"),
     	     as.is = TRUE, colClasses="character", check.names=FALSE)
+    nonblank <- sub("[[:blank:]]*$", "", result$Answers)
+    maxlen <- max(nchar(nonblank))
+    result$Answers <- substr(result$Answers, 1, maxlen)
+    result
 }
 
 grades <- function(scanex, key=scanex[scanex$"Student ID" == "999999999",],

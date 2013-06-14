@@ -26,6 +26,7 @@ Sys.setenv(R_KEEP_PKG_SOURCE="yes")
 install.packages("..",type="source",repos=NULL)
 library(Sweavetest)
 library(tables)
+Initialization(name = "Test1", version = "Teacher")
 randomize(TRUE)
 testversion(1)
 newCommands(thesection=FALSE)
@@ -36,7 +37,6 @@ dir.create("figs", showWarnings=FALSE)
 \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
 
 % These commands affect the display of the test samples
-\newcommand{\Correct}{*}
 \renewcommand{\labelenumii}{(\Alph{enumii})}
 
 \title{The \pkg{Sweavetest} Package\footnote{This 
@@ -81,15 +81,21 @@ and merging them into existing class lists.
 
 An important part of testing is to analyze the results of a test.  This can detect badly
 worded questions, errors in answer keys, and can otherwise give information about the
-quality of the questions and of the test as a whole.  Section \ref{sec:analysis} describes
-this aspect of \pkg{Sweavetest}.  It may also be possible to use the aggregate results
+quality of the questions and of the test as a whole.  Sections \ref{sec:analysis} to \ref{sec:report} describe
+this aspect of \pkg{Sweavetest}. Section \ref{sec:Merge} describes functions that help
+with merging grade lists.  
+It may be possible to use the aggregate results
 to detect cheating by individual students; section \ref{sec:cheating} describes how this is done.
 This paper finishes with a short discussion of plans for changes to \pkg{Sweavetest}.
 
 \subsection{Comparison with Other Packages}
 
-\pkg{Sweavetest} is not the only R package designed to produce tests
-or exams.  The \pkg{exams} package \citep{Grun09,Zeileis12}  version
+\pkg{Sweavetest} is not the only software package designed to produce tests
+or exams.  \citet{Macleod03} describes a system using Perl scripts to randomize
+question order and answer order in automatically produced tests using
+rich text format.
+
+The R package \pkg{exams}  \citep{Grun09,Zeileis12}  version
 1.9-6 is designed to produce exams in multiple formats (PDF, HTML,
 etc.).  It also manages a database of questions in Sweave format,
 allowing random selection of questions for each version of the test, and
@@ -105,10 +111,25 @@ a future version.
 The \pkg{ProfessR} package \citep{Lees13} also maintains a
 database of questions, and produces an exam based on them.  It
 produces a \LaTeX\ file directly from questions stored in an R object.
+It does not appear to support randomized question content as 
+\pkg{exams} and \pkg{Sweavetest} do via Sweave.
 
-\citet{Macleod03} describes a system using Perl scripts to randomize
-question order and answer order in automatically produced tests using
-rich text format.
+One difference between \pkg{Sweavetest} and the \citet{Macleod03} or
+\citet{Grun09} approaches is that \pkg{Sweavetest} is designed to produce
+a small number of randomized exams (typically 4), whereas those projects 
+can easily produce a unique exam for each student.  Using a small
+number of exams makes printing easier, since high speed duplication
+of hundreds of identical papers is simpler than printing hundreds of
+individually unique ones.  It also makes errors more obvious:  if every
+exam is different, it is harder to detect an error that affects only a 
+random subset than it is to detect a difference in a pre-identified 
+fraction of the papers.  Finally, the \pkg{Sweavetest} limitation of always
+asking the same questions is actually a benefit in the case where an
+error slips past proofreading and needs to be corrected during the 
+administration of the exam, since all students will have the same text
+(with possible numerical variations) for corresponding question
+numbers, and broadcast announcements of corrections are feasible.
+
 
 \section{Preparing a Test}
 \label{sec:preparing}
@@ -135,9 +156,9 @@ questions; the question text itself is not important, but it is assumed that
 all questions have multiple choice responses.  See below for how to
 handle tests where some questions are in other formats.
 
-\pkg{Sweavetest} supports four separate versions of each test; questions
+\pkg{Sweavetest} supports multiple (typically 4) separate versions of each test; questions
 may contain from 2 to 5 answers.  The preamble to the test randomizes the test version
-numbers to be 4  numbers from 100 to 999 in sorted order.  Version 1 of the test has the smallest 
+numbers to be codes from 100 to 999 in sorted order.  Version 1 of the test has the smallest 
 test version number, version 4 the largest.
 
 The supplied functions do the work of formatting the answers.   For example,
@@ -185,7 +206,7 @@ Besides \verb!enumerate()!, several other functions produce randomized answer li
 is like \verb!enumerate()!, but only the \LaTeX\ \verb!\items! part of the enumeration is output:
 it is assumed that the test writer has already entered \verb!\begin{enumerate}! or equivalent.
 The \verb!things()! function just randomizes the items it is given; the test writer needs to
-enter the \verb!\item! values if necessary.
+enter the \verb!\item! macros if necessary.
 
 The \pkg{Sweavetest} package also has special support for questions
 involving R code. \verb!Renumerate()!, \verb!Rhoriz()! and 
@@ -253,7 +274,7 @@ msg("None of the above"))
 
 If some question numbers are not used for multiple choice questions, then the test author can
 manipulate the internal question counter using the \texttt{QuestionCounter()} global.  See
-section \ref{sec:globals}.
+appendix \ref{sec:globals}.
 
 \subsection{Introductory material at start of test}
 \label{sec:initialization}
@@ -269,17 +290,18 @@ where \texttt{SEED} is replaced by a fixed number.  This initializes the package
 and fixes the randomization
 of the test questions so that Sweavetest will produce the same results on future runs.
 
-Next, one calls the \texttt{Initialization()} function, for example
+Next, one calls the \texttt{Initialization()} and possibly the \texttt{newCommands()} function, for example
 \begin{verbatim}
  <<>>=
- Initialization(name="Test1", version="Teacher")
+ Initialization(name = "Test1", version="Teacher")
+ newCommands(thesection = FALSE)
  @
 \end{verbatim}
 This names the test
 so that when Sweavetest saves files associated with the test, it will use that name, and 
 sets the \texttt{Version()} global variable.  Normally the \texttt{Version()} is set
-to ``Teacher'' during preparation of the test; this will display correct answers,
-and an answer key at the end.  Use ``Student'' to produce a randomized version for the
+to ``Teacher'' during preparation of the test; this will mark correct answers with an asterisk,
+and display an answer key at the end.  Use ``Student'' to produce a randomized version for the
 students, and ``Report'' after the test is complete to produce a report and
 analyze responses.  (More details on ``Report'' are given in section \ref{sec:report}.)
 It also sets up the 
@@ -303,9 +325,8 @@ for(i in n) {
 \end{tabular}
 \end{center}
 \end{table}
-The \verb!Initialization()! call also calls
-the \verb!newCommands()! function to define a number of \LaTeX\ macros that may be
-convenient to use in the test.  Current definitions of simple macros
+The  \verb!newCommands()! function defines a number of \LaTeX\ macros that may be
+convenient to use in the test; it may be called next.  Current definitions of simple macros
 to use in mathematical expressions are shown in Table \ref{tab:commands}.  The function
 also optionally defines \verb!\Marks!, which displays marks for a question in the right
 margin, \verb!\thesection!, which suppresses section numbering, and \verb!\lowtilde!,
@@ -707,8 +728,7 @@ it does not sufficiently distinguish good and bad students.
 
 Using the \verb!AnswerCounts()! function, a count of how many students
 chose each answer option is provided. This function takes as input the
-index automatically created by the test creation process (read in
-as ``TestIndex.csv"), as well as the result of the
+index automatically created by the test creation process, as well as the result of the
 \verb!grades()! function.  Also included are counts of blank responses
 and responses that don't correspond to one of the offered choices.
 
@@ -886,29 +906,26 @@ to choose from - the full report, and the analysis only report. Both are discuss
 
 \subsection{Full Report}
 
-The full report can be used by those instructors who have created their entire test using the provided 
-Sweave template. The creation of the test itself is discussed in Section \ref{sec:preparing}. 
+The full report can be used by those instructors who have created their entire test using \pkg{Sweavetest}. 
+The creation of the test itself is discussed in Section \ref{sec:preparing}. 
 
-By simply modifying a few global variables in the template, the instructor can create a full report
-to analyze the results of the test.
-
-The template provides a number of variables that are under the user's control.  For example:
+By simply modifying the \texttt{Initialization()} call, the instructor can create a full report
+to analyze the results of the test.  For example, change
 
 \begin{verbatim}
 set.seed(18)
 library(Sweavetest)
 Initialization("sample", "Student")
 testversion(4)
-
 \end{verbatim}
 
-To create the report, the user needs to change the following:
-\begin{itemize}
-\item Set the \verb!Version()! to ``Report" rather than ``Student''
-\item Specify the Scantron file they wish to use.
-\end{itemize}
+to
 
-The variables not mentioned above should not be changed or modified in any way, unless the instructor is familiar with \LaTeX\ and wishes to modify the preset formatting done by the templates.
+\begin{verbatim}
+set.seed(18)
+library(Sweavetest)
+Initialization("sample", "Report", scanex = "sample.dat")
+\end{verbatim}
 
 From here, everything else is achieved automatically through the built in functions.
 The instructor need only process the newly modified .Rnw file, and a pdf report will be created.
@@ -924,15 +941,18 @@ in the report.
 
 \subsection{Analysis Only}
 
-If the instructor did not use the Sweave template to create their test, analysis is still possible
-using the \pkg{Sweavetest} package. 
+If the instructor did not use \pkg{Sweavetest} to create their test, analysis is still possible.
 
-If the user only has the results of the test, they should use the low level template provided with
-the package. This template produces many of the same statistics as the full report, but it will not 
-be able to reproduce the questions and answer options, nor will it be able to undo any randomization
+If the user only has the results of the test, they should use the low level template provided 
+in \verb!system.file("sample/LowLevelTemplate.Rnw", package = "Sweavetest")!. 
+This template produces many of the same statistics as the full report, but it will not 
+display the text of the exam, nor will it be able to undo any randomization
 in the answer options.
 
-This method does however, provide the instructor with a function that will allow the report to recognize the correspondence between randomization in questions, as opposed to the randomization in answer options that is done during the full report creation process. The function that must be called to determine these correspondences is the \verb!Unscramble()! function.
+This method does however, provide the instructor with a function that will allow the report to recognize the 
+correspondence between randomization in questions, as opposed to the randomization in answer options that
+is done during the full report creation process. The function that must be called to determine these correspondences 
+is the \verb!Unscramble()! function.
 
 The \verb!Unscramble()! function takes the following as input:
 
@@ -945,42 +965,30 @@ The \verb!Unscramble()! function takes the following as input:
 
 The syntax for using this function is as follows:
 
-\begin{verbatim}
-scanex <- readScanex(''sample.dat'')
+<<echo = TRUE>>=
 ExamCodes <- c(170,738,840,967)
-Master <- c(1:30)
-Order1 <- c(15:30, 1:14)
-Order2 <- c(20:30,1:10, 15:19,11:14)
-Order3 <- c(30:1)
-Orders <- data.frame("170"=Master,"738"=Order1,"840"=Order2,"967"=Order3, check.names=FALSE)
-
-NewScanex <- Unscramble(scanex,Orders)
-
-\end{verbatim}
-
-We can see below what the function does by comparing the original Scantron file to the new scantron file:
-
-<<>>=
-ExamCodes <- c(170,738,840,967)
-Master <- c(1:30)
-Order1 <- c(15:30, 1:14)
-Order2 <- c(20:30,1:10, 15:19,11:14)
-Order3 <- c(30:1)
-Orders <- data.frame("170"=Master,"738"=Order1,"840"=Order2,"967"=Order3, check.names=FALSE)
-
+Order170 <- c(1:30)
+Order738 <- c(15:30, 1:14)
+Order840 <- c(20:30,1:10, 15:19,11:14)
+Order967 <- c(30:1)
+Orders <- data.frame("170"=Order170,"738"=Order738,
+                             "840"=Order840,"967"=Order967, 
+                             check.names=FALSE)
 NewScanex <- Unscramble(scanex,Orders)
 @
+
+We can see below what the function does by comparing the original Scantron file to the new scantron file:
 
 First 6 student answers of old scanex
 
 <<results=verbatim>>=
-scanex$Answers[5:10]
+scanex[5:10, c("ExamCode", "Answers")]
 @
 
 First 6 student answers of new scanex
 
 <<results=verbatim>>=
-NewScanex$Answers[5:10]
+NewScanex[5:10, c("ExamCode", "Answers")]
 @
 
 We can see that the answers have been re-ordered in the new Scantron file as specified by the
@@ -989,31 +997,6 @@ correspondences.
 
 Note: The \verb!Unscramble()! function is not used when running a full report, as question randomization is not done.
 
-The provided Sweave template provides several variables that are under the users control:
-
-\begin{verbatim}
-set.seed(18)
-library(Sweavetest)
-library(tables)
-setwd("C:/Users/Sample")
-scanex <- readScanex("sample.dat")
-\end{verbatim}
-
-Most of these variables can be left untouched. The user must only make three modifications
-to the variables above:
-
-\begin{itemize}
-\item The working directory must be changed to the location of the Scantron file that will be read in
-\item The file in the \verb!readScanex()! function must be changed to the desired Scantron file
-\item If the user has chosen to put the questions in different orders on each version of the exam, the \verb!Unscramble()! function must be used
-\end{itemize}
-
-No other variables should be modified, unless the instructor is familiar with \LaTeX\ formatting and 
-wishes to change the pre-set formatting done by the template.
-
-At this point the instructor need only process the Sweave document, and a report will be created
-in the working directory.
-
 \subsection{Report Without Using A Scantron}
 
 If the instructor uses grading technology other than that provided by Scantron, they may still use
@@ -1021,7 +1004,7 @@ the analysis in the \pkg{Sweavetest} package, but must modify their input file t
 the functions.
 
 The instructor can create a .dat file with columns matching those produced by the \texttt{readScanex()} function;
-see Table \ref{tab:scantron}.
+see Table \ref{tab:scantron} (page \pageref{tab:scantron}).
 
 An example file is given below. The file should mirror the column titles of this file.
 
@@ -1171,5 +1154,15 @@ Still need to document
 [16] "nominalRoll"        "perms"  
 
 \bibliography{Sweavetest}
+
+\appendix
+
+\section{Globals}
+\label{sec:globals}
+
+Being based on Sweave, \pkg{Sweavetest} processes the R code chunks in each exam as a script.  It maintains
+an environment containing a number of global variables (accessed through ``getter'' and ``setter'' functions) that 
+record changes to the state of the exam as the code chunks are processed.  These variables 
+are described in the \texttt{?globals} help page.
 
 \end{document}

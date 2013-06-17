@@ -991,8 +991,8 @@ First 6 student answers of new scanex
 NewScanex[5:10, c("ExamCode", "Answers")]
 @
 
-We can see that the answers have been re-ordered in the new Scantron file as specified by the
-instructor. This will allow the \verb!LowLevelReport()! function to create a report with the proper
+We can see that the answers have been re-ordered in the new Scantron column. This will allow the 
+\verb!LowLevelReport()! function to create a report with the proper
 correspondences.
 
 Note: The \verb!Unscramble()! function is not used when running a full report, as question randomization is not done.
@@ -1020,24 +1020,24 @@ The answer keys for our sample test are provided below:
 scanex[1:4,]
 @
 
-Note that the answer keys do not require a section number, and should not count in the total exam count.
+Note that the answer keys do not require a section number, and will not count in the total exam count.
 
 Once this file has been created, the instructor can carry on with the report process as described above (with either the full report or using the \verb!LowLevelReport()! function).
 
 \section{Merging Class Lists}
 \label{sec:Merge}
 
-The \pkg{Sweavetest} package allows the instructor to export the
-results of the \verb!grades()! function and merge it with a pre-existing
+The \pkg{Sweavetest} package allows the instructor to merge the
+results of the \verb!grades()! function with a pre-existing
 class list. This is done by calling the \verb!MergeClassList()! function.
 
-This function takes as input the class list read in using the
-\verb!read.csv! function, into which we are merging the results of
-\verb!grades()!. A sample class list has been provided with this
-package, and the class list used should mirror its format\footnote{Our class list
+This function takes as input the class list dataframe (typically read in using the
+\verb!read.csv! function), into which we are merging the results of
+\verb!grades()!. Column names should match those of the sample class list 
+\verb!system.file("sample/ClassListTemplate.csv", package = "Sweavetest")!\footnote{Our class list
 uses R function names in place of student names.  We expect few real classes
-would have students named Dbinom Acf!}. A small
-snapshot is provided below:
+would have students named Dbinom Acf!}.
+A small snapshot is provided below:
 
 <<>>=
 Classlist <- system.file("sample/ClassListTemplate.csv", package = "Sweavetest")
@@ -1048,12 +1048,16 @@ SampleClassList <- read.csv(Classlist)
 head(SampleClassList)
 @
 
-Note that the column titles have been slightly modified by \verb!read.csv!:
+Note that the column titles have been slightly modified by \verb!read.csv! using
+the \verb!make.names()! function in R:
 blanks in title names have been converted to periods.
 
 A vector of class sections as characters, as well as a title for the test are also required as input. The original Scantron file must also be passed as input
 
-There are a couple optional variables under the instructors control. If the instructor has decided to exclude some of the questions from the exam (based on the analysis provided in the report), the \verb!weights! variable can be changed to a vector of 0s and 1s, corresponding to each question on the test. The user can change the name of the file to be exported from its default value of "MasterClassList", and the instructor can also request that one file be exported concatenating all class sections by changing the \verb!AcceptSectionCSV! variable to TRUE.
+There are a couple optional variables under the instructors control. If the instructor has decided to exclude some of the questions from the exam (based on the analysis provided in the 
+report), the \verb!weights! variable can be changed to a vector of 0s and 1s, corresponding to each question on the test. The user can change the name of the file to be exported from 
+its default value of "MasterClassList", and the instructor can also request that one file be exported concatenating all class sections by changing the \verb!AcceptSectionCSV! variable to 
+TRUE.
 
 The following syntax should be used when calling the \verb!MergeClassList()! function. In our example, we have decided to exclude the first question from the weighting:
 

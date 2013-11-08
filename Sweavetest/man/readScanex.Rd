@@ -27,9 +27,6 @@ The \code{writeScanex} function reads an index file from \code{paste0(
 name, "Index.csv")} and writes out records with Student ID of
 999999999, the standard marker for an answer key, to a filename
 constructed as \code{paste0(name, "Correct.dat")}.
-
-Blanks are stripped from the end of the answer strings if no record contains 
-non-blank characters there.
 }
 \value{
 For \code{readScanex},

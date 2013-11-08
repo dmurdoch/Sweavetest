@@ -47,6 +47,38 @@ QuestionCounter <- function(x = 0){
   .STEnv$QuestionCounter
 }
 
+LongQuestionCounter <- function(x = 0){
+  if (!missing(x) || !exists("LongQuestionCounter", .STEnv)) {
+    .STEnv$LongQuestionCounter <- x
+    return(invisible(x))
+  }
+  .STEnv$LongQuestionCounter
+}
+
+LSGrades <- function(x = 0){
+  if (!missing(x) || !exists("LSGrades", .STEnv)) {
+    .STEnv$LSGrades <- x
+    return(invisible(x))
+  }
+  .STEnv$LSGrades
+}
+
+LQMaxScores <- function(x = 0){
+  if (!missing(x) || !exists("LQMaxScores", .STEnv)) {
+    .STEnv$LQMaxScores <- x
+    return(invisible(x))
+  }
+  .STEnv$LQMaxScores
+}
+
+TotalGrade <- function(x = 0){
+  if (!missing(x) || !exists("TotalGrade", .STEnv)) {
+    .STEnv$TotalGrade <- x
+    return(invisible(x))
+  }
+  .STEnv$TotalGrade
+}
+
 QuestionIndex <- function(x = NULL){
   if (!missing(x) || !exists("QuestionIndex", .STEnv)) {
     .STEnv$QuestionIndex <- x

@@ -60,7 +60,7 @@ QReport <- function(newpage = TRUE) {
   filename <- file.path(dirname, paste0("fig", fignum(), ".pdf"))
   
   pdf(filename, width=8, height=4)
-  EmpiricalProbabilityPlot(GradedTests(), QuestionCounter())
+  EmpiricalProbabilityPlot(GradedTests(), QuestionCounter(),LSGrades())
   dev.off()
   cat("\\hspace{.08in}")
   cat(paste("\\includegraphics[width=.5\\textwidth]{", filename, "}\n", sep=""))
